@@ -1,0 +1,151 @@
+{%- style -%}
+.social-proof-{{ section.id }} {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  z-index: 9999;
+  display: none;
+  max-width: 300px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  font-family: sans-serif;
+}
+
+.social-proof-{{ section.id }}.show {
+  display: block;
+  animation: fadeInUp 0.5s;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media screen and (max-width: 749px) {
+  .social-proof-{{ section.id }} {
+    bottom: 10px;
+    left: 10px;
+    font-size: 12px;
+    max-width: 250px;
+  }
+}
+{%- endstyle -%}
+
+<div id="social-proof-{{ section.id }}" class="social-proof-{{ section.id }}">
+  <span id="social-proof-message-{{ section.id }}">Carregando...</span>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const sectionId = "{{ section.id }}";
+  const sp = document.getElementById(`social-proof-${sectionId}`);
+  const spMsg = document.getElementById(`social-proof-message-${sectionId}`);
+
+  const displayTime = {{ section.settings.display_time }};
+  const intervalTime = {{ section.settings.interval_time }};
+  const maxMessages = {{ section.settings.max_messages }};
+
+  const names = ["João", "Maria", "Lucas", "Ana", "Pedro", "Carla", "Marcos", "Julia"];
+
+  // --- Detecta produto atual, ou define padrão ---
+  let productTitle, productStock;
+  {% if product %}
+    productTitle = "{{ product.title }}";
+    productStock = {{ product.variants.first.inventory_quantity }};
+  {% else %}
+    productTitle = "um de nossos produtos";
+    productStock = 5;
+  {% endif %}
+
+  // --- Mensagens de coleção se definido ---
+  let collectionMessages = [];
+  {% if collection %}
+    {% for product in collection.products limit: maxMessages %}
+      collectionMessages.push(`Restam apenas {{ product.variants.first.inventory_quantity }} unidades de {{ product.title }}!`);
+      const randName = names[Math.floor(Math.random() * names.length)];
+      collectionMessages.push(`${randName} comprou {{ product.title }} recentemente`);
+    {% endfor %}
+  {% endif %}
+
+  // --- Gera mensagens universais ---
+  function generateMessages() {
+    const messages = [];
+
+    // Estoque baixo do produto atual
+    if(productStock <= 5){
+      messages.push(`Restam apenas ${productStock} unidades de ${productTitle}!`);
+    }
+
+    // Mensagens de compra simulada
+    for(let i=0; i<maxMessages; i++){
+      const randName = names[Math.floor(Math.random() * names.length)];
+      messages.push(`${randName} comprou ${productTitle} recentemente`);
+    }
+
+    // Mensagens de coleção, se houver
+    messages.push(...collectionMessages);
+
+    // Mensagem padrão caso nenhuma exista
+    if(messages.length === 0){
+      messages.push(`Clientes estão comprando ${productTitle} agora!`);
+    }
+
+    return messages;
+  }
+
+  let currentIndex = 0;
+  const messages = generateMessages();
+
+  function showMessage() {
+    if(messages.length === 0) return;
+
+    spMsg.textContent = messages[currentIndex];
+    sp.classList.add('show');
+
+    setTimeout(() => {
+      sp.classList.remove('show');
+    }, displayTime);
+
+    currentIndex = (currentIndex + 1) % messages.length;
+    setTimeout(showMessage, intervalTime);
+  }
+
+  showMessage();
+});
+</script>
+
+{% schema %}
+{
+  "name": "Social Proof",
+  "settings": [
+    {
+      "type": "number",
+      "id": "display_time",
+      "label": "Tempo de exibição da mensagem (ms)",
+      "default": 5000
+    },
+    {
+      "type": "number",
+      "id": "interval_time",
+      "label": "Intervalo entre mensagens (ms)",
+      "default": 7000
+    },
+    {
+      "type": "number",
+      "id": "max_messages",
+      "label": "Número de mensagens simuladas por ciclo",
+      "default": 5
+    }
+  ],
+  "presets": [
+    {
+      "name": "Social Proof",
+      "category": "Marketing"
+    }
+  ]
+}
+{% endschema %}
