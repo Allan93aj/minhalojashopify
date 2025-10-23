@@ -1,0 +1,28 @@
+{% schema %}
+{
+  "name": "Minha Section ",
+  "settings": [
+    {
+      "type": "text",
+      "id": "titulo",
+      "label": "Título da Section",
+      "default": "Título exemplo"
+    },
+    {
+      "type": "textarea",
+      "id": "descricao",
+      "label": "Descrição"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Minha Section"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="minha-section">
+  <h2>{{ section.settings.titulo }}</h2>
+  <p>{{ section.settings.descricao }}</p>
+</div>
