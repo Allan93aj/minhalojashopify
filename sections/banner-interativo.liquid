@@ -68,6 +68,48 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   });
 });
+
+
+
+// === Line draw suave e progressivo até 30% da div pai ===
+const lineSection = document.querySelector('.line-container');
+const paths = lineSection.querySelectorAll('path');
+
+// Inicializa cada path
+paths.forEach((path) => {
+  const length = path.getTotalLength();
+  path.style.strokeDasharray = `${length} ${length}`;
+  path.style.strokeDashoffset = length;
+  path.style.transition = 'stroke-dashoffset 0.3s ease-out';
+});
+
+window.addEventListener('scroll', () => {
+  const scrollTop = document.documentElement.scrollTop + document.body.scrollTop;
+  const sectionTop = lineSection.offsetTop;
+  const sectionHeight = lineSection.offsetHeight;
+
+  // Calcula progresso relativo dentro da seção até 30% da altura
+  let scrollRelative = (scrollTop - sectionTop + window.innerHeight) / (sectionHeight * 0.3 + window.innerHeight);
+  scrollRelative = Math.min(Math.max(scrollRelative, 0), 1); // limita entre 0 e 1
+
+  const totalPaths = paths.length;
+  const sectionSize = 1 / totalPaths;
+
+  paths.forEach((path, i) => {
+    const length = path.getTotalLength();
+    const start = sectionSize * i;
+    const end = sectionSize * (i + 1);
+
+    if (scrollRelative < start) {
+      path.style.strokeDashoffset = length;
+    } else if (scrollRelative > end) {
+      path.style.strokeDashoffset = 0;
+    } else {
+      const progress = (scrollRelative - start) / sectionSize;
+      path.style.strokeDashoffset = length - length * progress;
+    }
+  });
+});
 </script>
 
 {% schema %}
