@@ -10,7 +10,7 @@
 {
   "sections": {
     "banner_custom123_BrNjNk": {
-      "type": "banner-custom123",
+      "type": "banner-interativo",
       "blocks": {
         "card_wxTwig": {
           "type": "card",
