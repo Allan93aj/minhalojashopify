@@ -230,7 +230,7 @@
       ],
       "settings": {
         "collection": "masculino",
-        "products_to_show": 10,
+        "products_to_show": 4,
         "title": "<strong>Lançamentos</strong>",
         "heading_size": "h1",
         "description": "",
