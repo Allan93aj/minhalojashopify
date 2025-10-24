@@ -285,8 +285,40 @@
     },
     "banner_custom123_BrNjNk": {
       "type": "banner-custom123",
+      "blocks": {
+        "card_wxTwig": {
+          "type": "card",
+          "settings": {
+            "card_number": "01",
+            "card_title": "Café",
+            "background_image": "shopify://shop_images/card01.png",
+            "overlay_image": "shopify://shop_images/card01_575f9fed-00f5-455d-ab3e-cfeafcb2de2e.png",
+            "inner_image": "shopify://shop_images/card01_98f37c40-232f-47bd-bb35-bdbe34357756.png",
+            "button_text": "Ver mais",
+            "button_link": ""
+          }
+        },
+        "card_LP3Gte": {
+          "type": "card",
+          "settings": {
+            "card_number": "02",
+            "card_title": "Conexão",
+            "background_image": "shopify://shop_images/card02.png",
+            "overlay_image": "shopify://shop_images/card02_a1d3e97c-9056-49f2-8ed7-6a2521b36484.png",
+            "inner_image": "shopify://shop_images/card02_0734c0b1-e35b-4441-a656-e81a4be502f3.png",
+            "button_text": "Ver mais",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "card_wxTwig",
+        "card_LP3Gte"
+      ],
       "name": "Banner Dinâmico 123",
-      "settings": {}
+      "settings": {
+        "banner_title": "Muito mais do que café. Um lugar de momentos"
+      }
     }
   },
   "order": [
