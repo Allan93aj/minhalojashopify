@@ -43,11 +43,12 @@
     "header": {
       "type": "header",
       "custom_css": [
-        "header {background: #001C1F; position: fixed; width: 100%; border-radius: 150px; color: #fff; z-index: 100;}",
+        "header {background: #001c1f; position: fixed; width: 100%; border-radius: 150px; color: #fff; z-index: 100;}",
         ".header-wrapper {background: #000;}",
         ".header__menu-item span {text-decoration: none; color: #fff;}",
         ".list-menu__item {color: #fff;}",
-        ".header__icon .svg-wrapper {color: #fff;}"
+        ".header__icon .svg-wrapper {color: #fff;}",
+        "path{fill: #fff}"
       ],
       "settings": {
         "logo_position": "middle-center",
