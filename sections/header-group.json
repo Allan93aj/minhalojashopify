@@ -42,7 +42,6 @@
     },
     "header": {
       "type": "header",
-      "disabled": true,
       "custom_css": [
         ".header-wrapper {background: #000;}",
         ".header__menu-item span {text-decoration: none; color: #fff;}",
@@ -50,11 +49,11 @@
         ".header__icon .svg-wrapper {color: #fff;}"
       ],
       "settings": {
-        "logo_position": "middle-left",
+        "logo_position": "middle-center",
         "mobile_logo_position": "center",
         "menu": "main-menu",
-        "menu_type_desktop": "mega",
-        "sticky_header_type": "on-scroll-up",
+        "menu_type_desktop": "drawer",
+        "sticky_header_type": "always",
         "show_line_separator": false,
         "color_scheme": "scheme-1",
         "menu_color_scheme": "scheme-1",
