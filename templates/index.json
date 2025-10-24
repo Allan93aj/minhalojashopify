@@ -282,6 +282,11 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "banner_custom123_49tnKM": {
+      "type": "banner-custom123",
+      "name": "Banner Dinâmico 123",
+      "settings": {}
     }
   },
   "order": [
@@ -291,6 +296,7 @@
     "collection_list_h3qNVC",
     "featured_collection_ErjrNU",
     "collection_list_pRU7dP",
-    "collection_list_Mx9xFa"
+    "collection_list_Mx9xFa",
+    "banner_custom123_49tnKM"
   ]
 }
