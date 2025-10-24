@@ -1,0 +1,261 @@
+/***** BANNER *****/
+
+.main-banner {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+  background: #442D17;
+}
+
+/* ===== UL LISTA ===== */
+.banner-list {
+        position: absolute;
+    top: 115px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    list-style: none;
+   z-index: 10;
+    max-width: 1200px;
+    padding: 0;
+    text-align: center;;
+    flex-direction: column;
+}
+
+.banner-items{
+    display: flex;
+    background: #001C1F;
+    border-radius: 100px;   
+}
+
+.banner-title h1{
+  color: #fff;
+  margin: 0;
+}
+
+.banner-title {
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+.banner-title.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+
+.banner-list li {
+  background: #022D2F;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 30px;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    font-family: sans-serif;
+    font-weight: 500;
+    transition: all 0.4s ease, transform 0.3s ease;
+    transform-origin: center;
+    width: 170px;
+    margin: 12px;
+}
+
+.banner-list li.active {
+  background: #fff;
+  color: #442D17;
+  transform: scale(1.2);
+  transform: scale(1.3);
+  box-shadow: 0 0 20px rgba(255,255,255,0.3);
+}
+
+
+
+/* ===== CARDS ===== */
+.cards-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  gap: 10px;
+}
+
+.cards-expanding {
+  flex: 1;
+  transition: all 0.6s ease;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.cards-expanding:hover {
+  flex: 10;
+}
+
+.cards-expanding:hover .wrapper-cards-expanding > img {
+    width: 100%;
+    height: 100%;
+    filter: blur(10px);
+}
+
+.wrapper-cards-expanding {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.wrapper-number-and-name{
+  position: absolute;
+    bottom: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card-number {
+      font-size: 7rem;
+    font-weight: bold;
+    margin: 0;
+    font-style: italic;
+    opacity: 0.4;
+}
+
+.card-title {
+      font-size: 1.5rem;
+    position: relative;
+    top: -36px;
+    text-transform: uppercase;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.content-cards-expanding {
+  display: none;
+}
+
+.cards-expanding:hover .card-number,
+.cards-expanding:hover .card-title {
+  display: none;
+}
+
+.cards-expanding:hover .content-cards-expanding {
+  display: block;
+    position: absolute;
+    bottom: -30%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    background: blue;
+    width: 90%;
+    height: 70%;
+}
+
+/*******/
+.line-container{
+    position: relative;
+    /* top: -250px; */
+    left: 0;
+    width: 100%;
+    height: 950px;
+    text-align: center;
+    overflow: hidden;
+    background: #022D2F;
+
+}
+
+.line-container svg{
+    position: absolute;
+    display: inline-block;
+    height: 94%;
+    top: 0;
+    right: 0;
+    width: 30%;
+}
+
+section{
+    height: 100vh;
+    place-content: center;
+    font-family: 'garamond';
+}
+
+.info1{
+    background: #E6E5E1;
+        text-align: center;
+}
+
+.info2{
+    background: blue;
+        text-align: center;
+}
+
+
+/*card de produtos*/
+
+
+.cardproducts .cards{
+  display: flex;
+  background: #022D2F;
+}
+
+.card-item{
+  width: 25%;
+}
+
+.card-item img{
+  width: 100%;
+}
+
+  .scene {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Poste */
+  .street {
+    position: relative;
+    width: 220px;
+    height: 420px;
+  }
+
+
+
+  /* Lâmpada */
+  .lamp {
+    --int: var(--intensity);
+    position: absolute;
+    top: 6px;
+    left: calc(50% + 100px - 14px); /* no fim do braço */
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, rgba(255,240,200,calc(var(--int)*1)),
+                rgba(255,210,100,calc(var(--int)*0.9)), rgba(200,140,50,calc(var(--int)*0.6)));
+    box-shadow:
+      0 0 calc(18px * var(--int)) rgba(255,210,90, calc(var(--int) * 0.9)),
+      0 0 calc(60px * var(--int)) rgba(255,210,90, calc(var(--int) * 0.45));
+    transition: background 100ms linear, box-shadow 200ms linear;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  /* "Halo" ou brilho maior */
+  .lamp::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -40%);
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    filter: blur(30px);
+    opacity: calc(var(--intensity) * 0.85);
+    background: radial-gradient(circle, rgba(255, 187, 0, 0.9), rgba(255,210,100,0.12), rgba(0,0,0,0));
+    transition: opacity 200ms linear;
+    pointer-events: none;
+  }
