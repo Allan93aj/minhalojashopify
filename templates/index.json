@@ -111,6 +111,44 @@
         "banner_title": "Muito mais do que café. Um lugar de momentos"
       }
     },
+    "monte_seu_kit_bGfW4z": {
+      "type": "monte-seu-kit",
+      "blocks": {
+        "step_QWWFnM": {
+          "type": "step",
+          "settings": {
+            "step_title": "produto 1",
+            "collection_handle": "masculino"
+          }
+        },
+        "step_yekpzb": {
+          "type": "step",
+          "settings": {
+            "step_title": "produto 2",
+            "collection_handle": "feminino"
+          }
+        },
+        "step_CVqL36": {
+          "type": "step",
+          "settings": {
+            "step_title": "produto 3",
+            "collection_handle": "infantil"
+          }
+        }
+      },
+      "block_order": [
+        "step_QWWFnM",
+        "step_yekpzb",
+        "step_CVqL36"
+      ],
+      "name": "Monte seu kit Inciclo",
+      "settings": {
+        "title": "Monte seu kit Inciclo",
+        "banner_image": "shopify://shop_images/067b8373-6c45-416c-a40f-982bb59e7bb8___c9188f1fad96830bcde6c5fb6f26578b.webp",
+        "description": "Monte seu kit em 3 passos simples",
+        "steps_count": 10
+      }
+    },
     "collection_list_qPAmYz": {
       "type": "collection-list",
       "blocks": {
@@ -384,54 +422,17 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
-    },
-    "monte_seu_kit_bGfW4z": {
-      "type": "monte-seu-kit",
-      "blocks": {
-        "step_QWWFnM": {
-          "type": "step",
-          "settings": {
-            "step_title": "produto 1",
-            "collection_handle": "masculino"
-          }
-        },
-        "step_yekpzb": {
-          "type": "step",
-          "settings": {
-            "step_title": "produto 2",
-            "collection_handle": "feminino"
-          }
-        },
-        "step_CVqL36": {
-          "type": "step",
-          "settings": {
-            "step_title": "produto 3",
-            "collection_handle": "infantil"
-          }
-        }
-      },
-      "block_order": [
-        "step_QWWFnM",
-        "step_yekpzb",
-        "step_CVqL36"
-      ],
-      "name": "Monte seu kit Inciclo",
-      "settings": {
-        "title": "Monte seu kit Inciclo",
-        "description": "Monte seu kit em 3 passos simples",
-        "steps_count": 10
-      }
     }
   },
   "order": [
     "banner_custom123_BrNjNk",
+    "monte_seu_kit_bGfW4z",
     "collection_list_qPAmYz",
     "collection_list_8baJV6",
     "featured_collection_6r9xkU",
     "collection_list_h3qNVC",
     "featured_collection_ErjrNU",
     "collection_list_pRU7dP",
-    "collection_list_Mx9xFa",
-    "monte_seu_kit_bGfW4z"
+    "collection_list_Mx9xFa"
   ]
 }
