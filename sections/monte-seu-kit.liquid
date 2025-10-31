@@ -1,212 +1,261 @@
- {{ 'section_monte-seu-kit.css' | asset_url | stylesheet_tag }}
-  <script src="{{ 'monte-seu-kit.js' | asset_url }}" defer></script>
+{{ 'section_monte-seu-kit.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'monte-seu-kit.js' | asset_url }}" defer></script>
 
-{% schema %}
-{
-  "name": "Monte seu kit Inciclo",
-  "settings": [
-    {
-      "type": "text",
-      "id": "title",
-      "label": "Título principal",
-      "default": "Monte seu kit Inciclo"
-    },
-    {
-      "type": "image_picker",
-      "id": "banner_image",
-      "label": "Banner do topo"
-    },
-    {
-      "type": "text",
-      "id": "description",
-      "label": "Descrição",
-      "default": "Monte seu kit em 3 passos simples"
-    },
-    {
-      "type": "number",
-      "id": "steps_count",
-      "label": "Quantidade de produtos no kit",
-      "default": 3
-    }
-  ],
-  "blocks": [
-    {
-      "type": "step",
-      "name": "Passo do Kit",
-      "settings": [
-        {
-          "type": "text",
-          "id": "step_title",
-          "label": "Título do passo (ex: Produto 1)"
-        },
-        {
-          "type": "collection",
-          "id": "collection_handle",
-          "label": "Coleção de produtos para este passo"
-        }
-      ]
-    }
-  ],
-  "presets": [
-    {
-      "name": "Monte seu kit Inciclo"
-    }
-  ]
-}
-{% endschema %}
+{% comment %}
+Section: Kit Builder Dinâmico
+Este componente cria uma montagem de kit com produtos dinâmicos a partir das coleções da loja.
+{% endcomment %}
 
-<section class="build-your-kit">
-  {% if section.settings.banner_image != blank %}
-    <div class="banner">
-      <img src="{{ section.settings.banner_image | image_url }}" alt="Banner do Kit">
-    </div>
-  {% endif %}
+<section class="kit-builder-section">
+  <div class="kit-builder-container">
+    <h2 class="kit-builder-title">{{ section.settings.title }}</h2>
 
-  <div class="title-container">
-    <h2>{{ section.settings.title | escape }}</h2>
-    <p>{{ section.settings.description }}</p>
-  </div>
+    <div class="kit-builder-steps">
+      {% for i in (1..3) %}
+        {% assign select_key = 'select_placeholder_' | append: i %}
+        {% assign collection_key = 'collection_' | append: i %}
+        {% assign select_placeholder = section.settings[select_key] %}
+        {% assign collection_handle = section.settings[collection_key] %}
+        {% assign collection_obj = collections[collection_handle] %}
 
-  <div class="build-your-kit-builder__header">
-    {% for block in section.blocks %}
-      {% assign step_index = forloop.index %}
-      <div 
-        class="build-your-kit-builder__selector {% if forloop.first %}build-your-kit-builder__selector--active{% endif %}" 
-        data-step="{{ step_index }}"
-      >
-        <select 
-          class="build-your-kit-builder__select {% unless forloop.first %}build-your-kit-builder__select--disabled{% endunless %}" 
-          id="step{{ step_index }}-select"
-          {% unless forloop.first %}disabled{% endunless %}
-        >
-          <option value="" disabled selected>{{ block.settings.step_title }}</option>
-          {% if block.settings.collection_handle != blank %}
-            {% assign handle = block.settings.collection_handle %}
-            {% assign coll = collections[handle] %}
-            {% for product in coll.products %}
-              <option 
-                value="{{ product.id }}" 
-                data-title="{{ product.title }}" 
-                data-price="{{ product.price | money }}" 
-                data-image="{{ product.featured_image | image_url: '300x' }}"
-              >
-                {{ product.title }}
-              </option>
-            {% endfor %}
+        <div class="kit-step" id="kit-step-{{ i }}">
+          <h3 class="step-title">Passo {{ i }}: {{ select_placeholder }}</h3>
+
+          {% if collection_obj != blank %}
+            <div class="kit-products-grid">
+              {% for product in collection_obj.products %}
+                <div class="kit-product-card" data-product-id="{{ product.id }}">
+                  <img src="{{ product.featured_image | img_url: '400x' }}" alt="{{ product.title }}">
+                  <h4>{{ product.title }}</h4>
+                  <p class="kit-product-price">{{ product.price | money }}</p>
+                  <button class="select-product-btn" data-handle="{{ product.handle }}">Selecionar</button>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="no-products">Selecione uma coleção no editor para este passo.</p>
           {% endif %}
-        </select>
-      </div>
-
-      {% unless forloop.last %}
-        <div class="build-your-kit-builder__selector-divider">
-          <span class="svg-wrapper">
-            <svg class="icon icon-caret" viewBox="0 0 6 10">
-              <path fill="currentColor" fill-rule="evenodd" d="M.646 9.354a.5.5 0 0 0 .708 0L4.293 5.707a.5.5 0 0 0 0-.708L1.354 2.354a.5.5 0 0 0-.708.708L3.172 5 1.354 6.646a.5.5 0 0 0 0 .708" clip-rule="evenodd"></path>
-            </svg>
-          </span>
         </div>
-      {% endunless %}
-    {% endfor %}
-
-    <div class="build-your-kit-builder__actions">
-      <button 
-        class="build-your-kit-builder__actions-button build-your-kit-builder__actions-button--disabled" 
-        id="resumo-btn" 
-        disabled
-      >
-        Resumo do pedido
-      </button>
+      {% endfor %}
     </div>
-  </div>
 
-  <div id="products-container" class="products-container"></div>
-
-  <div id="resumo-section" class="resumo-section-container" style="display: none;">
-    <h2>Seu Kit</h2>
-    <div id="resumo-content" class="resumo-content"></div>
-    <div id="resumo-total-container" class="resumo-total-container">
-      <p class="resumo-total-label">Total:</p>
-      <p id="resumo-total-value" class="resumo-total-value">R$ 0,00</p>
-    </div>
-    <div class="resumo-buttons-wrapper">
-      <button id="resumo-voltar-button" class="resumo-voltar-button">Voltar</button>
-      <button id="add-to-cart-button" class="add-to-cart-button">Adicionar ao Carrinho</button>
-    </div>
-  </div>
-
-  <div id="next-step-button-container" class="next-step-button-container" style="display: none;">
-    <div class="next-step-buttons-wrapper">
-      <button id="voltar-button" class="voltar-button" style="display: none;">Voltar</button>
-      <button id="next-step-button" class="next-step-button" disabled>Próximo Passo</button>
-      <button id="finalizar-button" class="finalizar-button" style="display: none;" disabled>Finalizar</button>
+    <div class="kit-summary">
+      <h3>Seu Kit:</h3>
+      <div id="selected-products"></div>
+      <button id="add-kit-to-cart" disabled>Adicionar Kit ao Carrinho</button>
     </div>
   </div>
 </section>
 
+<style>
+.kit-builder-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+.kit-builder-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+.kit-step {
+  margin-bottom: 40px;
+}
+.kit-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+.kit-product-card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  text-align: center;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+.kit-product-card:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.kit-product-card img {
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+.select-product-btn {
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.select-product-btn:hover {
+  background: #333;
+}
+.kit-summary {
+  text-align: center;
+  border-top: 1px solid #ddd;
+  padding-top: 30px;
+}
+#selected-products {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+#selected-products .kit-product-card {
+  max-width: 150px;
+}
+#add-kit-to-cart {
+  background: #007b5e;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+#add-kit-to-cart:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+</style>
+
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const selects = document.querySelectorAll('.build-your-kit-builder__select');
-  const resumoBtn = document.getElementById('resumo-btn');
-  const resumoSection = document.getElementById('resumo-section');
-  const resumoContent = document.getElementById('resumo-content');
-  const resumoTotalValue = document.getElementById('resumo-total-value');
-  const addToCartButton = document.getElementById('add-to-cart-button');
-  const selectedProducts = [];
+document.addEventListener("DOMContentLoaded", function() {
+  const selectedProductsContainer = document.getElementById('selected-products');
+  const addKitBtn = document.getElementById('add-kit-to-cart');
+  let selectedProducts = [];
 
-  selects.forEach((select, index) => {
-    select.addEventListener('change', (e) => {
-      const selectedOption = e.target.options[e.target.selectedIndex];
-      const nextSelect = selects[index + 1];
+  document.querySelectorAll('.select-product-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('.kit-product-card');
+      const productId = card.dataset.productId;
+      const productTitle = card.querySelector('h4').innerText;
+      const productImg = card.querySelector('img').src;
+      const productPrice = card.querySelector('.kit-product-price').innerText;
 
-      selectedProducts[index] = {
-        id: selectedOption.value,
-        title: selectedOption.dataset.title,
-        price: selectedOption.dataset.price,
-        image: selectedOption.dataset.image
-      };
-
-      if (nextSelect) {
-        nextSelect.disabled = false;
-        nextSelect.classList.remove('build-your-kit-builder__select--disabled');
-      } else {
-        resumoBtn.disabled = false;
-        resumoBtn.classList.remove('build-your-kit-builder__actions-button--disabled');
-      }
-    });
-  });
-
-  resumoBtn.addEventListener('click', () => {
-    resumoSection.style.display = 'block';
-    resumoContent.innerHTML = '';
-    let total = 0;
-
-    selectedProducts.forEach((p) => {
-      if (p) {
-        resumoContent.innerHTML += `
-          <div class="resumo-item">
-            <img src="${p.image}" alt="${p.title}" />
-            <p>${p.title}</p>
-            <span>${p.price}</span>
-          </div>
-        `;
-        total += parseFloat(p.price.replace('R$', '').replace(',', '.'));
-      }
-    });
-
-    resumoTotalValue.textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
-  });
-
-  addToCartButton.addEventListener('click', async () => {
-    for (const p of selectedProducts) {
-      if (p && p.id) {
-        await fetch('/cart/add.js', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: p.id, quantity: 1 })
+      if (!selectedProducts.find(p => p.id === productId)) {
+        selectedProducts.push({
+          id: productId,
+          title: productTitle,
+          img: productImg,
+          price: productPrice,
+          handle: btn.dataset.handle
         });
       }
-    }
-    window.location.href = '/cart';
+
+      renderSelectedProducts();
+    });
+  });
+
+  function renderSelectedProducts() {
+    selectedProductsContainer.innerHTML = '';
+    selectedProducts.forEach(p => {
+      const div = document.createElement('div');
+      div.classList.add('kit-product-card');
+      div.innerHTML = `
+        <img src="${p.img}" alt="${p.title}">
+        <h4>${p.title}</h4>
+        <p>${p.price}</p>
+        <button class="remove-product-btn" data-id="${p.id}">Remover</button>
+      `;
+      selectedProductsContainer.appendChild(div);
+    });
+
+    addKitBtn.disabled = selectedProducts.length === 0;
+
+    document.querySelectorAll('.remove-product-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedProducts = selectedProducts.filter(p => p.id !== btn.dataset.id);
+        renderSelectedProducts();
+      });
+    });
+  }
+
+  addKitBtn.addEventListener('click', () => {
+    const items = selectedProducts.map(p => ({
+      id: parseInt(p.id),
+      quantity: 1
+    }));
+
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items })
+    }).then(res => res.json())
+      .then(() => {
+        alert('Kit adicionado ao carrinho!');
+        selectedProducts = [];
+        renderSelectedProducts();
+      });
   });
 });
 </script>
+
+{% schema %}
+{
+  "name": "Kit Builder Dinâmico",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título da Seção",
+      "default": "Monte seu Kit"
+    },
+    {
+      "type": "header",
+      "content": "Passo 1"
+    },
+    {
+      "type": "text",
+      "id": "select_placeholder_1",
+      "label": "Título do Passo 1",
+      "default": "Escolha o primeiro produto"
+    },
+    {
+      "type": "collection",
+      "id": "collection_1",
+      "label": "Coleção - Passo 1"
+    },
+    {
+      "type": "header",
+      "content": "Passo 2"
+    },
+    {
+      "type": "text",
+      "id": "select_placeholder_2",
+      "label": "Título do Passo 2",
+      "default": "Escolha o segundo produto"
+    },
+    {
+      "type": "collection",
+      "id": "collection_2",
+      "label": "Coleção - Passo 2"
+    },
+    {
+      "type": "header",
+      "content": "Passo 3"
+    },
+    {
+      "type": "text",
+      "id": "select_placeholder_3",
+      "label": "Título do Passo 3",
+      "default": "Escolha o terceiro produto"
+    },
+    {
+      "type": "collection",
+      "id": "collection_3",
+      "label": "Coleção - Passo 3"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kit Builder Dinâmico",
+      "category": "Kits"
+    }
+  ]
+}
+{% endschema %}
