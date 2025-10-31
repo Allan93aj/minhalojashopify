@@ -13,36 +13,23 @@ Este componente cria uma montagem de kit com produtos dinâmicos a partir das co
     <div class="kit-builder-steps">
       {% for i in (1..3) %}
         {% assign select_key = 'select_placeholder_' | append: i %}
-        {% assign collection_key = 'collection_' | append: i %}
         {% assign select_placeholder = section.settings[select_key] %}
-        {% assign collection_handle = section.settings[collection_key] %}
-        {% assign collection_obj = collections[collection_handle] %}
 
         <div class="kit-step" id="kit-step-{{ i }}">
           <h3 class="step-title">Passo {{ i }}: {{ select_placeholder }}</h3>
 
-          {% if collection_obj != blank %}
-            <div class="kit-products-grid">
-              {% for product in collection_obj.products %}
-                <div class="kit-product-card" data-product-id="{{ product.id }}">
-                  <img src="{{ product.featured_image | img_url: '400x' }}" alt="{{ product.title }}">
-                  <h4>{{ product.title }}</h4>
-                  <p class="kit-product-price">{{ product.price | money }}</p>
-                  <button class="select-product-btn" data-handle="{{ product.handle }}">Selecionar</button>
-                </div>
-              {% endfor %}
-            </div>
-          {% else %}
-            <p class="no-products">Selecione uma coleção no editor para este passo.</p>
-          {% endif %}
+          <select class="kit-collection-select" data-step="{{ i }}">
+            <option value="">Selecione uma coleção</option>
+            {% for collection in collections %}
+              <option value="{{ collection[1].handle }}">{{ collection[1].title }}</option>
+            {% endfor %}
+          </select>
+
+          <div class="kit-products-grid" id="products-container-{{ i }}">
+            <!-- Aqui os produtos serão carregados via JS após o select -->
+          </div>
         </div>
       {% endfor %}
-    </div>
-
-    <div class="kit-summary">
-      <h3>Seu Kit:</h3>
-      <div id="selected-products"></div>
-      <button id="add-kit-to-cart" disabled>Adicionar Kit ao Carrinho</button>
     </div>
   </div>
 </section>
@@ -125,72 +112,31 @@ Este componente cria uma montagem de kit com produtos dinâmicos a partir das co
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-  const selectedProductsContainer = document.getElementById('selected-products');
-  const addKitBtn = document.getElementById('add-kit-to-cart');
-  let selectedProducts = [];
+  document.querySelectorAll('.kit-collection-select').forEach(select => {
+    select.addEventListener('change', function() {
+      const step = this.dataset.step;
+      const handle = this.value;
+      const container = document.getElementById(`products-container-${step}`);
+      container.innerHTML = '';
 
-  document.querySelectorAll('.select-product-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const card = btn.closest('.kit-product-card');
-      const productId = card.dataset.productId;
-      const productTitle = card.querySelector('h4').innerText;
-      const productImg = card.querySelector('img').src;
-      const productPrice = card.querySelector('.kit-product-price').innerText;
+      if (!handle) return;
 
-      if (!selectedProducts.find(p => p.id === productId)) {
-        selectedProducts.push({
-          id: productId,
-          title: productTitle,
-          img: productImg,
-          price: productPrice,
-          handle: btn.dataset.handle
+      fetch(`/collections/${handle}/products.json`)
+        .then(res => res.json())
+        .then(data => {
+          data.products.forEach(product => {
+            const card = document.createElement('div');
+            card.classList.add('kit-product-card');
+            card.innerHTML = `
+              <img src="${product.images[0]}" alt="${product.title}">
+              <h4>${product.title}</h4>
+              <p class="kit-product-price">${product.variants[0].price}</p>
+              <button class="select-product-btn" data-handle="${product.handle}">Selecionar</button>
+            `;
+            container.appendChild(card);
+          });
         });
-      }
-
-      renderSelectedProducts();
     });
-  });
-
-  function renderSelectedProducts() {
-    selectedProductsContainer.innerHTML = '';
-    selectedProducts.forEach(p => {
-      const div = document.createElement('div');
-      div.classList.add('kit-product-card');
-      div.innerHTML = `
-        <img src="${p.img}" alt="${p.title}">
-        <h4>${p.title}</h4>
-        <p>${p.price}</p>
-        <button class="remove-product-btn" data-id="${p.id}">Remover</button>
-      `;
-      selectedProductsContainer.appendChild(div);
-    });
-
-    addKitBtn.disabled = selectedProducts.length === 0;
-
-    document.querySelectorAll('.remove-product-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        selectedProducts = selectedProducts.filter(p => p.id !== btn.dataset.id);
-        renderSelectedProducts();
-      });
-    });
-  }
-
-  addKitBtn.addEventListener('click', () => {
-    const items = selectedProducts.map(p => ({
-      id: parseInt(p.id),
-      quantity: 1
-    }));
-
-    fetch('/cart/add.js', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items })
-    }).then(res => res.json())
-      .then(() => {
-        alert('Kit adicionado ao carrinho!');
-        selectedProducts = [];
-        renderSelectedProducts();
-      });
   });
 });
 </script>
