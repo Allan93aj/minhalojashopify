@@ -1,0 +1,46 @@
+<section id="monte-seu-kit" class="monte-seu-kit">
+  <div class="banner">
+    <img src="{{ 'bannerkit.png' | asset_url }}" alt="Banner">
+  </div>
+
+  <div class="title-container">
+    <h2>MONTE</h2>
+    <h1>SEU KIT</h1>
+    <span>-</span>
+    <p>Monte seu kit em 3 passos simples</p>
+  </div>
+
+  <div class="build-your-kit-builder__header">
+    {% for i in (1..3) %}
+      <div class="build-your-kit-builder__selector{% if i == 1 %} build-your-kit-builder__selector--active{% endif %}" data-step="{{ i }}">
+        <select class="build-your-kit-builder__select{% if i > 1 %} build-your-kit-builder__select--disabled{% endif %}" id="step{{ i }}-select" {% if i > 1 %}disabled{% endif %}>
+          <option value="" disabled selected>Produto {{ i }}</option>
+        </select>
+        <span class="svg-wrapper selector-icon">
+          <svg class="icon icon-caret" viewBox="0 0 6 10">
+            <path fill="currentColor" d="M.646 9.354a.5.5 0 0 0 .708 0L4.293 5.707a.5.5 0 0 0 0-.708L1.354 2.354a.5.5 0 0 0-.708.708L3.172 5 1.354 6.646a.5.5 0 0 0 0 .708"/>
+          </svg>
+        </span>
+      </div>
+      {% unless forloop.last %}
+        <div class="build-your-kit-builder__selector-divider">
+          <svg class="icon icon-caret" viewBox="0 0 6 10">
+            <path fill="currentColor" d="M.646 9.354a.5.5 0 0 0 .708 0L4.293 5.707a.5.5 0 0 0 0-.708L1.354 2.354a.5.5 0 0 0-.708.708L3.172 5 1.354 6.646a.5.5 0 0 0 0 .708"/>
+          </svg>
+        </div>
+      {% endunless %}
+    {% endfor %}
+
+    <div class="build-your-kit-builder__actions">
+      <button class="build-your-kit-builder__actions-button build-your-kit-builder__actions-button--disabled" id="resumo-btn" disabled>
+        <span>Resumo do pedido</span>
+      </button>
+    </div>
+  </div>
+
+  <div id="products-container" class="products-container"></div>
+
+  {% comment %}
+    As seções de resumo e botões permanecem iguais ao seu HTML original
+  {% endcomment %}
+</section>
