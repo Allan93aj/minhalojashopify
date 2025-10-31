@@ -1,3 +1,5 @@
+{{ 'monte-seu-kit.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'monte-seu-kit.js' | asset_url }}" defer></script>
 
 
 <section id="monte-seu-kit" class="monte-seu-kit">
@@ -45,8 +47,7 @@
   {% comment %}
     As seções de resumo e botões permanecem iguais ao seu HTML original
   {% endcomment %}
+   
 </section>
 
-{{ 'monte-seu-kit.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'monte-seu-kit.js' | asset_url }}" defer></script>
 
