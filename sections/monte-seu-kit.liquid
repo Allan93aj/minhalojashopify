@@ -9,22 +9,22 @@
       {% for step in (1..3) %}
         <div class="kit-step" id="kit-step-{{ step }}">
           <h3 class="step-title">Passo {{ step }}</h3>
-
-          <!-- Select para escolher a coleção -->
+          
+          <!-- Select de coleções -->
           <select class="kit-collection-select" data-step="{{ step }}">
             <option value="">Selecione uma coleção</option>
-            {% for collection in collections %}
-              <option value="{{ collection[1].handle }}">{{ collection[1].title }}</option>
+            {% for handle in all_collections %}
+              {% assign collection = all_collections[handle] %}
+              <option value="{{ handle }}">{{ collection.title }}</option>
             {% endfor %}
           </select>
 
-          <!-- Container onde os produtos da coleção selecionada aparecerão -->
-          <div class="kit-products-grid" id="products-container-{{ step }}"></div>
+          <!-- Produtos aparecem aqui -->
+          <div class="kit-products-grid" id="products-step-{{ step }}"></div>
         </div>
       {% endfor %}
     </div>
 
-    <!-- Resumo do kit -->
     <div class="kit-summary">
       <h3>Seu Kit:</h3>
       <div id="selected-products"></div>
@@ -34,137 +34,99 @@
 </section>
 
 <style>
-.kit-builder-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
-.kit-builder-title { text-align: center; font-size: 2rem; margin-bottom: 30px; }
-.kit-step { margin-bottom: 40px; }
-.kit-products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
-.kit-product-card { border: 1px solid #ddd; padding: 15px; text-align: center; border-radius: 8px; transition: 0.3s; cursor: pointer; opacity: 1; }
-.kit-product-card--disabled { opacity: 0.5; pointer-events: none; }
-.kit-product-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-.kit-product-card img { width: 100%; height: auto; margin-bottom: 10px; }
-.kit-summary { text-align: center; border-top: 1px solid #ddd; padding-top: 30px; }
-#selected-products { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
-#selected-products .kit-product-card { max-width: 150px; }
-#add-kit-to-cart { background: #007b5e; color: #fff; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-#add-kit-to-cart:disabled { opacity: 0.5; cursor: not-allowed; }
+.kit-builder-container { max-width:1200px; margin:0 auto; padding:40px 20px; }
+.kit-builder-title { text-align:center; font-size:2rem; margin-bottom:30px; }
+.kit-step { margin-bottom:40px; }
+.kit-products-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:20px; margin-top:20px; }
+.kit-product-card { border:1px solid #ddd; padding:15px; text-align:center; border-radius:8px; transition:.3s; }
+.kit-product-card:hover { box-shadow:0 2px 8px rgba(0,0,0,.1); }
+.kit-product-card img { width:100%; height:auto; margin-bottom:10px; }
+.select-product-btn { background:#000; color:#fff; border:none; padding:8px 14px; border-radius:5px; cursor:pointer; transition:.3s; }
+.select-product-btn:hover { background:#333; }
+.kit-summary { text-align:center; border-top:1px solid #ddd; padding-top:30px; margin-top:40px; }
+#selected-products { display:flex; justify-content:center; flex-wrap:wrap; gap:15px; margin-bottom:20px; }
+#selected-products .kit-product-card { max-width:150px; }
+#add-kit-to-cart { background:#007b5e; color:#fff; border:none; padding:12px 20px; border-radius:6px; cursor:pointer; font-weight:bold; }
+#add-kit-to-cart:disabled { opacity:.5; cursor:not-allowed; }
 </style>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
   const selectedProductsContainer = document.getElementById('selected-products');
   const addKitBtn = document.getElementById('add-kit-to-cart');
-  let selectedProducts = {}; // objeto { step1: produto, step2: produto, step3: produto }
+  let selectedProducts = [];
 
-  // Quando muda a coleção do select
-  document.querySelectorAll('.kit-collection-select').forEach(select => {
-    select.addEventListener('change', function() {
-      const step = this.dataset.step;
-      const handle = this.value;
-      const container = document.getElementById(`products-container-${step}`);
-      container.innerHTML = '';
+  // Função para renderizar produtos do passo
+  function renderProducts(collectionHandle, step) {
+    const container = document.getElementById(`products-step-${step}`);
+    container.innerHTML = '';
 
-      if (!handle) return;
+    if (!collectionHandle) return;
 
-      fetch(`/collections/${handle}/products.json`)
-        .then(res => res.json())
-        .then(data => {
-          data.products.forEach(product => {
-            const card = document.createElement('div');
-            card.classList.add('kit-product-card');
-            card.dataset.step = step;
-            card.dataset.id = product.id;
-            card.dataset.handle = product.handle;
-            card.innerHTML = `
-              <img src="${product.images[0]}" alt="${product.title}">
-              <h4>${product.title}</h4>
-              <p class="kit-product-price">${product.variants[0].price}</p>
-              <input type="checkbox" class="product-checkbox" data-step="${step}" data-id="${product.id}">
-            `;
-            container.appendChild(card);
-          });
+    const collection = all_collections_data[collectionHandle];
+    if (!collection || !collection.products) return;
 
-          attachCheckboxEvents(step);
-          updateCardOpacity(step);
-        });
+    collection.products.forEach(product => {
+      const div = document.createElement('div');
+      div.classList.add('kit-product-card');
+      div.dataset.productId = product.id;
+      div.innerHTML = `
+        <img src="${product.featured_image}" alt="${product.title}">
+        <h4>${product.title}</h4>
+        <p class="kit-product-price">${product.price}</p>
+        <button class="select-product-btn" data-handle="${product.handle}" data-step="${step}">Selecionar</button>
+      `;
+      container.appendChild(div);
     });
-  });
 
-  // Anexa eventos de checkbox para selecionar produtos
-  function attachCheckboxEvents(step) {
-    const checkboxes = document.querySelectorAll(`.product-checkbox[data-step="${step}"]`);
-    checkboxes.forEach(cb => {
-      cb.addEventListener('change', function() {
-        const id = this.dataset.id;
-        const card = this.closest('.kit-product-card');
+    // Adiciona evento de seleção
+    container.querySelectorAll('.select-product-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const card = btn.closest('.kit-product-card');
+        const productId = card.dataset.productId;
+        const productTitle = card.querySelector('h4').innerText;
+        const productImg = card.querySelector('img').src;
+        const productPrice = card.querySelector('.kit-product-price').innerText;
 
-        if (this.checked) {
-          // Desmarca outras checkboxes do mesmo passo
-          checkboxes.forEach(other => { if (other !== this) other.checked = false; });
-          selectedProducts[`step${step}`] = {
-            id, 
-            title: card.querySelector('h4').innerText,
-            img: card.querySelector('img').src,
-            price: card.querySelector('.kit-product-price').innerText,
-            handle: card.dataset.handle
-          };
-        } else {
-          delete selectedProducts[`step${step}`];
-        }
+        // Remove produto do mesmo passo se existir
+        selectedProducts = selectedProducts.filter(p => p.step != step);
+        selectedProducts.push({ id: productId, title: productTitle, img: productImg, price: productPrice, step });
 
-        updateCardOpacity(step);
         renderSelectedProducts();
       });
     });
   }
 
-  // Atualiza a opacidade dos cards para mostrar o selecionado
-  function updateCardOpacity(step) {
-    const cards = document.querySelectorAll(`.kit-product-card[data-step="${step}"]`);
-    cards.forEach(card => {
-      if (selectedProducts[`step${step}`] && selectedProducts[`step${step}`].id !== card.dataset.id) {
-        card.classList.add('kit-product-card--disabled');
-      } else {
-        card.classList.remove('kit-product-card--disabled');
-      }
-    });
-  }
-
-  // Renderiza os produtos selecionados no resumo
+  // Função para renderizar produtos selecionados no resumo
   function renderSelectedProducts() {
     selectedProductsContainer.innerHTML = '';
-    Object.keys(selectedProducts).forEach(step => {
-      const p = selectedProducts[step];
+    selectedProducts.forEach(p => {
       const div = document.createElement('div');
       div.classList.add('kit-product-card');
       div.innerHTML = `
         <img src="${p.img}" alt="${p.title}">
         <h4>${p.title}</h4>
         <p>${p.price}</p>
-        <button class="remove-product-btn" data-step="${step}">Remover</button>
+        <button class="remove-product-btn" data-step="${p.step}">Remover</button>
       `;
       selectedProductsContainer.appendChild(div);
     });
 
-    addKitBtn.disabled = Object.keys(selectedProducts).length === 0;
+    addKitBtn.disabled = selectedProducts.length === 0;
 
+    // Remover produto
     document.querySelectorAll('.remove-product-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        const step = btn.dataset.step;
-        delete selectedProducts[step];
-
-        // Desmarca checkbox correspondente
-        const checkbox = document.querySelector(`.product-checkbox[data-step="${step}"]:checked`);
-        if (checkbox) checkbox.checked = false;
-
-        updateCardOpacity(step);
+        const step = parseInt(btn.dataset.step);
+        selectedProducts = selectedProducts.filter(p => p.step != step);
         renderSelectedProducts();
       });
     });
   }
 
-  // Adiciona kit ao carrinho
+  // Adicionar ao carrinho
   addKitBtn.addEventListener('click', () => {
-    const items = Object.values(selectedProducts).map(p => ({ id: parseInt(p.id), quantity: 1 }));
+    const items = selectedProducts.map(p => ({ id: parseInt(p.id), quantity:1 }));
     fetch('/cart/add.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -172,14 +134,41 @@ document.addEventListener("DOMContentLoaded", function() {
     }).then(res => res.json())
       .then(() => {
         alert('Kit adicionado ao carrinho!');
-        selectedProducts = {};
+        selectedProducts = [];
         renderSelectedProducts();
-
-        // Reseta selects e produtos exibidos
-        document.querySelectorAll('.kit-collection-select').forEach(select => select.value = '');
-        document.querySelectorAll('.kit-products-grid').forEach(grid => grid.innerHTML = '');
       });
   });
+
+  // Evento de mudança do select
+  document.querySelectorAll('.kit-collection-select').forEach(select => {
+    select.addEventListener('change', () => {
+      const step = parseInt(select.dataset.step);
+      const handle = select.value;
+      renderProducts(handle, step);
+    });
+  });
+
+  // ===============================
+  // Carregar dados de todas as coleções
+  // Shopify não permite fetch via JS puro de coleções
+  // Vamos criar um objeto com todos os produtos necessários via Liquid
+  // ===============================
+  const all_collections_data = {};
+  {% for handle in all_collections %}
+    {% assign collection = all_collections[handle] %}
+    all_collections_data["{{ handle }}"] = {
+      products: [
+        {% for product in collection.products %}
+          {
+            id: {{ product.id }},
+            handle: "{{ product.handle }}",
+            title: "{{ product.title | escape }}",
+            price: "{{ product.price | money }}",
+            featured_image: "{{ product.featured_image | img_url: '400x' }}"
+          }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      ]
+    };
+  {% endfor %}
 });
 </script>
-
