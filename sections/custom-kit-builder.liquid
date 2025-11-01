@@ -1,270 +1,44 @@
-
-<!-- HTML do Builder -->
 <div class="kit-builder-container">
-  <div class="steps-selects">
-    <div class="step-select" data-step="1">
-      <select id="step1-select">
-        <option value="">PRODUTO 1</option>
-      </select>
+  <!-- Passos lado a lado -->
+  <div class="steps-container">
+    <div class="step" data-step="1">
+      <label for="step1-select">Passo 1</label>
+      <select id="step1-select" class="kit-select"></select>
     </div>
-    <div class="step-select" data-step="2">
-      <select id="step2-select" disabled>
-        <option value="">PRODUTO 2</option>
-      </select>
+    <div class="step" data-step="2">
+      <label for="step2-select">Passo 2</label>
+      <select id="step2-select" class="kit-select" disabled></select>
     </div>
-    <div class="step-select" data-step="3">
-      <select id="step3-select" disabled>
-        <option value="">PRODUTO 3</option>
-      </select>
+    <div class="step" data-step="3">
+      <label for="step3-select">Passo 3</label>
+      <select id="step3-select" class="kit-select" disabled></select>
     </div>
   </div>
 
-  <div id="products-container" class="products-grid"></div>
+  <!-- Produtos -->
+  <div id="products-container" class="products-container"></div>
 
-  <div id="next-step-button-container" class="buttons-container">
-    <button id="voltar-button" class="btn btn-secondary">Voltar</button>
-    <button id="next-step-button" class="btn btn-primary">Próximo passo</button>
-    <button id="finalizar-button" class="btn btn-primary" style="display:none;">Finalizar</button>
+  <!-- Botões -->
+  <div id="button-container" class="kit-builder-buttons">
+    <button id="back-button" class="btn-secondary" disabled>Voltar</button>
+    <button id="next-button" class="btn-primary" disabled>Próximo</button>
+    <button id="finish-button" class="btn-primary" style="display:none;">Finalizar</button>
   </div>
 
-  <button id="resumo-btn" class="btn btn-summary">Resumo</button>
-
-  <div id="resumo-section" style="display:none;">
-    <div id="resumo-content"></div>
-    <p>Total: <span id="resumo-total-value"></span></p>
-    <button id="resumo-voltar-button" class="btn btn-secondary">Voltar</button>
-    <button id="add-to-cart-button" class="btn btn-primary">Adicionar ao carrinho</button>
+  <!-- Resumo -->
+  <div id="summary-section" class="summary-section" style="display:none;">
+    <h2>Resumo do Kit</h2>
+    <div id="summary-content"></div>
+    <p class="total">Total: <span id="summary-total">R$ 0,00</span></p>
+    <button id="add-to-cart" class="btn-primary">Adicionar ao carrinho</button>
   </div>
 </div>
 
-<!-- CSS atualizado com estilo tipo Shelf -->
-<style>
-.kit-builder-container { display: flex; flex-direction: column; gap: 20px; font-family: 'Arial', sans-serif; }
-.steps-selects { display: flex; gap: 20px; flex-wrap: wrap; justify-content: space-between; }
-.step-select { display: flex; flex-direction: column; flex: 1 1 30%; }
-.step-select label { font-weight: bold; margin-bottom: 5px; }
-.products-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap: 20px; }
-.product-card { border: 1px solid #eee; border-radius: 12px; padding: 15px; background:#fff; transition: all 0.3s; display:flex; flex-direction:column; align-items:center; box-shadow:0 2px 6px rgba(0,0,0,0.05); cursor:pointer; }
-.product-card:hover { box-shadow:0 6px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
-.product-card--disabled { opacity:0.4; pointer-events:none; }
-.product-image { width:100%; height:200px; object-fit:cover; border-radius:8px; margin-bottom:10px; }
-.product-title { font-size:15px; font-weight:bold; margin:5px 0; text-align:center; }
-.product-category { font-size:12px; color:#888; }
-.product-price { font-size:16px; font-weight:bold; color:#1a73e8; margin-top:5px; }
-
-.buttons-container { display:flex; gap:10px; margin-top:15px; flex-wrap:wrap; }
-.btn { padding:10px 20px; border:none; border-radius:8px; cursor:pointer; font-weight:bold; transition:all 0.3s; }
-.btn-primary { background:#1a73e8; color:#fff; }
-.btn-primary:hover { background:#1669c1; }
-.btn-secondary { background:#eee; color:#333; }
-.btn-secondary:hover { background:#ddd; }
-.btn-summary { background:#ff9800; color:#fff; margin-top:10px; }
-.resumo-step { border-top:1px solid #eee; padding-top:10px; margin-top:10px; display:flex; gap:10px; align-items:center; }
-.resumo-image { width:50px; height:50px; object-fit:cover; border-radius:6px; }
-.resumo-item-info { display:flex; flex-direction:column; font-size:13px; }
-.loading { font-style:italic; color:#555; text-align:center; }
-@media(max-width:768px){.steps-selects{flex-direction:column;}.step-select{flex:1 1 100%;}}
-
-</style>
-
-<!-- JS completo -->
+<link rel="stylesheet" href="{{ 'kit-builder.css' | asset_url }}">
 <script>
-const state = {
-  categories: [{% for collection in collections %}"{{ collection.title | escape }}"{% unless forloop.last %}, {% endunless %}{% endfor %}],
-  allProducts: [
-    {% for collection in collections %}
-      {% for product in collection.products %}
-      {
-        id: {{ product.id }},
-        title: "{{ product.title | escape }}",
-        image: "{{ product.featured_image | img_url: '300x' }}",
-        category: "{{ collection.title | escape }}",
-        price: {{ product.variants.first.price | money_without_currency | remove: ',' | divided_by: 100 }},
-        variantId: {{ product.variants.first.id }}
-      }{% unless forloop.last and forloop.parentloop.last %}, {% endunless %}
-      {% endfor %}
-    {% endfor %}
-  ],
-  selectedCategories: { step1:null, step2:null, step3:null },
-  selectedProducts: { step1:null, step2:null, step3:null },
-  displayedProducts: [],
-  currentStep: null,
-  showResumo: false
-};
-
-function formatPrice(price){ return 'R$ '+price.toFixed(2).replace('.',','); }
-function capitalizeFirst(str){ return str.charAt(0).toUpperCase() + str.slice(1); }
-function populateSelectors(categories){
-  ['step1','step2','step3'].forEach(step=>{
-    const select = document.getElementById(step+'-select');
-    categories.forEach(cat=>{
-      const opt = document.createElement('option');
-      opt.value = cat; opt.textContent = capitalizeFirst(cat);
-      select.appendChild(opt);
-    });
-  });
-}
-function filterProductsByCategory(category){
-  return state.allProducts.filter(p=>p.category===category);
-}
-function createProductCard(product, step){
-  const card = document.createElement('div');
-  card.className = 'product-card';
-  const checkboxId = `product-${step}-${product.id}`;
-  const isSelected = state.selectedProducts[`step${step}`]?.id===product.id;
-  card.innerHTML = `
-    <div class="product-checkbox-container">
-      <input type="checkbox" class="product-checkbox" id="${checkboxId}" data-product-id="${product.id}" data-step="${step}" ${isSelected?'checked':''}>
-    </div>
-    <img src="${product.image}" alt="${product.title}" class="product-image">
-    <div class="product-info">
-      <h3 class="product-title">${product.title.length>50?product.title.substring(0,50)+'...':product.title}</h3>
-      <p class="product-category">${capitalizeFirst(product.category)}</p>
-      <p class="product-price">${formatPrice(Number(product.price))}</p>
-    </div>
-  `;
-  if(!isSelected && state.selectedProducts[`step${step}`]) card.classList.add('product-card--disabled');
-  card.querySelector('.product-checkbox').addEventListener('change', handleProductSelection);
-  return card;
-}
-function handleProductSelection(e){
-  const cb = e.target;
-  const step = cb.dataset.step;
-  const product = state.displayedProducts.find(p=>p.id==cb.dataset.productId);
-  if(cb.checked){
-    state.selectedProducts[`step${step}`]=product;
-    document.querySelectorAll(`.product-checkbox[data-step="${step}"]`).forEach(x=>{ if(x.id!==cb.id)x.checked=false; });
-  } else state.selectedProducts[`step${step}`]=null;
-  updateProductCardsOpacity(step); updateButtons(); updateResumo();
-}
-function updateProductCardsOpacity(step){
-  document.querySelectorAll('.product-card').forEach(card=>{
-    const cb=card.querySelector('.product-checkbox');
-    if(cb?.dataset.step===step){
-      if(cb.checked) card.classList.remove('product-card--disabled');
-      else if(state.selectedProducts[`step${step}`]) card.classList.add('product-card--disabled');
-      else card.classList.remove('product-card--disabled');
-    }
-  });
-}
-function displayProducts(products, step){
-  const container = document.getElementById('products-container');
-  if(state.showResumo){ container.style.display='none'; return; }
-  container.style.display='grid'; container.innerHTML='';
-  if(!products.length) container.innerHTML='<p class="loading">Clique em Produto '+step+' para escolher o produto</p>';
-  else products.forEach(p=>container.appendChild(createProductCard(p,step)));
-  state.displayedProducts=products; state.currentStep=step;
-  updateProductCardsOpacity(step); updateButtons();
-}
-function goToNextStep(){
-  if(!state.currentStep || !state.selectedProducts[`step${state.currentStep}`]) return;
-  const next = parseInt(state.currentStep)+1;
-  if(next<=3){
-    const sel=document.getElementById('step'+next+'-select');
-    sel.disabled=false; sel.classList.remove('build-your-kit-builder__select--disabled');
-    displayProducts([],next);
-  }
-}
-function goToPreviousStep(){
-  if(!state.currentStep || state.currentStep==1) return;
-  const prev=parseInt(state.currentStep)-1;
-  const sel=document.getElementById('step'+prev+'-select'); sel.disabled=false;
-  if(state.selectedCategories[`step${prev}`]){
-    sel.value=state.selectedCategories[`step${prev}`];
-    displayProducts(filterProductsByCategory(state.selectedCategories[`step${prev}`]),prev);
-  } else displayProducts([],prev);
-}
-function showResumo(){
-  state.showResumo=true;
-  document.getElementById('products-container').style.display='none';
-  document.getElementById('next-step-button-container').style.display='none';
-  updateResumo();
-  document.getElementById('resumo-section').style.display='block';
-  document.getElementById('resumo-section').scrollIntoView({behavior:'smooth',block:'start'});
-}
-function goBackFromResumo(){
-  state.showResumo=false;
-  displayProducts(filterProductsByCategory(state.selectedCategories['step3']),3);
-  document.getElementById('resumo-section').style.display='none';
-}
-function updateResumo(){
-  const content=document.getElementById('resumo-content');
-  const totalValue=document.getElementById('resumo-total-value');
-  let html=''; let total=0;
-  for(let i=1;i<=3;i++){
-    const prod=state.selectedProducts[`step${i}`];
-    const cat=state.selectedCategories[`step${i}`];
-    if(prod){ html+=`<div class="resumo-step"><h3>Produto ${i}: ${cat}</h3>
-      <div class="resumo-item">
-        <img src="${prod.image}" class="resumo-image">
-        <div class="resumo-item-info">
-          <p class="resumo-item-title">${prod.title}</p>
-          <p class="resumo-item-price">${formatPrice(Number(prod.price))}</p>
-        </div>
-      </div></div>`;
-      total+=Number(prod.price);
-    }
-  }
-  content.innerHTML=html; totalValue.textContent=`${formatPrice(total)}`;
-}
-function handleStepChange(step,val){
-  state.selectedCategories[`step${step}`]=val;
-  state.selectedProducts[`step${step}`]=null;
-  displayProducts(filterProductsByCategory(val),step);
-}
-function updateButtons(){
-  const next=document.getElementById('next-step-button');
-  const finalizar=document.getElementById('finalizar-button');
-  const voltar=document.getElementById('voltar-button');
-  const cont=document.getElementById('next-step-button-container');
-  if(state.showResumo){ cont.style.display='none'; return; }
-  if(state.currentStep && state.selectedProducts[`step${state.currentStep}`]){
-    cont.style.display='block';
-    voltar.style.display=state.currentStep>1?'inline-block':'none';
-    if(state.currentStep==3){ next.style.display='none'; finalizar.style.display='inline-block'; finalizar.disabled=false; }
-    else{ next.style.display='inline-block'; finalizar.style.display='none'; next.disabled=false; }
-  } else { cont.style.display='none'; next.disabled=true; finalizar.disabled=true; }
-}
-function showInitialScreen(){
-  document.getElementById('products-container').innerHTML='<p class="loading">Clique em Produto 1 para escolher o produto</p>';
-}
-
-// Adicionar produtos ao carrinho Shopify AJAX
-function addProductsToCart(){
-  const items = [];
-  for(let i=1;i<=3;i++){
-    const prod=state.selectedProducts[`step${i}`];
-    if(prod) items.push({ id: prod.variantId, quantity: 1 });
-  }
-  if(!items.length) return alert('Nenhum produto selecionado');
-  
-  fetch('/cart/add.js', {
-    method:'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ items })
-  })
-  .then(res=>res.json())
-  .then(data=>{ alert('Produtos adicionados ao carrinho com sucesso!'); })
-  .catch(err=>{ console.error(err); alert('Erro ao adicionar ao carrinho'); });
-}
-
-document.addEventListener('DOMContentLoaded',()=>{
-  showInitialScreen();
-  populateSelectors(state.categories);
-
-  ['step1','step2','step3'].forEach(step=>{
-    document.getElementById(step+'-select').addEventListener('change',e=>handleStepChange(step.slice(-1),e.target.value));
-  });
-
-  document.getElementById('next-step-button').addEventListener('click',goToNextStep);
-  document.getElementById('finalizar-button').addEventListener('click',showResumo);
-  document.getElementById('voltar-button').addEventListener('click',goToPreviousStep);
-  document.getElementById('resumo-voltar-button').addEventListener('click',goBackFromResumo);
-  document.getElementById('resumo-btn').addEventListener('click',showResumo);
-  document.getElementById('add-to-cart-button').addEventListener('click',addProductsToCart);
-});
+  window.kitBuilderCollections = {{ section.settings.collections | json }};
 </script>
-
+<script src="{{ 'kit-builder.js' | asset_url }}" defer></script>
 
 {% schema %}
 {
@@ -273,13 +47,13 @@ document.addEventListener('DOMContentLoaded',()=>{
   "settings": [
     {
       "type": "header",
-      "content": "Configurações do Kit Builder"
+      "content": "Monte seu kit com coleções"
     },
     {
       "type": "collection_list",
       "id": "collections",
-      "label": "Selecione coleções disponíveis",
-      "limit": 10
+      "label": "Coleções disponíveis (ordem = passo 1, 2 e 3)",
+      "limit": 3
     }
   ],
   "presets": [
