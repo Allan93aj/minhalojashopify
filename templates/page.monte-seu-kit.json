@@ -37,11 +37,7 @@
       "type": "custom-kit-builder",
       "name": "Kit Builder",
       "settings": {
-        "collections": [
-          "collabs",
-          "copos",
-          "feminino"
-        ]
+        "collections": []
       }
     }
   },
