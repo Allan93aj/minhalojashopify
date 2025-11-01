@@ -1,3 +1,6 @@
+{{ 'section_monte-seu-kit.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'monte-seu-kit.js' | asset_url }}" defer></script>
+
 
 <!-- HTML do Builder -->
 <div class="kit-builder-container">
@@ -38,7 +41,7 @@
 </div>
 
 <!-- CSS atualizado com estilo tipo Shelf -->
-<style>
+{% comment %} <style>
 .kit-builder-container { display: flex; flex-direction: column; gap: 20px; font-family: 'Arial', sans-serif; }
 .steps-selects { display: flex; gap: 20px; flex-wrap: wrap; justify-content: space-between; }
 .step-select { display: flex; flex-direction: column; flex: 1 1 30%; }
@@ -65,7 +68,7 @@
 .loading { font-style:italic; color:#555; text-align:center; }
 @media(max-width:768px){.steps-selects{flex-direction:column;}.step-select{flex:1 1 100%;}}
 
-</style>
+</style> {% endcomment %}
 
 <!-- JS completo -->
 <script>
