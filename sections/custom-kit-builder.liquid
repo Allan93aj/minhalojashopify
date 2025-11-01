@@ -38,7 +38,7 @@
 <script>
   window.kitBuilderCollections = {{ section.settings.collections | json }};
 </script>
-<script src="{{ 'kit-builder.js' | asset_url }}" defer></script>
+{{ 'kit-builder.js' | asset_url | script_tag }}
 
 {% schema %}
 {
