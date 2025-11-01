@@ -32,10 +32,24 @@
         "mobile_content_alignment": "center",
         "show_text_below": true
       }
+    },
+    "custom_kit_builder_j3QHDi": {
+      "type": "custom-kit-builder",
+      "name": "Kit Builder",
+      "settings": {
+        "collections": [
+          "collabs",
+          "copos",
+          "feminino",
+          "infantil",
+          "lancamento-manto-2"
+        ]
+      }
     }
   },
   "order": [
     "main",
-    "image_banner_Lq9fNb"
+    "image_banner_Lq9fNb",
+    "custom_kit_builder_j3QHDi"
   ]
 }
