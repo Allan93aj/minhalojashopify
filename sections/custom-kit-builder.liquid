@@ -264,3 +264,29 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('add-to-cart-button').addEventListener('click',addProductsToCart);
 });
 </script>
+
+
+{% schema %}
+{
+  "name": "Kit Builder",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Configurações do Kit Builder"
+    },
+    {
+      "type": "collection_list",
+      "id": "collections",
+      "label": "Selecione coleções disponíveis",
+      "limit": 10
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kit Builder",
+      "category": "Produtos"
+    }
+  ]
+}
+{% endschema %}
