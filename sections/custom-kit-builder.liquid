@@ -34,7 +34,7 @@
   </div>
 </div>
 
-<link rel="stylesheet" href="{{ 'kit-builder.css' | asset_url }}">
+{{ 'kit-builder.css' | asset_url | stylesheet_tag }}">
 <script>
   window.kitBuilderCollections = {{ section.settings.collections | json }};
 </script>
