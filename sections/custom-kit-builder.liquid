@@ -48,19 +48,20 @@
 
   <div id="products-container" class="products-grid"></div>
 
-  <div id="next-step-button-container" class="buttons-container">
-    <button id="voltar-button" class="btn btn-secondary">Voltar</button>
-    <button id="next-step-button" class="btn btn-primary">Próximo passo</button>
-    <button id="finalizar-button" class="btn btn-primary" style="display:none;">Finalizar</button>
+  <!-- Botão próximo passo (inicialmente oculto) -->
+  <div id="next-step-button-container" class="buttons-container" style="display:none;">
+    <button id="next-step-button" class="btn btn-primary disabled">Próximo passo</button>
+    <button id="finalizar-button" class="btn btn-primary" style="display:none;">Finalizar e Adicionar ao Carrinho</button>
   </div>
 
-  <button id="resumo-btn" class="btn btn-summary">Resumo</button>
-
-  <div id="resumo-section" style="display:none;">
-    <div id="resumo-content"></div>
-    <p>Total: <span id="resumo-total-value"></span></p>
-    <button id="resumo-voltar-button" class="btn btn-secondary">Voltar</button>
-    <button id="add-to-cart-button" class="btn btn-primary">Adicionar ao carrinho</button>
+  <!-- Seção de produtos selecionados (sempre visível) -->
+  <div id="selected-products-section" class="selected-products-container" style="display:none;">
+    <h2>Produtos Selecionados</h2>
+    <div id="selected-products-content"></div>
+    <div class="total-section">
+      <p class="total-label">Total do Kit:</p>
+      <p class="total-value" id="total-value">R$ 0,00</p>
+    </div>
   </div>
 </div>
 
@@ -85,7 +86,7 @@ const state = {
   selectedCategories: { step1:null, step2:null, step3:null },
   selectedProducts: { step1:null, step2:null, step3:null },
   displayedProducts: [],
-  currentStep: null,
+  currentStep: 1,
   showResumo: false
 };
 
@@ -137,7 +138,7 @@ function selectDropdownOption(step, stepNum, value, optionElement) {
   // Fechar dropdown
   dropdown.classList.remove('open');
   
-  // Chamar lógica de seleção (substitui o onChange do select)
+  // Chamar lógica de seleção
   handleStepChange(stepNum, value);
 }
 
@@ -189,7 +190,9 @@ function handleProductSelection(e){
     state.selectedProducts[`step${step}`]=product;
     document.querySelectorAll(`.product-checkbox[data-step="${step}"]`).forEach(x=>{ if(x.id!==cb.id)x.checked=false; });
   } else state.selectedProducts[`step${step}`]=null;
-  updateProductCardsOpacity(step); updateButtons(); updateResumo();
+  updateProductCardsOpacity(step); 
+  updateButtons(); 
+  updateSelectedProductsDisplay(); // Atualizar display em tempo real
 }
 
 function updateProductCardsOpacity(step){
@@ -205,12 +208,19 @@ function updateProductCardsOpacity(step){
 
 function displayProducts(products, step){
   const container = document.getElementById('products-container');
-  if(state.showResumo){ container.style.display='none'; return; }
-  container.style.display='grid'; container.innerHTML='';
-  if(!products.length) container.innerHTML='<p class="loading">Clique em Produto '+step+' para escolher o produto</p>';
-  else products.forEach(p=>container.appendChild(createProductCard(p,step)));
-  state.displayedProducts=products; state.currentStep=step;
-  updateProductCardsOpacity(step); updateButtons();
+  container.style.display='grid'; 
+  container.innerHTML='';
+  
+  if(!products.length) {
+    container.innerHTML='<p class="loading">Clique em Produto '+step+' para escolher a categoria</p>';
+  } else {
+    products.forEach(p=>container.appendChild(createProductCard(p,step)));
+  }
+  
+  state.displayedProducts=products; 
+  state.currentStep=step;
+  updateProductCardsOpacity(step); 
+  updateButtons();
 }
 
 function goToNextStep(){
@@ -222,73 +232,92 @@ function goToNextStep(){
   }
 }
 
-function goToPreviousStep(){
-  if(!state.currentStep || state.currentStep==1) return;
-  const prev=parseInt(state.currentStep)-1;
-  enableDropdown(prev);
-  if(state.selectedCategories[`step${prev}`]){
-    displayProducts(filterProductsByCategory(state.selectedCategories[`step${prev}`]),prev);
-  } else displayProducts([],prev);
-}
-
-function showResumo(){
-  state.showResumo=true;
-  document.getElementById('products-container').style.display='none';
-  document.getElementById('next-step-button-container').style.display='none';
-  updateResumo();
-  document.getElementById('resumo-section').style.display='block';
-  document.getElementById('resumo-section').scrollIntoView({behavior:'smooth',block:'start'});
-}
-
-function goBackFromResumo(){
-  state.showResumo=false;
-  displayProducts(filterProductsByCategory(state.selectedCategories['step3']),3);
-  document.getElementById('resumo-section').style.display='none';
-}
-
-function updateResumo(){
-  const content=document.getElementById('resumo-content');
-  const totalValue=document.getElementById('resumo-total-value');
-  let html=''; let total=0;
-  for(let i=1;i<=3;i++){
-    const prod=state.selectedProducts[`step${i}`];
-    const cat=state.selectedCategories[`step${i}`];
-    if(prod){ html+=`<div class="resumo-step"><h3>Produto ${i}: ${cat}</h3>
-      <div class="resumo-item">
-        <img src="${prod.image}" class="resumo-image">
-        <div class="resumo-item-info">
-          <p class="resumo-item-title">${prod.title}</p>
-          <p class="resumo-item-price">${formatPrice(Number(prod.price))}</p>
+// ===== NOVA FUNÇÃO: Atualizar Display de Produtos Selecionados =====
+function updateSelectedProductsDisplay(){
+  const section = document.getElementById('selected-products-section');
+  const content = document.getElementById('selected-products-content');
+  const totalValue = document.getElementById('total-value');
+  
+  let html = ''; 
+  let total = 0;
+  let hasProducts = false;
+  
+  for(let i=1; i<=3; i++){
+    const prod = state.selectedProducts[`step${i}`];
+    const cat = state.selectedCategories[`step${i}`];
+    
+    if(prod){ 
+      hasProducts = true;
+      html += `
+        <div class="selected-product-item">
+          <div class="selected-product-number">Produto ${i}</div>
+          <img src="${prod.image}" class="selected-product-image">
+          <div class="selected-product-info">
+            <p class="selected-product-category">${capitalizeFirst(cat)}</p>
+            <p class="selected-product-title">${prod.title}</p>
+            <p class="selected-product-price">${formatPrice(Number(prod.price))}</p>
+          </div>
         </div>
-      </div></div>`;
-      total+=Number(prod.price);
+      `;
+      total += Number(prod.price);
     }
   }
-  content.innerHTML=html; totalValue.textContent=`${formatPrice(total)}`;
+  
+  if(hasProducts) {
+    section.style.display = 'block';
+    content.innerHTML = html;
+    totalValue.textContent = formatPrice(total);
+  } else {
+    section.style.display = 'none';
+  }
 }
 
 function handleStepChange(step,val){
   state.selectedCategories[`step${step}`]=val;
   state.selectedProducts[`step${step}`]=null;
   displayProducts(filterProductsByCategory(val),step);
+  updateButtons(); // Mostrar botão desabilitado após selecionar categoria
 }
 
 function updateButtons(){
-  const next=document.getElementById('next-step-button');
-  const finalizar=document.getElementById('finalizar-button');
-  const voltar=document.getElementById('voltar-button');
-  const cont=document.getElementById('next-step-button-container');
-  if(state.showResumo){ cont.style.display='none'; return; }
-  if(state.currentStep && state.selectedProducts[`step${state.currentStep}`]){
-    cont.style.display='block';
-    voltar.style.display=state.currentStep>1?'inline-block':'none';
-    if(state.currentStep==3){ next.style.display='none'; finalizar.style.display='inline-block'; finalizar.disabled=false; }
-    else{ next.style.display='inline-block'; finalizar.style.display='none'; next.disabled=false; }
-  } else { cont.style.display='none'; next.disabled=true; finalizar.disabled=true; }
+  const nextBtn = document.getElementById('next-step-button');
+  const finalizarBtn = document.getElementById('finalizar-button');
+  const container = document.getElementById('next-step-button-container');
+  
+  const hasSelectedProduct = state.selectedProducts[`step${state.currentStep}`];
+  const hasSelectedCategory = state.selectedCategories[`step${state.currentStep}`];
+  
+  // Mostrar container se houver categoria selecionada
+  if(hasSelectedCategory) {
+    container.style.display = 'flex';
+  } else {
+    container.style.display = 'none';
+    return;
+  }
+  
+  // Botão desabilitado/habilitado
+  if(hasSelectedProduct) {
+    nextBtn.classList.remove('disabled');
+    nextBtn.disabled = false;
+    finalizarBtn.disabled = false;
+  } else {
+    nextBtn.classList.add('disabled');
+    nextBtn.disabled = true;
+    finalizarBtn.disabled = true;
+  }
+  
+  // Mostrar finalizar ou próximo
+  if(state.currentStep == 3) {
+    nextBtn.style.display = 'none';
+    finalizarBtn.style.display = 'inline-block';
+  } else {
+    nextBtn.style.display = 'inline-block';
+    finalizarBtn.style.display = 'none';
+  }
 }
 
 function showInitialScreen(){
-  document.getElementById('products-container').innerHTML='<p class="loading">Clique em Produto 1 para escolher o produto</p>';
+  document.getElementById('products-container').innerHTML='<p class="loading">Clique em Produto 1 para escolher a categoria</p>';
 }
 
 // Adicionar produtos ao carrinho Shopify AJAX
@@ -306,19 +335,18 @@ function addProductsToCart(){
     body: JSON.stringify({ items })
   })
   .then(res=>res.json())
-  .then(data=>{ alert('Produtos adicionados ao carrinho com sucesso!'); })
+  .then(data=>{ 
+    alert('Produtos adicionados ao carrinho com sucesso!');
+    window.location.href = '/cart';
+  })
   .catch(err=>{ console.error(err); alert('Erro ao adicionar ao carrinho'); });
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
   showInitialScreen();
-  initCustomDropdowns(); // Inicializar dropdowns customizados
+  initCustomDropdowns();
 
   document.getElementById('next-step-button').addEventListener('click',goToNextStep);
-  document.getElementById('finalizar-button').addEventListener('click',showResumo);
-  document.getElementById('voltar-button').addEventListener('click',goToPreviousStep);
-  document.getElementById('resumo-voltar-button').addEventListener('click',goBackFromResumo);
-  document.getElementById('resumo-btn').addEventListener('click',showResumo);
-  document.getElementById('add-to-cart-button').addEventListener('click',addProductsToCart);
+  document.getElementById('finalizar-button').addEventListener('click',addProductsToCart);
 });
 </script>
