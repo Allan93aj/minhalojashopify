@@ -1,10 +1,5 @@
 {{ 'section_monte-seu-kit.css' | asset_url | stylesheet_tag }}
 
-{% comment %} Capturar as categorias selecionadas no schema {% endcomment %}
-{% assign step1_collection = section.settings.step1_collection %}
-{% assign step2_collection = section.settings.step2_collection %}
-{% assign step3_collection = section.settings.step3_collection %}
-
 <!-- HTML do Builder -->
 <div class="kit-builder-container">
   <div class="steps-selects">
@@ -54,74 +49,54 @@
   <div id="products-container" class="products-grid"></div>
 
   <div id="next-step-button-container" class="buttons-container">
-    <button id="voltar-button" class="btn btn-secondary">Voltar</button>
-    <button id="next-step-button" class="btn btn-primary">Próximo passo</button>
-    <button id="finalizar-button" class="btn btn-primary" style="display:none;">Finalizar</button>
+    <button id="voltar-button" class="btn btn-secondary">{{ section.settings.btn_back | default: 'Voltar' }}</button>
+    <button id="next-step-button" class="btn btn-primary">{{ section.settings.btn_next | default: 'Próximo passo' }}</button>
+    <button id="finalizar-button" class="btn btn-primary" style="display:none;">{{ section.settings.btn_finish | default: 'Finalizar' }}</button>
   </div>
 
-  <button id="resumo-btn" class="btn btn-summary">Resumo</button>
+  <button id="resumo-btn" class="btn btn-summary">{{ section.settings.btn_summary | default: 'Resumo' }}</button>
 
   <div id="resumo-section" style="display:none;">
     <div id="resumo-content"></div>
     <p>Total: <span id="resumo-total-value"></span></p>
-    <button id="resumo-voltar-button" class="btn btn-secondary">Voltar</button>
-    <button id="add-to-cart-button" class="btn btn-primary">Adicionar ao carrinho</button>
+    <div class="buttons-container">
+      <button id="resumo-voltar-button" class="btn btn-secondary">{{ section.settings.btn_back | default: 'Voltar' }}</button>
+      <button id="add-to-cart-button" class="btn btn-primary">{{ section.settings.btn_add_cart | default: 'Adicionar ao carrinho' }}</button>
+    </div>
   </div>
 </div>
 
 <!-- JS completo -->
 <script>
 const state = {
-  categories: {
-    step1: "{{ step1_collection }}",
-    step2: "{{ step2_collection }}",
-    step3: "{{ step3_collection }}"
-  },
+  categories: [
+    {% for block in section.blocks %}
+      {% if block.type == 'collection' and block.settings.collection != blank %}
+        {
+          handle: "{{ block.settings.collection }}",
+          title: "{{ collections[block.settings.collection].title | escape }}"
+        }{% unless forloop.last %},{% endunless %}
+      {% endif %}
+    {% endfor %}
+  ],
   allProducts: [
-    {% if step1_collection != blank %}
-      {% assign collection1 = collections[step1_collection] %}
-      {% for product in collection1.products %}
-      {
-        id: {{ product.id }},
-        title: "{{ product.title | escape }}",
-        image: "{{ product.featured_image | img_url: '300x' }}",
-        category: "{{ step1_collection }}",
-        step: 1,
-        price: {{ product.variants.first.price | money_without_currency | remove: ',' | divided_by: 100 }},
-        variantId: {{ product.variants.first.id }}
-      }{% unless forloop.last %},{% endunless %}
-      {% endfor %}
-    {% endif %}
-    {% if step2_collection != blank %}
-      {% assign collection2 = collections[step2_collection] %}
-      {% if step1_collection != blank %},{% endif %}
-      {% for product in collection2.products %}
-      {
-        id: {{ product.id }},
-        title: "{{ product.title | escape }}",
-        image: "{{ product.featured_image | img_url: '300x' }}",
-        category: "{{ step2_collection }}",
-        step: 2,
-        price: {{ product.variants.first.price | money_without_currency | remove: ',' | divided_by: 100 }},
-        variantId: {{ product.variants.first.id }}
-      }{% unless forloop.last %},{% endunless %}
-      {% endfor %}
-    {% endif %}
-    {% if step3_collection != blank %}
-      {% assign collection3 = collections[step3_collection] %}
-      {% if step1_collection != blank or step2_collection != blank %},{% endif %}
-      {% for product in collection3.products %}
-      {
-        id: {{ product.id }},
-        title: "{{ product.title | escape }}",
-        image: "{{ product.featured_image | img_url: '300x' }}",
-        category: "{{ step3_collection }}",
-        step: 3,
-        price: {{ product.variants.first.price | money_without_currency | remove: ',' | divided_by: 100 }},
-        variantId: {{ product.variants.first.id }}
-      }{% unless forloop.last %},{% endunless %}
-      {% endfor %}
-    {% endif %}
+    {% for block in section.blocks %}
+      {% if block.type == 'collection' and block.settings.collection != blank %}
+        {% assign collection = collections[block.settings.collection] %}
+        {% for product in collection.products %}
+        {
+          id: {{ product.id }},
+          title: "{{ product.title | escape }}",
+          image: "{{ product.featured_image | img_url: '300x' }}",
+          category: "{{ block.settings.collection }}",
+          categoryTitle: "{{ collection.title | escape }}",
+          price: {{ product.variants.first.price | money_without_currency | remove: ',' | divided_by: 100 }},
+          variantId: {{ product.variants.first.id }}
+        }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+        {% unless forloop.last %},{% endunless %}
+      {% endif %}
+    {% endfor %}
   ],
   selectedCategories: { step1:null, step2:null, step3:null },
   selectedProducts: { step1:null, step2:null, step3:null },
@@ -132,44 +107,54 @@ const state = {
 
 // ===== FUNÇÕES DROPDOWN CUSTOMIZADO =====
 function initCustomDropdowns() {
-  const steps = [
-    { id: 'step1', num: 1, category: state.categories.step1 },
-    { id: 'step2', num: 2, category: state.categories.step2 },
-    { id: 'step3', num: 3, category: state.categories.step3 }
-  ];
-
-  steps.forEach(({ id, num, category }) => {
-    if (!category) return; // Pular se não tiver categoria selecionada
-    
-    const dropdown = document.getElementById(`${id}-dropdown`);
+  ['step1', 'step2', 'step3'].forEach((step, index) => {
+    const stepNum = index + 1;
+    const dropdown = document.getElementById(`${step}-dropdown`);
     const button = dropdown.querySelector('.dropdown-button');
-    const menu = document.getElementById(`${id}-menu`);
-    const label = dropdown.querySelector('.dropdown-label');
+    const menu = document.getElementById(`${step}-menu`);
     
-    // Atualizar label com o nome da categoria
-    label.textContent = capitalizeFirst(category);
-    
-    // Criar opção única (já que cada step tem uma categoria fixa)
-    const option = document.createElement('div');
-    option.className = 'dropdown-option selected';
-    option.textContent = capitalizeFirst(category);
-    option.dataset.value = category;
-    option.addEventListener('click', () => {
-      selectDropdownOption(id, num, category, option);
+    // Popular menu com TODAS as categorias disponíveis
+    state.categories.forEach(cat => {
+      const option = document.createElement('div');
+      option.className = 'dropdown-option';
+      option.textContent = capitalizeFirst(cat.title);
+      option.dataset.value = cat.handle;
+      option.addEventListener('click', () => {
+        selectDropdownOption(step, stepNum, cat.handle, cat.title, option);
+      });
+      menu.appendChild(option);
     });
-    menu.appendChild(option);
     
-    // Auto-selecionar ao clicar no botão
+    // Toggle dropdown
     button.addEventListener('click', (e) => {
       e.stopPropagation();
       if (!button.disabled) {
-        handleStepChange(num, category);
+        closeAllDropdowns();
+        dropdown.classList.toggle('open');
       }
     });
   });
   
   // Fechar ao clicar fora
   document.addEventListener('click', () => closeAllDropdowns());
+}
+
+function selectDropdownOption(step, stepNum, value, title, optionElement) {
+  const dropdown = document.getElementById(`${step}-dropdown`);
+  const label = dropdown.querySelector('.dropdown-label');
+  
+  // Atualizar label
+  label.textContent = capitalizeFirst(title);
+  
+  // Marcar opção selecionada
+  dropdown.querySelectorAll('.dropdown-option').forEach(opt => opt.classList.remove('selected'));
+  optionElement.classList.add('selected');
+  
+  // Fechar dropdown
+  dropdown.classList.remove('open');
+  
+  // Chamar lógica de seleção
+  handleStepChange(stepNum, value);
 }
 
 function selectDropdownOption(step, stepNum, value, optionElement) {
@@ -210,7 +195,10 @@ function filterProductsByCategory(category){
 }
 
 function filterProductsByStep(step){
-  return state.allProducts.filter(p=>p.step===step);
+  // Não usamos mais filtro por step, apenas por categoria selecionada
+  const selectedCategory = state.selectedCategories[`step${step}`];
+  if (!selectedCategory) return [];
+  return filterProductsByCategory(selectedCategory);
 }
 
 function createProductCard(product, step){
@@ -261,11 +249,16 @@ function displayProducts(products, step){
   if(state.showResumo){ container.style.display='none'; return; }
   container.style.display='grid'; container.innerHTML='';
   
-  // Filtrar produtos do step específico
+  // Filtrar produtos da categoria selecionada no step
   const stepProducts = filterProductsByStep(step);
   
   if(!stepProducts.length) {
-    container.innerHTML='<p class="loading">Nenhum produto disponível para o Passo '+step+'</p>';
+    const categoryName = state.selectedCategories[`step${step}`];
+    if (categoryName) {
+      container.innerHTML='<p class="loading">Nenhum produto disponível nesta categoria</p>';
+    } else {
+      container.innerHTML='<p class="loading">Clique em Produto '+step+' para escolher a categoria</p>';
+    }
   } else {
     stepProducts.forEach(p=>container.appendChild(createProductCard(p,step)));
   }
@@ -349,7 +342,7 @@ function updateButtons(){
 }
 
 function showInitialScreen(){
-  document.getElementById('products-container').innerHTML='<p class="loading">Clique em Produto 1 para escolher o produto</p>';
+  document.getElementById('products-container').innerHTML='<p class="loading">Clique em Produto 1 para escolher a categoria</p>';
 }
 
 // Adicionar produtos ao carrinho Shopify AJAX
@@ -394,25 +387,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     },
     {
       "type": "paragraph",
-      "content": "Selecione as categorias (coleções) que aparecerão em cada passo do kit."
-    },
-    {
-      "type": "collection",
-      "id": "step1_collection",
-      "label": "Passo 1 - Coleção",
-      "info": "Escolha a coleção de produtos para o primeiro passo"
-    },
-    {
-      "type": "collection",
-      "id": "step2_collection",
-      "label": "Passo 2 - Coleção",
-      "info": "Escolha a coleção de produtos para o segundo passo"
-    },
-    {
-      "type": "collection",
-      "id": "step3_collection",
-      "label": "Passo 3 - Coleção",
-      "info": "Escolha a coleção de produtos para o terceiro passo"
+      "content": "Adicione as coleções que estarão disponíveis para escolha em TODOS os passos do kit. Use os blocos abaixo para adicionar quantas coleções quiser."
     },
     {
       "type": "header",
@@ -474,10 +449,35 @@ document.addEventListener('DOMContentLoaded',()=>{
       "default": "Adicionar ao carrinho"
     }
   ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Coleção",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Selecione a Coleção",
+          "info": "Esta coleção estará disponível como opção em todos os 3 passos"
+        }
+      ]
+    }
+  ],
   "presets": [
     {
       "name": "Monte seu Kit",
-      "category": "Custom"
+      "category": "Custom",
+      "blocks": [
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
+      ]
     }
   ]
 }
