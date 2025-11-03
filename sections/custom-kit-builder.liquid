@@ -8,7 +8,7 @@
       <label>Passo 1</label>
       <div class="custom-dropdown" id="step1-dropdown">
         <button class="dropdown-button" type="button">
-          <span class="dropdown-label">{{ section.settings.step1_label | default: 'PRODUTO 1' }}</span>
+          <span class="dropdown-label">PRODUTO 1</span>
           <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
             <path d="M2 4l4 4 4-4"/>
           </svg>
@@ -22,7 +22,7 @@
       <label>Passo 2</label>
       <div class="custom-dropdown disabled" id="step2-dropdown">
         <button class="dropdown-button" type="button" disabled>
-          <span class="dropdown-label">{{ section.settings.step2_label | default: 'PRODUTO 2' }}</span>
+          <span class="dropdown-label">PRODUTO 2</span>
           <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
             <path d="M2 4l4 4 4-4"/>
           </svg>
@@ -36,7 +36,7 @@
       <label>Passo 3</label>
       <div class="custom-dropdown disabled" id="step3-dropdown">
         <button class="dropdown-button" type="button" disabled>
-          <span class="dropdown-label">{{ section.settings.step3_label | default: 'PRODUTO 3' }}</span>
+          <span class="dropdown-label">PRODUTO 3</span>
           <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
             <path d="M2 4l4 4 4-4"/>
           </svg>
@@ -49,53 +49,37 @@
   <div id="products-container" class="products-grid"></div>
 
   <div id="next-step-button-container" class="buttons-container">
-    <button id="voltar-button" class="btn btn-secondary">{{ section.settings.btn_back | default: 'Voltar' }}</button>
-    <button id="next-step-button" class="btn btn-primary">{{ section.settings.btn_next | default: 'Próximo passo' }}</button>
-    <button id="finalizar-button" class="btn btn-primary" style="display:none;">{{ section.settings.btn_finish | default: 'Finalizar' }}</button>
+    <button id="voltar-button" class="btn btn-secondary">Voltar</button>
+    <button id="next-step-button" class="btn btn-primary">Próximo passo</button>
+    <button id="finalizar-button" class="btn btn-primary" style="display:none;">Finalizar</button>
   </div>
 
-  <button id="resumo-btn" class="btn btn-summary">{{ section.settings.btn_summary | default: 'Resumo' }}</button>
+  <button id="resumo-btn" class="btn btn-summary">Resumo</button>
 
   <div id="resumo-section" style="display:none;">
     <div id="resumo-content"></div>
     <p>Total: <span id="resumo-total-value"></span></p>
-    <div class="buttons-container">
-      <button id="resumo-voltar-button" class="btn btn-secondary">{{ section.settings.btn_back | default: 'Voltar' }}</button>
-      <button id="add-to-cart-button" class="btn btn-primary">{{ section.settings.btn_add_cart | default: 'Adicionar ao carrinho' }}</button>
-    </div>
+    <button id="resumo-voltar-button" class="btn btn-secondary">Voltar</button>
+    <button id="add-to-cart-button" class="btn btn-primary">Adicionar ao carrinho</button>
   </div>
 </div>
 
 <!-- JS completo -->
 <script>
 const state = {
-  categories: [
-    {% for block in section.blocks %}
-      {% if block.type == 'collection' and block.settings.collection != blank %}
-        {
-          handle: "{{ block.settings.collection }}",
-          title: "{{ collections[block.settings.collection].title | escape }}"
-        }{% unless forloop.last %},{% endunless %}
-      {% endif %}
-    {% endfor %}
-  ],
+  categories: [{% for collection in collections %}"{{ collection.title | escape }}"{% unless forloop.last %}, {% endunless %}{% endfor %}],
   allProducts: [
-    {% for block in section.blocks %}
-      {% if block.type == 'collection' and block.settings.collection != blank %}
-        {% assign collection = collections[block.settings.collection] %}
-        {% for product in collection.products %}
-        {
-          id: {{ product.id }},
-          title: "{{ product.title | escape }}",
-          image: "{{ product.featured_image | img_url: '300x' }}",
-          category: "{{ block.settings.collection }}",
-          categoryTitle: "{{ collection.title | escape }}",
-          price: {{ product.variants.first.price | money_without_currency | remove: ',' | divided_by: 100 }},
-          variantId: {{ product.variants.first.id }}
-        }{% unless forloop.last %},{% endunless %}
-        {% endfor %}
-        {% unless forloop.last %},{% endunless %}
-      {% endif %}
+    {% for collection in collections %}
+      {% for product in collection.products %}
+      {
+        id: {{ product.id }},
+        title: "{{ product.title | escape }}",
+        image: "{{ product.featured_image | img_url: '300x' }}",
+        category: "{{ collection.title | escape }}",
+        price: {{ product.variants.first.price | money_without_currency | remove: ',' | divided_by: 100 }},
+        variantId: {{ product.variants.first.id }}
+      }{% unless forloop.last and forloop.parentloop.last %}, {% endunless %}
+      {% endfor %}
     {% endfor %}
   ],
   selectedCategories: { step1:null, step2:null, step3:null },
@@ -113,14 +97,14 @@ function initCustomDropdowns() {
     const button = dropdown.querySelector('.dropdown-button');
     const menu = document.getElementById(`${step}-menu`);
     
-    // Popular menu com TODAS as categorias disponíveis
+    // Popular menu com categorias
     state.categories.forEach(cat => {
       const option = document.createElement('div');
       option.className = 'dropdown-option';
-      option.textContent = capitalizeFirst(cat.title);
-      option.dataset.value = cat.handle;
+      option.textContent = capitalizeFirst(cat);
+      option.dataset.value = cat;
       option.addEventListener('click', () => {
-        selectDropdownOption(step, stepNum, cat.handle, cat.title, option);
+        selectDropdownOption(step, stepNum, cat, option);
       });
       menu.appendChild(option);
     });
@@ -137,24 +121,6 @@ function initCustomDropdowns() {
   
   // Fechar ao clicar fora
   document.addEventListener('click', () => closeAllDropdowns());
-}
-
-function selectDropdownOption(step, stepNum, value, title, optionElement) {
-  const dropdown = document.getElementById(`${step}-dropdown`);
-  const label = dropdown.querySelector('.dropdown-label');
-  
-  // Atualizar label
-  label.textContent = capitalizeFirst(title);
-  
-  // Marcar opção selecionada
-  dropdown.querySelectorAll('.dropdown-option').forEach(opt => opt.classList.remove('selected'));
-  optionElement.classList.add('selected');
-  
-  // Fechar dropdown
-  dropdown.classList.remove('open');
-  
-  // Chamar lógica de seleção
-  handleStepChange(stepNum, value);
 }
 
 function selectDropdownOption(step, stepNum, value, optionElement) {
@@ -192,13 +158,6 @@ function capitalizeFirst(str){ return str.charAt(0).toUpperCase() + str.slice(1)
 
 function filterProductsByCategory(category){
   return state.allProducts.filter(p=>p.category===category);
-}
-
-function filterProductsByStep(step){
-  // Não usamos mais filtro por step, apenas por categoria selecionada
-  const selectedCategory = state.selectedCategories[`step${step}`];
-  if (!selectedCategory) return [];
-  return filterProductsByCategory(selectedCategory);
 }
 
 function createProductCard(product, step){
@@ -248,25 +207,10 @@ function displayProducts(products, step){
   const container = document.getElementById('products-container');
   if(state.showResumo){ container.style.display='none'; return; }
   container.style.display='grid'; container.innerHTML='';
-  
-  // Filtrar produtos da categoria selecionada no step
-  const stepProducts = filterProductsByStep(step);
-  
-  if(!stepProducts.length) {
-    const categoryName = state.selectedCategories[`step${step}`];
-    if (categoryName) {
-      container.innerHTML='<p class="loading">Nenhum produto disponível nesta categoria</p>';
-    } else {
-      container.innerHTML='<p class="loading">Clique em Produto '+step+' para escolher a categoria</p>';
-    }
-  } else {
-    stepProducts.forEach(p=>container.appendChild(createProductCard(p,step)));
-  }
-  
-  state.displayedProducts=stepProducts; 
-  state.currentStep=step;
-  updateProductCardsOpacity(step); 
-  updateButtons();
+  if(!products.length) container.innerHTML='<p class="loading">Clique em Produto '+step+' para escolher o produto</p>';
+  else products.forEach(p=>container.appendChild(createProductCard(p,step)));
+  state.displayedProducts=products; state.currentStep=step;
+  updateProductCardsOpacity(step); updateButtons();
 }
 
 function goToNextStep(){
@@ -282,7 +226,9 @@ function goToPreviousStep(){
   if(!state.currentStep || state.currentStep==1) return;
   const prev=parseInt(state.currentStep)-1;
   enableDropdown(prev);
-  displayProducts([], prev);
+  if(state.selectedCategories[`step${prev}`]){
+    displayProducts(filterProductsByCategory(state.selectedCategories[`step${prev}`]),prev);
+  } else displayProducts([],prev);
 }
 
 function showResumo(){
@@ -296,7 +242,7 @@ function showResumo(){
 
 function goBackFromResumo(){
   state.showResumo=false;
-  displayProducts([], 3);
+  displayProducts(filterProductsByCategory(state.selectedCategories['step3']),3);
   document.getElementById('resumo-section').style.display='none';
 }
 
@@ -324,7 +270,7 @@ function updateResumo(){
 function handleStepChange(step,val){
   state.selectedCategories[`step${step}`]=val;
   state.selectedProducts[`step${step}`]=null;
-  displayProducts([], step);
+  displayProducts(filterProductsByCategory(val),step);
 }
 
 function updateButtons(){
@@ -342,7 +288,7 @@ function updateButtons(){
 }
 
 function showInitialScreen(){
-  document.getElementById('products-container').innerHTML='<p class="loading">Clique em Produto 1 para escolher a categoria</p>';
+  document.getElementById('products-container').innerHTML='<p class="loading">Clique em Produto 1 para escolher o produto</p>';
 }
 
 // Adicionar produtos ao carrinho Shopify AJAX
@@ -376,109 +322,3 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('add-to-cart-button').addEventListener('click',addProductsToCart);
 });
 </script>
-
-{% schema %}
-{
-  "name": "Monte seu Kit",
-  "settings": [
-    {
-      "type": "header",
-      "content": "Configurações do Kit Builder"
-    },
-    {
-      "type": "paragraph",
-      "content": "Adicione as coleções que estarão disponíveis para escolha em TODOS os passos do kit. Use os blocos abaixo para adicionar quantas coleções quiser."
-    },
-    {
-      "type": "header",
-      "content": "Textos Personalizados"
-    },
-    {
-      "type": "text",
-      "id": "step1_label",
-      "label": "Texto Passo 1",
-      "default": "PRODUTO 1",
-      "info": "Texto que aparece no botão do passo 1"
-    },
-    {
-      "type": "text",
-      "id": "step2_label",
-      "label": "Texto Passo 2",
-      "default": "PRODUTO 2",
-      "info": "Texto que aparece no botão do passo 2"
-    },
-    {
-      "type": "text",
-      "id": "step3_label",
-      "label": "Texto Passo 3",
-      "default": "PRODUTO 3",
-      "info": "Texto que aparece no botão do passo 3"
-    },
-    {
-      "type": "header",
-      "content": "Botões"
-    },
-    {
-      "type": "text",
-      "id": "btn_next",
-      "label": "Texto Botão Próximo",
-      "default": "Próximo passo"
-    },
-    {
-      "type": "text",
-      "id": "btn_back",
-      "label": "Texto Botão Voltar",
-      "default": "Voltar"
-    },
-    {
-      "type": "text",
-      "id": "btn_finish",
-      "label": "Texto Botão Finalizar",
-      "default": "Finalizar"
-    },
-    {
-      "type": "text",
-      "id": "btn_summary",
-      "label": "Texto Botão Resumo",
-      "default": "Resumo"
-    },
-    {
-      "type": "text",
-      "id": "btn_add_cart",
-      "label": "Texto Botão Adicionar ao Carrinho",
-      "default": "Adicionar ao carrinho"
-    }
-  ],
-  "blocks": [
-    {
-      "type": "collection",
-      "name": "Coleção",
-      "settings": [
-        {
-          "type": "collection",
-          "id": "collection",
-          "label": "Selecione a Coleção",
-          "info": "Esta coleção estará disponível como opção em todos os 3 passos"
-        }
-      ]
-    }
-  ],
-  "presets": [
-    {
-      "name": "Monte seu Kit",
-      "category": "Custom",
-      "blocks": [
-        {
-          "type": "collection"
-        },
-        {
-          "type": "collection"
-        },
-        {
-          "type": "collection"
-        }
-      ]
-    }
-  ]
-}
-{% endschema %}
