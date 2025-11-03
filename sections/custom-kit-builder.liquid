@@ -1,23 +1,48 @@
 {{ 'section_monte-seu-kit.css' | asset_url | stylesheet_tag }}
 
-
 <!-- HTML do Builder -->
 <div class="kit-builder-container">
   <div class="steps-selects">
+    <!-- Step 1 - Dropdown Customizado -->
     <div class="step-select" data-step="1">
-      <select id="step1-select">
-        <option value="">PRODUTO 1</option>
-      </select>
+      <label>Passo 1</label>
+      <div class="custom-dropdown" id="step1-dropdown">
+        <button class="dropdown-button" type="button">
+          <span class="dropdown-label">PRODUTO 1</span>
+          <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+            <path d="M2 4l4 4 4-4"/>
+          </svg>
+        </button>
+        <div class="dropdown-menu" id="step1-menu"></div>
+      </div>
     </div>
+
+    <!-- Step 2 - Dropdown Customizado -->
     <div class="step-select" data-step="2">
-      <select id="step2-select" disabled>
-        <option value="">PRODUTO 2</option>
-      </select>
+      <label>Passo 2</label>
+      <div class="custom-dropdown disabled" id="step2-dropdown">
+        <button class="dropdown-button" type="button" disabled>
+          <span class="dropdown-label">PRODUTO 2</span>
+          <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+            <path d="M2 4l4 4 4-4"/>
+          </svg>
+        </button>
+        <div class="dropdown-menu" id="step2-menu"></div>
+      </div>
     </div>
+
+    <!-- Step 3 - Dropdown Customizado -->
     <div class="step-select" data-step="3">
-      <select id="step3-select" disabled>
-        <option value="">PRODUTO 3</option>
-      </select>
+      <label>Passo 3</label>
+      <div class="custom-dropdown disabled" id="step3-dropdown">
+        <button class="dropdown-button" type="button" disabled>
+          <span class="dropdown-label">PRODUTO 3</span>
+          <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+            <path d="M2 4l4 4 4-4"/>
+          </svg>
+        </button>
+        <div class="dropdown-menu" id="step3-menu"></div>
+      </div>
     </div>
   </div>
 
@@ -38,7 +63,6 @@
     <button id="add-to-cart-button" class="btn btn-primary">Adicionar ao carrinho</button>
   </div>
 </div>
-
 
 <!-- JS completo -->
 <script>
@@ -65,21 +89,77 @@ const state = {
   showResumo: false
 };
 
-function formatPrice(price){ return 'R$ '+price.toFixed(2).replace('.',','); }
-function capitalizeFirst(str){ return str.charAt(0).toUpperCase() + str.slice(1); }
-function populateSelectors(categories){
-  ['step1','step2','step3'].forEach(step=>{
-    const select = document.getElementById(step+'-select');
-    categories.forEach(cat=>{
-      const opt = document.createElement('option');
-      opt.value = cat; opt.textContent = capitalizeFirst(cat);
-      select.appendChild(opt);
+// ===== FUNÇÕES DROPDOWN CUSTOMIZADO =====
+function initCustomDropdowns() {
+  ['step1', 'step2', 'step3'].forEach((step, index) => {
+    const stepNum = index + 1;
+    const dropdown = document.getElementById(`${step}-dropdown`);
+    const button = dropdown.querySelector('.dropdown-button');
+    const menu = document.getElementById(`${step}-menu`);
+    
+    // Popular menu com categorias
+    state.categories.forEach(cat => {
+      const option = document.createElement('div');
+      option.className = 'dropdown-option';
+      option.textContent = capitalizeFirst(cat);
+      option.dataset.value = cat;
+      option.addEventListener('click', () => {
+        selectDropdownOption(step, stepNum, cat, option);
+      });
+      menu.appendChild(option);
+    });
+    
+    // Toggle dropdown
+    button.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!button.disabled) {
+        closeAllDropdowns();
+        dropdown.classList.toggle('open');
+      }
     });
   });
+  
+  // Fechar ao clicar fora
+  document.addEventListener('click', () => closeAllDropdowns());
 }
+
+function selectDropdownOption(step, stepNum, value, optionElement) {
+  const dropdown = document.getElementById(`${step}-dropdown`);
+  const label = dropdown.querySelector('.dropdown-label');
+  
+  // Atualizar label
+  label.textContent = capitalizeFirst(value);
+  
+  // Marcar opção selecionada
+  dropdown.querySelectorAll('.dropdown-option').forEach(opt => opt.classList.remove('selected'));
+  optionElement.classList.add('selected');
+  
+  // Fechar dropdown
+  dropdown.classList.remove('open');
+  
+  // Chamar lógica de seleção (substitui o onChange do select)
+  handleStepChange(stepNum, value);
+}
+
+function closeAllDropdowns() {
+  document.querySelectorAll('.custom-dropdown').forEach(dd => dd.classList.remove('open'));
+}
+
+function enableDropdown(stepNum) {
+  const dropdown = document.getElementById(`step${stepNum}-dropdown`);
+  const button = dropdown.querySelector('.dropdown-button');
+  dropdown.classList.remove('disabled');
+  button.disabled = false;
+}
+
+// ===== FUNÇÕES ORIGINAIS =====
+function formatPrice(price){ return 'R$ '+price.toFixed(2).replace('.',','); }
+function capitalizeFirst(str){ return str.charAt(0).toUpperCase() + str.slice(1); }
+
 function filterProductsByCategory(category){
   return state.allProducts.filter(p=>p.category===category);
 }
+
 function createProductCard(product, step){
   const card = document.createElement('div');
   card.className = 'product-card';
@@ -100,6 +180,7 @@ function createProductCard(product, step){
   card.querySelector('.product-checkbox').addEventListener('change', handleProductSelection);
   return card;
 }
+
 function handleProductSelection(e){
   const cb = e.target;
   const step = cb.dataset.step;
@@ -110,6 +191,7 @@ function handleProductSelection(e){
   } else state.selectedProducts[`step${step}`]=null;
   updateProductCardsOpacity(step); updateButtons(); updateResumo();
 }
+
 function updateProductCardsOpacity(step){
   document.querySelectorAll('.product-card').forEach(card=>{
     const cb=card.querySelector('.product-checkbox');
@@ -120,6 +202,7 @@ function updateProductCardsOpacity(step){
     }
   });
 }
+
 function displayProducts(products, step){
   const container = document.getElementById('products-container');
   if(state.showResumo){ container.style.display='none'; return; }
@@ -129,24 +212,25 @@ function displayProducts(products, step){
   state.displayedProducts=products; state.currentStep=step;
   updateProductCardsOpacity(step); updateButtons();
 }
+
 function goToNextStep(){
   if(!state.currentStep || !state.selectedProducts[`step${state.currentStep}`]) return;
   const next = parseInt(state.currentStep)+1;
   if(next<=3){
-    const sel=document.getElementById('step'+next+'-select');
-    sel.disabled=false; sel.classList.remove('build-your-kit-builder__select--disabled');
+    enableDropdown(next);
     displayProducts([],next);
   }
 }
+
 function goToPreviousStep(){
   if(!state.currentStep || state.currentStep==1) return;
   const prev=parseInt(state.currentStep)-1;
-  const sel=document.getElementById('step'+prev+'-select'); sel.disabled=false;
+  enableDropdown(prev);
   if(state.selectedCategories[`step${prev}`]){
-    sel.value=state.selectedCategories[`step${prev}`];
     displayProducts(filterProductsByCategory(state.selectedCategories[`step${prev}`]),prev);
   } else displayProducts([],prev);
 }
+
 function showResumo(){
   state.showResumo=true;
   document.getElementById('products-container').style.display='none';
@@ -155,11 +239,13 @@ function showResumo(){
   document.getElementById('resumo-section').style.display='block';
   document.getElementById('resumo-section').scrollIntoView({behavior:'smooth',block:'start'});
 }
+
 function goBackFromResumo(){
   state.showResumo=false;
   displayProducts(filterProductsByCategory(state.selectedCategories['step3']),3);
   document.getElementById('resumo-section').style.display='none';
 }
+
 function updateResumo(){
   const content=document.getElementById('resumo-content');
   const totalValue=document.getElementById('resumo-total-value');
@@ -180,11 +266,13 @@ function updateResumo(){
   }
   content.innerHTML=html; totalValue.textContent=`${formatPrice(total)}`;
 }
+
 function handleStepChange(step,val){
   state.selectedCategories[`step${step}`]=val;
   state.selectedProducts[`step${step}`]=null;
   displayProducts(filterProductsByCategory(val),step);
 }
+
 function updateButtons(){
   const next=document.getElementById('next-step-button');
   const finalizar=document.getElementById('finalizar-button');
@@ -198,6 +286,7 @@ function updateButtons(){
     else{ next.style.display='inline-block'; finalizar.style.display='none'; next.disabled=false; }
   } else { cont.style.display='none'; next.disabled=true; finalizar.disabled=true; }
 }
+
 function showInitialScreen(){
   document.getElementById('products-container').innerHTML='<p class="loading">Clique em Produto 1 para escolher o produto</p>';
 }
@@ -223,11 +312,7 @@ function addProductsToCart(){
 
 document.addEventListener('DOMContentLoaded',()=>{
   showInitialScreen();
-  populateSelectors(state.categories);
-
-  ['step1','step2','step3'].forEach(step=>{
-    document.getElementById(step+'-select').addEventListener('change',e=>handleStepChange(step.slice(-1),e.target.value));
-  });
+  initCustomDropdowns(); // Inicializar dropdowns customizados
 
   document.getElementById('next-step-button').addEventListener('click',goToNextStep);
   document.getElementById('finalizar-button').addEventListener('click',showResumo);
