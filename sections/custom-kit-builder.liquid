@@ -3,43 +3,34 @@
 <!-- HTML do Builder -->
 <div class="kit-builder-container">
   <div class="steps-selects">
-    <!-- Step 1 - Dropdown Customizado -->
     <div class="step-select" data-step="1">
       <label>Passo 1</label>
       <div class="custom-dropdown" id="step1-dropdown">
-        <button class="dropdown-button" type="button">
+        <button class="dropdown-button active" type="button">
           <span class="dropdown-label">PRODUTO 1</span>
-          <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
-            <path d="M2 4l4 4 4-4"/>
-          </svg>
+          <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4"/></svg>
         </button>
         <div class="dropdown-menu" id="step1-menu"></div>
       </div>
     </div>
 
-    <!-- Step 2 - Dropdown Customizado -->
     <div class="step-select" data-step="2">
       <label>Passo 2</label>
       <div class="custom-dropdown disabled" id="step2-dropdown">
         <button class="dropdown-button" type="button" disabled>
           <span class="dropdown-label">PRODUTO 2</span>
-          <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
-            <path d="M2 4l4 4 4-4"/>
-          </svg>
+          <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4"/></svg>
         </button>
         <div class="dropdown-menu" id="step2-menu"></div>
       </div>
     </div>
 
-    <!-- Step 3 - Dropdown Customizado -->
     <div class="step-select" data-step="3">
       <label>Passo 3</label>
       <div class="custom-dropdown disabled" id="step3-dropdown">
         <button class="dropdown-button" type="button" disabled>
           <span class="dropdown-label">PRODUTO 3</span>
-          <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
-            <path d="M2 4l4 4 4-4"/>
-          </svg>
+          <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4"/></svg>
         </button>
         <div class="dropdown-menu" id="step3-menu"></div>
       </div>
@@ -48,19 +39,22 @@
 
   <div id="products-container" class="products-grid"></div>
 
-  <!-- Botão próximo passo (inicialmente oculto) -->
   <div id="next-step-button-container" class="buttons-container" style="display:none;">
+    <button id="back-step-button" class="btn btn-secondary" style="display:none;">Voltar</button>
     <button id="next-step-button" class="btn btn-primary disabled">Próximo passo</button>
-    <button id="finalizar-button" class="btn btn-primary" style="display:none;">Finalizar e Adicionar ao Carrinho</button>
+    <button id="finalizar-button" class="btn btn-success" style="display:none;">Finalizar Kit</button>
   </div>
 
-  <!-- Seção de produtos selecionados (sempre visível) -->
   <div id="selected-products-section" class="selected-products-container" style="display:none;">
-    <h2>Produtos Selecionados</h2>
+    <h2>Resumo do Kit</h2>
     <div id="selected-products-content"></div>
     <div class="total-section">
       <p class="total-label">Total do Kit:</p>
       <p class="total-value" id="total-value">R$ 0,00</p>
+    </div>
+    <div class="buttons-resumo">
+      <button id="back-to-steps" class="btn btn-secondary">Voltar aos passos</button>
+      <button id="add-kit-button" class="btn btn-success">Adicionar Kit ao Carrinho</button>
     </div>
   </div>
 </div>
