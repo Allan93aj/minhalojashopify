@@ -1,5 +1,10 @@
 {{ 'section_monte-seu-kit.css' | asset_url | stylesheet_tag }}
 
+{% comment %} Capturar as categorias selecionadas no schema {% endcomment %}
+{% assign step1_collection = section.settings.step1_collection %}
+{% assign step2_collection = section.settings.step2_collection %}
+{% assign step3_collection = section.settings.step3_collection %}
+
 <!-- HTML do Builder -->
 <div class="kit-builder-container">
   <div class="steps-selects">
@@ -8,7 +13,7 @@
       <label>Passo 1</label>
       <div class="custom-dropdown" id="step1-dropdown">
         <button class="dropdown-button" type="button">
-          <span class="dropdown-label">PRODUTO 1</span>
+          <span class="dropdown-label">{{ section.settings.step1_label | default: 'PRODUTO 1' }}</span>
           <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
             <path d="M2 4l4 4 4-4"/>
           </svg>
@@ -22,7 +27,7 @@
       <label>Passo 2</label>
       <div class="custom-dropdown disabled" id="step2-dropdown">
         <button class="dropdown-button" type="button" disabled>
-          <span class="dropdown-label">PRODUTO 2</span>
+          <span class="dropdown-label">{{ section.settings.step2_label | default: 'PRODUTO 2' }}</span>
           <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
             <path d="M2 4l4 4 4-4"/>
           </svg>
@@ -36,7 +41,7 @@
       <label>Passo 3</label>
       <div class="custom-dropdown disabled" id="step3-dropdown">
         <button class="dropdown-button" type="button" disabled>
-          <span class="dropdown-label">PRODUTO 3</span>
+          <span class="dropdown-label">{{ section.settings.step3_label | default: 'PRODUTO 3' }}</span>
           <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
             <path d="M2 4l4 4 4-4"/>
           </svg>
@@ -67,20 +72,56 @@
 <!-- JS completo -->
 <script>
 const state = {
-  categories: [{% for collection in collections %}"{{ collection.title | escape }}"{% unless forloop.last %}, {% endunless %}{% endfor %}],
+  categories: {
+    step1: "{{ step1_collection }}",
+    step2: "{{ step2_collection }}",
+    step3: "{{ step3_collection }}"
+  },
   allProducts: [
-    {% for collection in collections %}
-      {% for product in collection.products %}
+    {% if step1_collection != blank %}
+      {% assign collection1 = collections[step1_collection] %}
+      {% for product in collection1.products %}
       {
         id: {{ product.id }},
         title: "{{ product.title | escape }}",
         image: "{{ product.featured_image | img_url: '300x' }}",
-        category: "{{ collection.title | escape }}",
+        category: "{{ step1_collection }}",
+        step: 1,
         price: {{ product.variants.first.price | money_without_currency | remove: ',' | divided_by: 100 }},
         variantId: {{ product.variants.first.id }}
-      }{% unless forloop.last and forloop.parentloop.last %}, {% endunless %}
+      }{% unless forloop.last %},{% endunless %}
       {% endfor %}
-    {% endfor %}
+    {% endif %}
+    {% if step2_collection != blank %}
+      {% assign collection2 = collections[step2_collection] %}
+      {% if step1_collection != blank %},{% endif %}
+      {% for product in collection2.products %}
+      {
+        id: {{ product.id }},
+        title: "{{ product.title | escape }}",
+        image: "{{ product.featured_image | img_url: '300x' }}",
+        category: "{{ step2_collection }}",
+        step: 2,
+        price: {{ product.variants.first.price | money_without_currency | remove: ',' | divided_by: 100 }},
+        variantId: {{ product.variants.first.id }}
+      }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    {% endif %}
+    {% if step3_collection != blank %}
+      {% assign collection3 = collections[step3_collection] %}
+      {% if step1_collection != blank or step2_collection != blank %},{% endif %}
+      {% for product in collection3.products %}
+      {
+        id: {{ product.id }},
+        title: "{{ product.title | escape }}",
+        image: "{{ product.featured_image | img_url: '300x' }}",
+        category: "{{ step3_collection }}",
+        step: 3,
+        price: {{ product.variants.first.price | money_without_currency | remove: ',' | divided_by: 100 }},
+        variantId: {{ product.variants.first.id }}
+      }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    {% endif %}
   ],
   selectedCategories: { step1:null, step2:null, step3:null },
   selectedProducts: { step1:null, step2:null, step3:null },
@@ -91,30 +132,38 @@ const state = {
 
 // ===== FUNÇÕES DROPDOWN CUSTOMIZADO =====
 function initCustomDropdowns() {
-  ['step1', 'step2', 'step3'].forEach((step, index) => {
-    const stepNum = index + 1;
-    const dropdown = document.getElementById(`${step}-dropdown`);
+  const steps = [
+    { id: 'step1', num: 1, category: state.categories.step1 },
+    { id: 'step2', num: 2, category: state.categories.step2 },
+    { id: 'step3', num: 3, category: state.categories.step3 }
+  ];
+
+  steps.forEach(({ id, num, category }) => {
+    if (!category) return; // Pular se não tiver categoria selecionada
+    
+    const dropdown = document.getElementById(`${id}-dropdown`);
     const button = dropdown.querySelector('.dropdown-button');
-    const menu = document.getElementById(`${step}-menu`);
+    const menu = document.getElementById(`${id}-menu`);
+    const label = dropdown.querySelector('.dropdown-label');
     
-    // Popular menu com categorias
-    state.categories.forEach(cat => {
-      const option = document.createElement('div');
-      option.className = 'dropdown-option';
-      option.textContent = capitalizeFirst(cat);
-      option.dataset.value = cat;
-      option.addEventListener('click', () => {
-        selectDropdownOption(step, stepNum, cat, option);
-      });
-      menu.appendChild(option);
+    // Atualizar label com o nome da categoria
+    label.textContent = capitalizeFirst(category);
+    
+    // Criar opção única (já que cada step tem uma categoria fixa)
+    const option = document.createElement('div');
+    option.className = 'dropdown-option selected';
+    option.textContent = capitalizeFirst(category);
+    option.dataset.value = category;
+    option.addEventListener('click', () => {
+      selectDropdownOption(id, num, category, option);
     });
+    menu.appendChild(option);
     
-    // Toggle dropdown
+    // Auto-selecionar ao clicar no botão
     button.addEventListener('click', (e) => {
       e.stopPropagation();
       if (!button.disabled) {
-        closeAllDropdowns();
-        dropdown.classList.toggle('open');
+        handleStepChange(num, category);
       }
     });
   });
@@ -158,6 +207,10 @@ function capitalizeFirst(str){ return str.charAt(0).toUpperCase() + str.slice(1)
 
 function filterProductsByCategory(category){
   return state.allProducts.filter(p=>p.category===category);
+}
+
+function filterProductsByStep(step){
+  return state.allProducts.filter(p=>p.step===step);
 }
 
 function createProductCard(product, step){
@@ -207,10 +260,20 @@ function displayProducts(products, step){
   const container = document.getElementById('products-container');
   if(state.showResumo){ container.style.display='none'; return; }
   container.style.display='grid'; container.innerHTML='';
-  if(!products.length) container.innerHTML='<p class="loading">Clique em Produto '+step+' para escolher o produto</p>';
-  else products.forEach(p=>container.appendChild(createProductCard(p,step)));
-  state.displayedProducts=products; state.currentStep=step;
-  updateProductCardsOpacity(step); updateButtons();
+  
+  // Filtrar produtos do step específico
+  const stepProducts = filterProductsByStep(step);
+  
+  if(!stepProducts.length) {
+    container.innerHTML='<p class="loading">Nenhum produto disponível para o Passo '+step+'</p>';
+  } else {
+    stepProducts.forEach(p=>container.appendChild(createProductCard(p,step)));
+  }
+  
+  state.displayedProducts=stepProducts; 
+  state.currentStep=step;
+  updateProductCardsOpacity(step); 
+  updateButtons();
 }
 
 function goToNextStep(){
@@ -226,9 +289,7 @@ function goToPreviousStep(){
   if(!state.currentStep || state.currentStep==1) return;
   const prev=parseInt(state.currentStep)-1;
   enableDropdown(prev);
-  if(state.selectedCategories[`step${prev}`]){
-    displayProducts(filterProductsByCategory(state.selectedCategories[`step${prev}`]),prev);
-  } else displayProducts([],prev);
+  displayProducts([], prev);
 }
 
 function showResumo(){
@@ -242,7 +303,7 @@ function showResumo(){
 
 function goBackFromResumo(){
   state.showResumo=false;
-  displayProducts(filterProductsByCategory(state.selectedCategories['step3']),3);
+  displayProducts([], 3);
   document.getElementById('resumo-section').style.display='none';
 }
 
@@ -270,7 +331,7 @@ function updateResumo(){
 function handleStepChange(step,val){
   state.selectedCategories[`step${step}`]=val;
   state.selectedProducts[`step${step}`]=null;
-  displayProducts(filterProductsByCategory(val),step);
+  displayProducts([], step);
 }
 
 function updateButtons(){
@@ -322,3 +383,102 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('add-to-cart-button').addEventListener('click',addProductsToCart);
 });
 </script>
+
+{% schema %}
+{
+  "name": "Monte seu Kit",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Configurações do Kit Builder"
+    },
+    {
+      "type": "paragraph",
+      "content": "Selecione as categorias (coleções) que aparecerão em cada passo do kit."
+    },
+    {
+      "type": "collection",
+      "id": "step1_collection",
+      "label": "Passo 1 - Coleção",
+      "info": "Escolha a coleção de produtos para o primeiro passo"
+    },
+    {
+      "type": "collection",
+      "id": "step2_collection",
+      "label": "Passo 2 - Coleção",
+      "info": "Escolha a coleção de produtos para o segundo passo"
+    },
+    {
+      "type": "collection",
+      "id": "step3_collection",
+      "label": "Passo 3 - Coleção",
+      "info": "Escolha a coleção de produtos para o terceiro passo"
+    },
+    {
+      "type": "header",
+      "content": "Textos Personalizados"
+    },
+    {
+      "type": "text",
+      "id": "step1_label",
+      "label": "Texto Passo 1",
+      "default": "PRODUTO 1",
+      "info": "Texto que aparece no botão do passo 1"
+    },
+    {
+      "type": "text",
+      "id": "step2_label",
+      "label": "Texto Passo 2",
+      "default": "PRODUTO 2",
+      "info": "Texto que aparece no botão do passo 2"
+    },
+    {
+      "type": "text",
+      "id": "step3_label",
+      "label": "Texto Passo 3",
+      "default": "PRODUTO 3",
+      "info": "Texto que aparece no botão do passo 3"
+    },
+    {
+      "type": "header",
+      "content": "Botões"
+    },
+    {
+      "type": "text",
+      "id": "btn_next",
+      "label": "Texto Botão Próximo",
+      "default": "Próximo passo"
+    },
+    {
+      "type": "text",
+      "id": "btn_back",
+      "label": "Texto Botão Voltar",
+      "default": "Voltar"
+    },
+    {
+      "type": "text",
+      "id": "btn_finish",
+      "label": "Texto Botão Finalizar",
+      "default": "Finalizar"
+    },
+    {
+      "type": "text",
+      "id": "btn_summary",
+      "label": "Texto Botão Resumo",
+      "default": "Resumo"
+    },
+    {
+      "type": "text",
+      "id": "btn_add_cart",
+      "label": "Texto Botão Adicionar ao Carrinho",
+      "default": "Adicionar ao carrinho"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Monte seu Kit",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
