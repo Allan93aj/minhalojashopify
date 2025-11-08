@@ -72,8 +72,14 @@
 }
 
 .banner-list li.active::after{
-  content: "teste";
-  font-size: 10px;
+      content: "";
+    font-size: 10px;
+    position: absolute;
+    bottom: -20px;
+    width: 100%;
+    background: #fff;
+    left: 0;
+    height: 30px;
 }
 
 
