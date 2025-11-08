@@ -1,218 +1,320 @@
 {{ 'section_monte-seu-kit.css' | asset_url | stylesheet_tag }}
 
-<!-- HTML do Builder -->
 <div class="kit-builder-container">
   <div class="steps-selects">
-    <!-- Step 1 - Dropdown Customizado -->
     <div class="step-select" data-step="1">
-      <label>Passo 1</label>
       <div class="custom-dropdown" id="step1-dropdown">
-        <button class="dropdown-button" type="button">
-          <span class="dropdown-label">PRODUTO 1</span>
-          <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
-            <path d="M2 4l4 4 4-4"/>
-          </svg>
-        </button>
-        <div class="dropdown-menu" id="step1-menu"></div>
+        <div class="dropdown-header">
+          <span class="dropdown-text">PRODUTO 1</span>
+          <span class="dropdown-arrow">
+            <img src="{{ 'arrowDown.svg' | asset_url }}" alt="arrow right" width="24" height="14">
+          </span>
+        </div>
+        <div class="dropdown-list"></div>
       </div>
     </div>
-
-    <!-- Step 2 - Dropdown Customizado -->
+    
+    <span class="step-arrow">
+      <img src="{{ 'arrowRight.svg' | asset_url }}" alt="arrow right" width="6" height="11">
+    </span>
+    
     <div class="step-select" data-step="2">
-      <label>Passo 2</label>
       <div class="custom-dropdown disabled" id="step2-dropdown">
-        <button class="dropdown-button" type="button" disabled>
-          <span class="dropdown-label">PRODUTO 2</span>
-          <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
-            <path d="M2 4l4 4 4-4"/>
-          </svg>
-        </button>
-        <div class="dropdown-menu" id="step2-menu"></div>
+        <div class="dropdown-header">
+          <span class="dropdown-text">PRODUTO 2</span>
+          <span class="dropdown-arrow">
+            <img src="{{ 'arrowDown.svg' | asset_url }}" alt="arrow right" width="24" height="14">
+          </span>
+        </div>
+        <div class="dropdown-list"></div>
       </div>
     </div>
-
-    <!-- Step 3 - Dropdown Customizado -->
+    
+    <span class="step-arrow">
+      <img src="{{ 'arrowRight.svg' | asset_url }}" alt="arrow right" width="6" height="11">
+    </span>
+    
     <div class="step-select" data-step="3">
-      <label>Passo 3</label>
       <div class="custom-dropdown disabled" id="step3-dropdown">
-        <button class="dropdown-button" type="button" disabled>
-          <span class="dropdown-label">PRODUTO 3</span>
-          <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
-            <path d="M2 4l4 4 4-4"/>
-          </svg>
-        </button>
-        <div class="dropdown-menu" id="step3-menu"></div>
+        <div class="dropdown-header">
+          <span class="dropdown-text">PRODUTO 3</span>
+          <span class="dropdown-arrow">
+            <img src="{{ 'arrowDown.svg' | asset_url }}" alt="arrow right" width="24" height="14">
+          </span>
+        </div>
+        <div class="dropdown-list"></div>
       </div>
+    </div>
+    
+    <span class="step-arrow">
+      <img src="{{ 'arrowRight.svg' | asset_url }}" alt="arrow right" width="6" height="11">
+    </span>
+    
+    <div class="step-select" data-step="4">
+      <span class="step-label">RESUMO DO PEDIDO</span>
     </div>
   </div>
 
   <div id="products-container" class="products-grid"></div>
 
-  <!-- Botão próximo passo (inicialmente oculto) -->
-  <div id="next-step-button-container" class="buttons-container" style="display:none;">
-    <button id="next-step-button" class="btn btn-primary disabled">Próximo passo</button>
-    <button id="finalizar-button" class="btn btn-primary" style="display:none;">Finalizar e Adicionar ao Carrinho</button>
+  <div id="live-preview-section" style="display:none;">
+    <h2 class="preview-title">Seu Kit</h2>
+    <div id="live-preview-content"></div>
+    <p class="preview-total">
+      
+      <span id="preview-total-txt">Subtotal</span>
+      <span id="preview-total-value">R$ 0,00</span></p>
   </div>
 
-  <!-- Seção de produtos selecionados (sempre visível) -->
-  <div id="selected-products-section" class="selected-products-container" style="display:none;">
-    <h2>Produtos Selecionados</h2>
-    <div id="selected-products-content"></div>
-    <div class="total-section">
-      <p class="total-label">Total do Kit:</p>
-      <p class="total-value" id="total-value">R$ 0,00</p>
+  <div id="next-step-button-container" class="buttons-container" style="display:none;">
+    <button id="voltar-button" class="btn btn-secondary" style="display:none;">Voltar</button>
+    <button id="next-step-button" class="btn btn-primary">Próximo passo</button>
+  </div>
+
+  <div id="resumo-section" style="display:none;">
+    <div id="resumo-content"></div>
+    <p class="resumo-total"> 
+      <span id="resumo-total-txt">Subtotal</span>
+      <span id="resumo-total-value"></span></p>
+    <div class="buttons-container">
+      <button id="resumo-voltar-button" class="btn btn-secondary">Voltar</button>
+      <button id="add-to-cart-button" class="btn btn-primary">Adicionar ao carrinho</button>
     </div>
   </div>
 </div>
 
-<!-- JS completo -->
 <script>
 const state = {
-  categories: [{% for collection in collections %}"{{ collection.title | escape }}"{% unless forloop.last %}, {% endunless %}{% endfor %}],
+  // ✅ Coleções só aparecem se estiverem realmente configuradas
+  categories: [
+    {% if section.settings.colecao_1 %}"{{ section.settings.colecao_1.title }}",{% endif %}
+    {% if section.settings.colecao_2 %}"{{ section.settings.colecao_2.title }}",{% endif %}
+    {% if section.settings.colecao_3 %}"{{ section.settings.colecao_3.title }}",{% endif %}
+    {% if section.settings.colecao_4 %}"{{ section.settings.colecao_4.title }}",{% endif %}
+    {% if section.settings.colecao_5 %}"{{ section.settings.colecao_5.title }}",{% endif %}
+    {% if section.settings.colecao_6 %}"{{ section.settings.colecao_6.title }}",{% endif %}
+    {% if section.settings.colecao_7 %}"{{ section.settings.colecao_7.title }}",{% endif %}
+    {% if section.settings.colecao_8 %}"{{ section.settings.colecao_8.title }}",{% endif %}
+    {% if section.settings.colecao_9 %}"{{ section.settings.colecao_9.title }}",{% endif %}
+    {% if section.settings.colecao_10 %}"{{ section.settings.colecao_10.title }}"{% endif %}
+  ].filter(Boolean), // 🔥 Remove strings vazias e vírgulas soltas automaticamente
+
   allProducts: [
     {% for collection in collections %}
       {% for product in collection.products %}
-      {
-        id: {{ product.id }},
-        title: "{{ product.title | escape }}",
-        image: "{{ product.featured_image | img_url: '300x' }}",
-        category: "{{ collection.title | escape }}",
-        price: {{ product.variants.first.price | money_without_currency | remove: ',' | divided_by: 100 }},
-        variantId: {{ product.variants.first.id }}
-      }{% unless forloop.last and forloop.parentloop.last %}, {% endunless %}
+        {% if product.available %}
+        {
+          id: {{ product.id }},
+          title: "{{ product.title | escape }}",
+          image: "{{ product.featured_image | img_url: '300x' }}",
+          category: "{{ collection.title | escape }}",
+          // REFATORADO: Puxa o preço em centavos (sem arredondamento)
+          price: {{ product.variants.first.price }}, 
+          // REFATORADO: Puxa o preço de comparação em centavos (original)
+          compareAtPrice: {{ product.variants.first.compare_at_price | default: 0 }}, 
+          variantId: {{ product.variants.first.id }},
+          available: {{ product.available | json }}
+        }{% unless forloop.last and forloop.parentloop.last %}, {% endunless %}
+        {% endif %}
       {% endfor %}
     {% endfor %}
   ],
+
   selectedCategories: { step1:null, step2:null, step3:null },
   selectedProducts: { step1:null, step2:null, step3:null },
   displayedProducts: [],
-  currentStep: 1,
-  showResumo: false
+  currentStep: null
 };
 
-// ===== FUNÇÕES DROPDOWN CUSTOMIZADO =====
-function initCustomDropdowns() {
-  ['step1', 'step2', 'step3'].forEach((step, index) => {
-    const stepNum = index + 1;
-    const dropdown = document.getElementById(`${step}-dropdown`);
-    const button = dropdown.querySelector('.dropdown-button');
-    const menu = document.getElementById(`${step}-menu`);
-    
-    // Popular menu com categorias
-    state.categories.forEach(cat => {
-      const option = document.createElement('div');
-      option.className = 'dropdown-option';
-      option.textContent = capitalizeFirst(cat);
-      option.dataset.value = cat;
-      option.addEventListener('click', () => {
-        selectDropdownOption(step, stepNum, cat, option);
-      });
-      menu.appendChild(option);
+// REFATORADO: Função para formatar o preço de centavos para R$ X,XX
+function formatPrice(cents){ 
+  const price = cents / 100;
+  return 'R$ '+price.toFixed(2).replace('.',','); 
+}
+
+function capitalizeFirst(str){ return str.charAt(0).toUpperCase() + str.slice(1); }
+
+function initCustomDropdowns(categories){
+  // 🔥 Só inicializa se houver coleções
+  if(!categories || !categories.length) return;
+
+  ['step1','step2','step3'].forEach(step=>{
+    const dropdown = document.getElementById(step+'-dropdown');
+    const list = dropdown.querySelector('.dropdown-list');
+
+    // Adiciona itens apenas se existirem coleções
+    categories.forEach(cat=>{
+      const item = document.createElement('div');
+      item.className = 'dropdown-item';
+      item.textContent = capitalizeFirst(cat);
+      item.dataset.value = cat;
+      item.addEventListener('click', ()=>handleDropdownSelection(step, cat, dropdown));
+      list.appendChild(item);
     });
-    
-    // Toggle dropdown
-    button.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (!button.disabled) {
+
+    const header = dropdown.querySelector('.dropdown-header');
+    header.addEventListener('click', (e)=>{
+      if(!dropdown.classList.contains('disabled')){
+        e.stopPropagation();
         closeAllDropdowns();
         dropdown.classList.toggle('open');
       }
     });
   });
-  
-  // Fechar ao clicar fora
-  document.addEventListener('click', () => closeAllDropdowns());
+
+  document.addEventListener('click', closeAllDropdowns);
 }
 
-function selectDropdownOption(step, stepNum, value, optionElement) {
-  const dropdown = document.getElementById(`${step}-dropdown`);
-  const label = dropdown.querySelector('.dropdown-label');
-  
-  // Atualizar label
-  label.textContent = capitalizeFirst(value);
-  
-  // Marcar opção selecionada
-  dropdown.querySelectorAll('.dropdown-option').forEach(opt => opt.classList.remove('selected'));
-  optionElement.classList.add('selected');
-  
-  // Fechar dropdown
+function closeAllDropdowns(){
+  document.querySelectorAll('.custom-dropdown').forEach(d=>d.classList.remove('open'));
+}
+
+function handleDropdownSelection(step, value, dropdown){
+  const text = dropdown.querySelector('.dropdown-text');
+  text.textContent = capitalizeFirst(value);
   dropdown.classList.remove('open');
-  
-  // Chamar lógica de seleção
-  handleStepChange(stepNum, value);
+  handleStepChange(step.slice(-1), value);
 }
-
-function closeAllDropdowns() {
-  document.querySelectorAll('.custom-dropdown').forEach(dd => dd.classList.remove('open'));
-}
-
-function enableDropdown(stepNum) {
-  const dropdown = document.getElementById(`step${stepNum}-dropdown`);
-  const button = dropdown.querySelector('.dropdown-button');
-  dropdown.classList.remove('disabled');
-  button.disabled = false;
-}
-
-// ===== FUNÇÕES ORIGINAIS =====
-function formatPrice(price){ return 'R$ '+price.toFixed(2).replace('.',','); }
-function capitalizeFirst(str){ return str.charAt(0).toUpperCase() + str.slice(1); }
 
 function filterProductsByCategory(category){
   return state.allProducts.filter(p=>p.category===category);
 }
 
 function createProductCard(product, step){
+  // REFATORADO: Lógica para exibir preço com desconto
+  let priceHTML = `<p class="product-price">${formatPrice(product.price)}</p>`;
+  if (product.compareAtPrice > product.price && product.compareAtPrice > 0) {
+    priceHTML = `
+      <p class="product-price">
+        <span class="original-price" style="text-decoration: line-through; color: #FE378B; margin-right: 8px;">${formatPrice(product.compareAtPrice)}</span>
+        <span class="discount-price" style="color: #FE378B; font-weight: bold;">${formatPrice(product.price)}</span>
+      </p>
+    `;
+  }
+
   const card = document.createElement('div');
   card.className = 'product-card';
-  const checkboxId = `product-${step}-${product.id}`;
   const isSelected = state.selectedProducts[`step${step}`]?.id===product.id;
+  
+  // REFATORADO: Substituindo o input type="checkbox" por um div clicável
   card.innerHTML = `
     <div class="product-checkbox-container">
-      <input type="checkbox" class="product-checkbox" id="${checkboxId}" data-product-id="${product.id}" data-step="${step}" ${isSelected?'checked':''}>
+      <div class="custom-checkbox ${isSelected ? 'checked' : ''}" 
+           data-product-id="${product.id}" 
+           data-step="${step}"
+           data-is-checked="${isSelected}">
+      </div>
     </div>
     <img src="${product.image}" alt="${product.title}" class="product-image">
     <div class="product-info">
       <h3 class="product-title">${product.title.length>50?product.title.substring(0,50)+'...':product.title}</h3>
       <p class="product-category">${capitalizeFirst(product.category)}</p>
-      <p class="product-price">${formatPrice(Number(product.price))}</p>
+      ${priceHTML} <!-- Preço refatorado -->
     </div>
   `;
-  if(!isSelected && state.selectedProducts[`step${step}`]) card.classList.add('product-card--disabled');
-  card.querySelector('.product-checkbox').addEventListener('change', handleProductSelection);
+  
+  if(!isSelected && state.selectedProducts[`step${step}`]) {
+    card.classList.add('product-card--disabled');
+  }
+  
+  // Adiciona o listener de clique ao novo elemento
+  card.querySelector('.custom-checkbox').addEventListener('click', handleProductSelection);
   return card;
 }
 
+function updateStepDropdownState(step, isSelected) {
+  const dropdown = document.getElementById(`step${step}-dropdown`);
+  if (dropdown) {
+    if (isSelected) {
+      dropdown.classList.add('disabled');
+    } else {
+      dropdown.classList.remove('disabled');
+    }
+  }
+}
+
 function handleProductSelection(e){
-  const cb = e.target;
+  const cb = e.currentTarget; // Usar currentTarget para pegar o elemento com o listener
   const step = cb.dataset.step;
-  const product = state.displayedProducts.find(p=>p.id==cb.dataset.productId);
-  if(cb.checked){
+  const productId = cb.dataset.productId;
+  
+  // Simula o toggle do checkbox
+  const isChecked = cb.dataset.isChecked === 'true';
+  const newCheckedState = !isChecked;
+  
+  const product = state.displayedProducts.find(p=>p.id==productId);
+  
+  if(newCheckedState){
+    // Seleciona o produto atual
     state.selectedProducts[`step${step}`]=product;
-    document.querySelectorAll(`.product-checkbox[data-step="${step}"]`).forEach(x=>{ if(x.id!==cb.id)x.checked=false; });
-  } else state.selectedProducts[`step${step}`]=null;
+    cb.classList.add('checked');
+    cb.dataset.isChecked = 'true';
+    
+    // Desmarca os outros checkboxes do mesmo passo
+    document.querySelectorAll(`.custom-checkbox[data-step="${step}"]`).forEach(x=>{ 
+      if(x !== cb) {
+        x.classList.remove('checked');
+        x.dataset.isChecked = 'false';
+      }
+    });
+    
+    // Bloqueia o dropdown do passo
+    updateStepDropdownState(step, true);
+    
+  } else {
+    // Desmarca o produto atual
+    state.selectedProducts[`step${step}`]=null;
+    cb.classList.remove('checked');
+    cb.dataset.isChecked = 'false';
+    
+    // Desbloqueia o dropdown do passo
+    updateStepDropdownState(step, false);
+  }
+  
   updateProductCardsOpacity(step); 
-  updateButtons(); 
-  updateSelectedProductsDisplay(); // Atualizar display em tempo real
+  updateButtons();
+  updateLivePreview(); // Atualiza preview em tempo real
 }
 
 function updateProductCardsOpacity(step){
   document.querySelectorAll('.product-card').forEach(card=>{
-    const cb=card.querySelector('.product-checkbox');
+    // REFATORADO: Busca o novo elemento .custom-checkbox
+    const cb=card.querySelector('.custom-checkbox');
     if(cb?.dataset.step===step){
-      if(cb.checked) card.classList.remove('product-card--disabled');
-      else if(state.selectedProducts[`step${step}`]) card.classList.add('product-card--disabled');
-      else card.classList.remove('product-card--disabled');
+      const isChecked = cb.dataset.isChecked === 'true';
+      if(isChecked) {
+        card.classList.remove('product-card--disabled');
+      } else if(state.selectedProducts[`step${step}`]) {
+        card.classList.add('product-card--disabled');
+      } else {
+        card.classList.remove('product-card--disabled');
+      }
     }
   });
 }
 
 function displayProducts(products, step){
   const container = document.getElementById('products-container');
-  container.style.display='grid'; 
+  const resumoSection = document.getElementById('resumo-section');
+  
+  document.querySelectorAll('.step-select').forEach(s => s.classList.remove('active'));
+  
+  const currentStepElement = document.querySelector(`.step-select[data-step="${step}"]`);
+  if(currentStepElement) currentStepElement.classList.add('active');
+  
+  container.style.display='flex'; 
   container.innerHTML='';
+  resumoSection.style.display='none';
   
   if(!products.length) {
-    container.innerHTML='<p class="loading">Clique em Produto '+step+' para escolher a categoria</p>';
+    // Texto dinâmico conforme o passo
+    const stepNames = {
+      1: 'primeiro',
+      2: 'segundo',
+      3: 'terceiro'
+    };
+    
+    container.innerHTML = `<p class="loading">Clique em <b><u>Produto ${step} </u></b> para escolher o ${stepNames[step]} item do seu kit</p>`;
   } else {
     products.forEach(p=>container.appendChild(createProductCard(p,step)));
   }
@@ -223,22 +325,227 @@ function displayProducts(products, step){
   updateButtons();
 }
 
+
 function goToNextStep(){
   if(!state.currentStep || !state.selectedProducts[`step${state.currentStep}`]) return;
+  
   const next = parseInt(state.currentStep)+1;
+  
   if(next<=3){
-    enableDropdown(next);
-    displayProducts([],next);
+    const dropdown = document.getElementById('step'+next+'-dropdown');
+    dropdown.classList.remove('disabled');
+    
+    // Se já houver uma categoria selecionada no próximo passo, mostra os produtos
+    if(state.selectedCategories[`step${next}`]){
+      displayProducts(filterProductsByCategory(state.selectedCategories[`step${next}`]), next);
+    } else {
+      displayProducts([], next);
+    }
+  } else if(next===4){
+    showResumo();
   }
 }
 
-// ===== NOVA FUNÇÃO: Atualizar Display de Produtos Selecionados =====
-function updateSelectedProductsDisplay(){
-  const section = document.getElementById('selected-products-section');
-  const content = document.getElementById('selected-products-content');
-  const totalValue = document.getElementById('total-value');
+function goToPreviousStep(){
+  if(state.currentStep === 4){
+    // Se estiver no resumo, volta para o passo 3
+    displayProducts(filterProductsByCategory(state.selectedCategories['step3']),3);
+    document.getElementById('resumo-section').style.display='none';
+    document.getElementById('live-preview-section').style.display='block';
+    return;
+  }
   
-  let html = ''; 
+  if(!state.currentStep || state.currentStep==1) return;
+  
+  const prev=parseInt(state.currentStep)-1;
+  
+  // NÃO desbloqueia o dropdown se já houver um produto selecionado
+  // Apenas desbloqueia se não houver produto no passo anterior
+  if(!state.selectedProducts[`step${prev}`]){
+    updateStepDropdownState(prev, false);
+  }
+  
+  if(state.selectedCategories[`step${prev}`]){
+    displayProducts(filterProductsByCategory(state.selectedCategories[`step${prev}`]),prev);
+  } else {
+    displayProducts([],prev);
+  }
+}
+
+function showResumo(){
+  state.currentStep = 4;
+  
+  document.querySelectorAll('.step-select').forEach(s => s.classList.remove('active'));
+  
+  const step4Element = document.querySelector('.step-select[data-step="4"]');
+  if(step4Element) step4Element.classList.add('active');
+  
+  // Oculta tudo e mostra apenas o resumo limpo
+  document.getElementById('products-container').style.display='none';
+  document.getElementById('live-preview-section').style.display='none';
+  updateResumo();
+  document.getElementById('resumo-section').style.display='block';
+  document.getElementById('next-step-button-container').style.display='none';
+  document.getElementById('resumo-section').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function goBackFromResumo(){
+  displayProducts(filterProductsByCategory(state.selectedCategories['step3']),3);
+  document.getElementById('resumo-section').style.display='none';
+  document.getElementById('live-preview-section').style.display='block';
+}
+
+function handleRemoveProduct(step) {
+  // 1. Remove o produto da seleção
+  state.selectedProducts[`step${step}`] = null;
+  
+  // 2. Desbloqueia o dropdown do passo removido
+  updateStepDropdownState(step, false);
+  
+  // 3. Oculta a seção de resumo (resumo-section)
+  document.getElementById('resumo-section').style.display='none';
+  
+  // 4. Atualiza o resumo e o preview
+  updateResumo();
+  updateLivePreview();
+  
+  // 5. Se o resumo estiver vazio, volta para a tela inicial
+  const hasAnyProduct = Object.values(state.selectedProducts).some(p => p !== null);
+  if (!hasAnyProduct) {
+    showInitialScreen();
+    document.getElementById('products-container').style.display='flex';
+  } else {
+    // 6. Volta para o passo do produto removido para que o usuário possa selecionar um novo
+    displayProducts(filterProductsByCategory(state.selectedCategories[`step${step}`]), parseInt(step));
+  }
+}
+
+function handleRemoveProductFromPreview(step) {
+  // 1. Remove o produto da seleção
+  state.selectedProducts[`step${step}`] = null;
+  
+  // 2. Desbloqueia o dropdown do passo removido
+  updateStepDropdownState(step, false);
+  
+  // 3. Atualiza o preview
+  updateLivePreview();
+  
+  // 4. Se estiver no passo removido, atualiza a visualização dos produtos
+  if (state.currentStep == step) {
+    displayProducts(filterProductsByCategory(state.selectedCategories[`step${step}`]), parseInt(step));
+  }
+  
+  // 5. Se não houver mais produtos selecionados, volta para a tela inicial
+  const hasAnyProduct = Object.values(state.selectedProducts).some(p => p !== null);
+  if (!hasAnyProduct) {
+    showInitialScreen();
+    document.getElementById('live-preview-section').style.display = 'none';
+  }
+  
+  // 6. Atualiza os botões
+  updateButtons();
+}
+
+function updateResumo(){
+  const content=document.getElementById('resumo-content');
+  const totalValue=document.getElementById('resumo-total-value');
+  let html=''; 
+  let total=0;
+  
+  for(let i=1;i<=3;i++){
+    const prod=state.selectedProducts[`step${i}`];
+    const cat=state.selectedCategories[`step${i}`];
+    if(prod){ 
+      // REFATORADO: Lógica para exibir preço com desconto no resumo
+      let priceHTML = `<p class="resumo-product-price">${formatPrice(prod.price)}</p>`;
+      if (prod.compareAtPrice > prod.price && prod.compareAtPrice > 0) {
+        priceHTML = `
+          <p class="resumo-product-price">
+            <span class="original-price" style="text-decoration: line-through; color: #FE378B; margin-right: 8px; font-size: 15px;">${formatPrice(prod.compareAtPrice)}</span>
+            <span class="discount-price" style="color: #702399; font-weight: bold;">${formatPrice(prod.price)}</span>
+          </p>
+        `;
+      }
+
+      html+=`<div class="resumo-product-card">
+        
+        <img src="${prod.image}" class="resumo-product-image" alt="${prod.title}">
+        <div class="resumo-product-details">
+          <p class="resumo-product-category">${capitalizeFirst(cat)}</p>
+          <h3 class="resumo-product-title">${prod.title}</h3>
+          ${priceHTML} <!-- Preço refatorado -->
+        </div>
+        <button class="remove-product-btn" data-step="${i}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="21" height="24" viewBox="0 0 21 24" fill="none">
+<path d="M17.25 8.5L16.27 18.2977C16.1218 19.7828 16.0483 20.5248 15.71 21.086C15.4133 21.58 14.9768 21.975 14.4558 22.2212C13.8643 22.5 13.12 22.5 11.6267 22.5H8.87333C7.38117 22.5 6.63567 22.5 6.04417 22.22C5.52272 21.974 5.08588 21.579 4.78883 21.0848C4.45283 20.5248 4.37817 19.7828 4.22883 18.2977L3.25 8.5M12 16.0833V10.25M8.5 16.0833V10.25M1.5 5.58333H6.88417M6.88417 5.58333L7.3345 2.466C7.46517 1.899 7.9365 1.5 8.47783 1.5H12.0222C12.5635 1.5 13.0337 1.899 13.1655 2.466L13.6158 5.58333M6.88417 5.58333H13.6158M13.6158 5.58333H19" stroke="#FE378B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+        </button>
+      </div>`;
+      // REFATORADO: Soma o preço em centavos para o total
+      total+=prod.price; 
+    }
+  }
+  
+  content.innerHTML=html; 
+  totalValue.textContent=`${formatPrice(total)}`;
+  
+  // Adiciona os listeners de clique aos novos botões
+  document.querySelectorAll('.remove-product-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const stepToRemove = e.currentTarget.dataset.step;
+      handleRemoveProduct(stepToRemove);
+    });
+  });
+}
+
+function handleStepChange(step, val){
+  state.selectedCategories[`step${step}`]=val;
+  state.selectedProducts[`step${step}`]=null;
+  
+  if(!val || val === '') {
+    displayProducts([],step);
+    return;
+  }
+  
+  const products = filterProductsByCategory(val);
+  console.log(`Step ${step}: Categoria "${val}" tem ${products.length} produtos disponíveis`);
+  displayProducts(products, step);
+}
+
+function updateButtons(){
+  const next=document.getElementById('next-step-button');
+  const voltar=document.getElementById('voltar-button');
+  const cont=document.getElementById('next-step-button-container');
+  
+  if(state.currentStep === 4){ 
+    cont.style.display='none'; 
+    return; 
+  }
+  
+  if(state.currentStep && state.selectedProducts[`step${state.currentStep}`]){
+    cont.style.display='flex';
+    voltar.style.display=state.currentStep>1?'inline-block':'none';
+    next.style.display='inline-block';
+    next.disabled=false;
+    
+    if(state.currentStep==3){
+      next.textContent='Próximo passo';
+    } else {
+      next.textContent='Próximo passo';
+    }
+  } else { 
+    cont.style.display='none'; 
+    next.disabled=true; 
+  }
+}
+
+// Atualiza o preview em tempo real
+function updateLivePreview(){
+  const previewSection = document.getElementById('live-preview-section');
+  const previewContent = document.getElementById('live-preview-content');
+  const previewTotalValue = document.getElementById('preview-total-value');
+  
+  let html = '';
   let total = 0;
   let hasProducts = false;
   
@@ -246,81 +553,60 @@ function updateSelectedProductsDisplay(){
     const prod = state.selectedProducts[`step${i}`];
     const cat = state.selectedCategories[`step${i}`];
     
-    if(prod){ 
+    if(prod){
       hasProducts = true;
-      html += `
-        <div class="selected-product-item">
-          <div class="selected-product-number">Produto ${i}</div>
-          <img src="${prod.image}" class="selected-product-image">
-          <div class="selected-product-info">
-            <p class="selected-product-category">${capitalizeFirst(cat)}</p>
-            <p class="selected-product-title">${prod.title}</p>
-            <p class="selected-product-price">${formatPrice(Number(prod.price))}</p>
-          </div>
+      // REFATORADO: Lógica para exibir preço com desconto no preview
+      let priceHTML = `<p class="preview-item-price">${formatPrice(prod.price)}</p>`;
+      if (prod.compareAtPrice > prod.price && prod.compareAtPrice > 0) {
+        priceHTML = `
+          <p class="preview-item-price">
+            <span class="original-price" style="text-decoration: line-through; color: #fe378b; margin-right: 8px; font-size: 15px;">${formatPrice(prod.compareAtPrice)}</span>
+            <span class="discount-price" style="color: #702399; font-weight: bold; font-size: 25px;">${formatPrice(prod.price)}</span>
+          </p>
+        `;
+      }
+
+      html += `<div class="preview-item">
+        <img src="${prod.image}" class="preview-image" alt="${prod.title}">
+        <div class="preview-item-info">
+          
+          <p class="preview-item-title">${prod.title}</p>
+          ${priceHTML} <!-- Preço refatorado -->
         </div>
-      `;
-      total += Number(prod.price);
+        <button class="preview-remove-btn" data-step="${i}" title="Remover produto">
+          <svg xmlns="http://www.w3.org/2000/svg" width="21" height="24" viewBox="0 0 21 24" fill="none">
+<path d="M17.25 8.5L16.27 18.2977C16.1218 19.7828 16.0483 20.5248 15.71 21.086C15.4133 21.58 14.9768 21.975 14.4558 22.2212C13.8643 22.5 13.12 22.5 11.6267 22.5H8.87333C7.38117 22.5 6.63567 22.5 6.04417 22.22C5.52272 21.974 5.08588 21.579 4.78883 21.0848C4.45283 20.5248 4.37817 19.7828 4.22883 18.2977L3.25 8.5M12 16.0833V10.25M8.5 16.0833V10.25M1.5 5.58333H6.88417M6.88417 5.58333L7.3345 2.466C7.46517 1.899 7.9365 1.5 8.47783 1.5H12.0222C12.5635 1.5 13.0337 1.899 13.1655 2.466L13.6158 5.58333M6.88417 5.58333H13.6158M13.6158 5.58333H19" stroke="#FE378B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+        </button>
+      </div>`;
+      // REFATORADO: Soma o preço em centavos para o total
+      total += prod.price; 
     }
   }
   
-  if(hasProducts) {
-    section.style.display = 'block';
-    content.innerHTML = html;
-    totalValue.textContent = formatPrice(total);
+  if(hasProducts){
+    previewSection.style.display = 'block';
+    previewContent.innerHTML = html;
+    previewTotalValue.textContent = formatPrice(total);
+    
+    // Adiciona os listeners de clique aos botões de remover do preview
+    document.querySelectorAll('.preview-remove-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const stepToRemove = e.currentTarget.dataset.step;
+        handleRemoveProductFromPreview(stepToRemove);
+      });
+    });
   } else {
-    section.style.display = 'none';
-  }
-}
-
-function handleStepChange(step,val){
-  state.selectedCategories[`step${step}`]=val;
-  state.selectedProducts[`step${step}`]=null;
-  displayProducts(filterProductsByCategory(val),step);
-  updateButtons(); // Mostrar botão desabilitado após selecionar categoria
-}
-
-function updateButtons(){
-  const nextBtn = document.getElementById('next-step-button');
-  const finalizarBtn = document.getElementById('finalizar-button');
-  const container = document.getElementById('next-step-button-container');
-  
-  const hasSelectedProduct = state.selectedProducts[`step${state.currentStep}`];
-  const hasSelectedCategory = state.selectedCategories[`step${state.currentStep}`];
-  
-  // Mostrar container se houver categoria selecionada
-  if(hasSelectedCategory) {
-    container.style.display = 'flex';
-  } else {
-    container.style.display = 'none';
-    return;
-  }
-  
-  // Botão desabilitado/habilitado
-  if(hasSelectedProduct) {
-    nextBtn.classList.remove('disabled');
-    nextBtn.disabled = false;
-    finalizarBtn.disabled = false;
-  } else {
-    nextBtn.classList.add('disabled');
-    nextBtn.disabled = true;
-    finalizarBtn.disabled = true;
-  }
-  
-  // Mostrar finalizar ou próximo
-  if(state.currentStep == 3) {
-    nextBtn.style.display = 'none';
-    finalizarBtn.style.display = 'inline-block';
-  } else {
-    nextBtn.style.display = 'inline-block';
-    finalizarBtn.style.display = 'none';
+    previewSection.style.display = 'none';
   }
 }
 
 function showInitialScreen(){
-  document.getElementById('products-container').innerHTML='<p class="loading">Clique em Produto 1 para escolher a categoria</p>';
+  document.getElementById('products-container').innerHTML='<p class="loading">Clique em <b><u>Produto 1</u></b> para escolher o primeiro item do seu kit</p>';
+  const step1Element = document.querySelector('.step-select[data-step="1"]');
+  if(step1Element) step1Element.classList.add('active');
 }
 
-// Adicionar produtos ao carrinho Shopify AJAX
 function addProductsToCart(){
   const items = [];
   for(let i=1;i<=3;i++){
@@ -328,25 +614,51 @@ function addProductsToCart(){
     if(prod) items.push({ id: prod.variantId, quantity: 1 });
   }
   if(!items.length) return alert('Nenhum produto selecionado');
-  
+
   fetch('/cart/add.js', {
     method:'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
     body: JSON.stringify({ items })
   })
   .then(res=>res.json())
-  .then(data=>{ 
-    alert('Produtos adicionados ao carrinho com sucesso!');
-    window.location.href = '/cart';
+  .then(data=>{
+    
+    document.dispatchEvent(new CustomEvent('cart:updated'));
+    const cartToggle = document.querySelector('[data-cart-toggle]');
+    if(cartToggle) cartToggle.click();
+    console.log('Produtos adicionados:', data);
   })
-  .catch(err=>{ console.error(err); alert('Erro ao adicionar ao carrinho'); });
+  .catch(err=>{
+    console.error(err);
+    alert('Erro ao adicionar ao carrinho');
+  });
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
   showInitialScreen();
-  initCustomDropdowns();
+  initCustomDropdowns(state.categories);
 
   document.getElementById('next-step-button').addEventListener('click',goToNextStep);
-  document.getElementById('finalizar-button').addEventListener('click',addProductsToCart);
+  document.getElementById('voltar-button').addEventListener('click',goToPreviousStep);
+  document.getElementById('resumo-voltar-button').addEventListener('click',goBackFromResumo);
+  document.getElementById('add-to-cart-button').addEventListener('click',addProductsToCart);
 });
 </script>
+
+{% schema %}
+{
+  "name": "Monte seu kit",
+  "settings": [
+    { "type": "collection", "id": "colecao_1", "label": "Coleção 1" },
+    { "type": "collection", "id": "colecao_2", "label": "Coleção 2" },
+    { "type": "collection", "id": "colecao_3", "label": "Coleção 3" },
+    { "type": "collection", "id": "colecao_4", "label": "Coleção 4" },
+    { "type": "collection", "id": "colecao_5", "label": "Coleção 5" },
+    { "type": "collection", "id": "colecao_6", "label": "Coleção 6" },
+    { "type": "collection", "id": "colecao_7", "label": "Coleção 7" },
+    { "type": "collection", "id": "colecao_8", "label": "Coleção 8" },
+    { "type": "collection", "id": "colecao_9", "label": "Coleção 9" },
+    { "type": "collection", "id": "colecao_10", "label": "Coleção 10" }
+  ]
+}
+{% endschema %}
