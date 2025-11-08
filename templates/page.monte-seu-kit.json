@@ -37,11 +37,16 @@
       "type": "custom-kit-builder",
       "name": "Kit Builder",
       "settings": {
-        "collections": [
-          "feminino",
-          "masculino",
-          "mantos"
-        ]
+        "colecao_1": "masculino",
+        "colecao_2": "treino-e-viagem",
+        "colecao_3": "feminino",
+        "colecao_4": "",
+        "colecao_5": "",
+        "colecao_6": "",
+        "colecao_7": "",
+        "colecao_8": "",
+        "colecao_9": "",
+        "colecao_10": ""
       }
     }
   },
