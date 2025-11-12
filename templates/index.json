@@ -237,6 +237,20 @@
         "footer_text": "<p>Do café ao eterno: a árvore das experiência</p>"
       }
     },
+    "viva_seu_momento_YJ7fcx": {
+      "type": "viva-seu-momento",
+      "name": "Viva Seu Momento",
+      "settings": {
+        "left_image_1": "shopify://shop_images/poste.png",
+        "left_image_2": "shopify://shop_images/Rectangle_568.png",
+        "right_title_1": "a essência ladovas",
+        "right_text_1": "No Ladovas, cada detalhe foi pensado para inspirar momentos.\u000b A luz suave, o aroma, o som ambiente, o tempo que desacelera.\u000b Aqui, o que importa não é o que você pede — é o que você vive.",
+        "right_image_1": "shopify://shop_images/Rectangle_569.png",
+        "right_title_2": "ambientes que inspiram",
+        "right_text_2": "Cada canto do Ladovas conta uma história.\u000bseja na varanda ensolarada, no sofá da janela ou na mesa coletiva,  você encontra um lugar para viver o seu momento.",
+        "right_image_2": "shopify://shop_images/Rectangle_570.png"
+      }
+    },
     "featured_collection_6r9xkU": {
       "type": "featured-collection",
       "custom_css": [
@@ -406,6 +420,7 @@
     "collection_list_qPAmYz",
     "collection_list_8baJV6",
     "image_banner_custom_hGj44H",
+    "viva_seu_momento_YJ7fcx",
     "featured_collection_6r9xkU",
     "collection_list_h3qNVC",
     "featured_collection_ErjrNU",
