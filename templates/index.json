@@ -227,9 +227,14 @@
       "name": "Banner Customizado Full",
       "settings": {
         "main_image": "shopify://shop_images/Section_3369a9c1-13ad-4898-8bc4-dd0b4a2392e1.png",
-        "center_image": "shopify://shop_images/Gira.png",
-        "footer_text": "<p>Do café ao eterno: a árvore das experiência</p>",
-        "overlay_opacity": 0
+        "overlay_opacity": 0,
+        "center_static_image": "shopify://shop_images/Vector_c9fa5036-3abb-4119-b049-b8b4dfb5ac15.png",
+        "rotating_image": "shopify://shop_images/Gira_2708b34f-ba12-48f3-8fc2-92d03eeaa7ef.png",
+        "rotation_speed": "15s",
+        "rotation_direction": "normal",
+        "circle_size": 500,
+        "icon_size": 50,
+        "footer_text": "<p>Do café ao eterno: a árvore das experiência</p>"
       }
     },
     "featured_collection_6r9xkU": {
