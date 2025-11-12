@@ -1,149 +1,95 @@
-/* Container e layout */
-.container-viva-seu-momento {
-  display: flex;
-  gap: 60px;
-  padding: 60px 20px;
+.viva-momento-scene {
+  display: grid;
+  grid-template-columns: 50% 50%;
   align-items: flex-start;
-  justify-content: center;
-  width: 100%;
-  box-sizing: border-box;
+  max-width: 95%;
+  margin: 0 auto;
+  position: relative;
 }
 
-/* Permite inverter os lados pelo schema */
-.container-viva-seu-momento.layout-right {
-  flex-direction: row-reverse;
-}
-
-/* LADO ESQUERDO */
 .lado-esquerdo {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-}
-
-.imagens-esquerda {
-  display: flex;
-  gap: 24px;
-  align-items: center;
-}
-
-/* Poste (ícone) */
-.icone-poste {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
-  /* --max-brightness é definido inline via Liquid (valor percentual). */
-}
-.icone-poste img {
-  display: block;
-  transition: filter 0.2s ease, box-shadow 0.2s ease;
-  filter: brightness(1);
-  will-change: filter, box-shadow;
 }
 
-/* Imagem 2 (com título, texto, botão) */
-.imagem-esquerda-2 {
+.lampada-container {
+  position: relative;
   display: flex;
-  flex-direction: column;
-  gap: 12px;
   align-items: flex-start;
-  max-width: 420px;
-}
-.imagem-esquerda-2 img {
-  display:block;
-  border-radius: 8px;
-  object-fit: cover;
-}
-.left-image-title {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #222;
-}
-.left-image-text {
-  margin: 0;
-  color: #555;
-  line-height: 1.4;
-}
-.btn-left-image {
-  display:inline-block;
-  margin-top: 6px;
-  background:#222;
-  color:#fff;
-  padding:8px 14px;
-  border-radius:6px;
-  text-decoration:none;
-}
-
-/* LADO DIREITO */
-.lado-direito {
-  flex: 1;
-  display: flex;
   justify-content: center;
 }
-.container-lado-direito {
-  width: 100%;
-  max-width: 700px;
-  display: flex;
-  flex-direction: column;
-  gap: 36px;
+
+.lampada {
+  --intensity: 0;
+  position: absolute;
+  top: 40px;
+  left: calc(50% + 70px);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255,240,150,calc(var(--intensity)*1)), rgba(255,210,80,calc(var(--intensity)*0.9)), rgba(200,140,50,calc(var(--intensity)*0.6)));
+  box-shadow: 0 0 calc(18px * var(--intensity)) rgba(255,220,100,calc(var(--intensity)*0.9)), 0 0 calc(60px * var(--intensity)) rgba(255,210,90,calc(var(--intensity)*0.45));
+  transition: all 0.2s linear;
 }
 
-/* INFO BLOCO (aplicado aos dois blocos) */
+.lampada::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -40%);
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  filter: blur(30px);
+  opacity: calc(var(--intensity) * 0.85);
+  background: radial-gradient(circle, rgba(255, 187, 0, 0.9), rgba(255,210,100,0.12), rgba(0,0,0,0));
+  transition: opacity 200ms linear;
+  pointer-events: none;
+}
+
+.poste {
+  position: relative;
+  z-index: 1;
+}
+
+.imagem-secundaria {
+  text-align: center;
+  padding-left: 40px;
+}
+
+.imagem-secundaria h3 {
+  margin-top: 10px;
+}
+
+.lado-direito {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  justify-content: center;
+}
+
 .info-bloco {
   display: flex;
-  gap: 24px;
   align-items: center;
   justify-content: space-between;
+  gap: 30px;
 }
+
 .info-bloco .texto {
-  flex: 1;
-  min-width: 180px;
-}
-.info-bloco h2 {
-  margin: 0 0 8px 0;
-  font-size: 1.6rem;
-  color: #222;
-}
-.info-bloco p {
-  margin: 0 0 12px 0;
-  color: #555;
-  line-height: 1.5;
-}
-.btn-info {
-  display:inline-block;
-  background:#222;
-  color:#fff;
-  padding:8px 14px;
-  border-radius:6px;
-  text-decoration:none;
+  max-width: 300px;
 }
 
-/* Imagens dentro dos blocos */
-.bloco-img-1 img,
-.bloco-img-2 img {
-  display:block;
-  border-radius:8px;
-  object-fit: cover;
+.btn-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: #ffbb00;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
 }
 
-/* Responsividade */
-@media (max-width: 900px) {
-  .container-viva-seu-momento {
-    flex-direction: column;
-    gap: 40px;
-    padding: 40px 16px;
-  }
-
-  .imagens-esquerda {
-    gap: 16px;
-  }
-
-  .info-bloco {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .info-bloco .texto { order: 1; }
-  .bloco-img-1, .bloco-img-2 { order: 2; }
+.btn-link:hover {
+  color: #ffaa00;
 }

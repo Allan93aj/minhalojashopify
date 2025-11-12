@@ -1,24 +1,23 @@
 {{ 'viva-seu-momento.css' | asset_url | stylesheet_tag }}
 {{ 'custom-viva-seu-momento.js' | asset_url | script_tag }}
 
-
 <div id="scene-{{ section.id }}" class="viva-momento-scene">
   <div class="lado-esquerdo">
     <div class="lampada-container">
+      <div class="lampada" id="lamp-{{ section.id }}"></div>
       <img 
-        id="lamp-{{ section.id }}" 
-        class="lampada"
+        class="poste"
         src="{{ section.settings.post_icon | image_url: width: section.settings.post_icon_width }}"
-        alt="Lâmpada"
-        style="--lamp-intensity: 0;"
+        alt="Poste"
+        width="{{ section.settings.post_icon_width }}"
       >
-      <div class="luz-efeito"></div>
     </div>
 
     <div class="imagem-secundaria">
       <img 
         src="{{ section.settings.left_image | image_url: width: section.settings.left_image_width }}"
         alt="{{ section.settings.left_title | escape }}"
+        width="{{ section.settings.left_image_width }}"
       >
       <h3>{{ section.settings.left_title }}</h3>
       <p>{{ section.settings.left_text }}</p>
@@ -36,6 +35,7 @@
       <img 
         src="{{ section.settings.right_image_1 | image_url: width: section.settings.right_image_1_width }}" 
         alt="Imagem 1 Direita"
+        width="{{ section.settings.right_image_1_width }}"
       >
     </div>
 
@@ -43,6 +43,7 @@
       <img 
         src="{{ section.settings.right_image_2 | image_url: width: section.settings.right_image_2_width }}" 
         alt="Imagem 2 Direita"
+        width="{{ section.settings.right_image_2_width }}"
       >
       <div class="texto">
         <h2>{{ section.settings.right_title_2 }}</h2>
@@ -60,12 +61,12 @@
     {
       "type": "image_picker",
       "id": "post_icon",
-      "label": "Ícone do Poste/Lâmpada"
+      "label": "Imagem do Poste"
     },
     {
       "type": "range",
       "id": "post_icon_width",
-      "label": "Largura da lâmpada (px)",
+      "label": "Largura do poste (px)",
       "min": 50,
       "max": 600,
       "step": 10,
@@ -74,7 +75,7 @@
     {
       "type": "image_picker",
       "id": "left_image",
-      "label": "Imagem ao lado da lâmpada"
+      "label": "Imagem esquerda"
     },
     {
       "type": "range",
@@ -88,19 +89,18 @@
     {
       "type": "text",
       "id": "left_title",
-      "label": "Título imagem esquerda"
+      "label": "Título esquerda"
     },
     {
       "type": "textarea",
       "id": "left_text",
-      "label": "Texto imagem esquerda"
+      "label": "Texto esquerda"
     },
     {
       "type": "url",
       "id": "left_link",
-      "label": "Link botão imagem esquerda"
+      "label": "Link esquerda"
     },
-
     {
       "type": "header",
       "content": "Bloco direito 1"
@@ -134,7 +134,6 @@
       "step": 10,
       "default": 300
     },
-
     {
       "type": "header",
       "content": "Bloco direito 2"
