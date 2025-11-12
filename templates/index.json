@@ -243,10 +243,10 @@
       "settings": {
         "image_side": "left",
         "post_icon": "shopify://shop_images/poste_c6998ef5-ad0f-4fc0-92b2-76fd828183a0.png",
-        "post_icon_width": 150,
+        "post_icon_width": 140,
         "max_light_intensity": 110,
         "left_image_2": "shopify://shop_images/Rectangle_568_54fe7248-5f20-4cc9-b69d-e87b64a9535a.png",
-        "left_image_2_width": 800,
+        "left_image_2_width": 600,
         "left_image_2_title": "",
         "left_image_2_text": "",
         "left_image_2_button_text": "",
