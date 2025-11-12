@@ -111,19 +111,6 @@
         "banner_title": "Muito mais do que café. Um lugar de momentos"
       }
     },
-    "monte_seu_kit_bGfW4z": {
-      "type": "monte-seu-kit",
-      "name": "Monte seu kit Inciclo",
-      "settings": {
-        "title": "Monte seu kit Inciclo",
-        "select_placeholder_1": "Escolha o primeiro produto",
-        "collection_1": "masculino",
-        "select_placeholder_2": "Escolha o segundo produto",
-        "collection_2": "",
-        "select_placeholder_3": "Escolha o terceiro produto",
-        "collection_3": ""
-      }
-    },
     "collection_list_qPAmYz": {
       "type": "collection-list",
       "blocks": {
@@ -233,6 +220,35 @@
         "swipe_on_mobile": true,
         "padding_top": 36,
         "padding_bottom": 36
+      }
+    },
+    "image_banner_HUaeWk": {
+      "type": "image-banner",
+      "blocks": {
+        "text_TgBR9Y": {
+          "type": "text",
+          "settings": {
+            "text": "Do café ao eterno: a árvore das experiência",
+            "text_style": "caption-with-letter-spacing"
+          }
+        }
+      },
+      "block_order": [
+        "text_TgBR9Y"
+      ],
+      "name": "t:sections.image-banner.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Section.png",
+        "image_overlay_opacity": 0,
+        "image_height": "adapt",
+        "image_behavior": "none",
+        "desktop_content_position": "bottom-center",
+        "desktop_content_alignment": "center",
+        "show_text_box": true,
+        "color_scheme": "",
+        "stack_images_on_mobile": true,
+        "mobile_content_alignment": "center",
+        "show_text_below": true
       }
     },
     "featured_collection_6r9xkU": {
@@ -401,9 +417,9 @@
   },
   "order": [
     "banner_custom123_BrNjNk",
-    "monte_seu_kit_bGfW4z",
     "collection_list_qPAmYz",
     "collection_list_8baJV6",
+    "image_banner_HUaeWk",
     "featured_collection_6r9xkU",
     "collection_list_h3qNVC",
     "featured_collection_ErjrNU",
