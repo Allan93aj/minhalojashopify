@@ -1,16 +1,17 @@
 {{ 'viva-momento.css' | asset_url | stylesheet_tag }}
 {{ 'viva-momento.js' | asset_url | script_tag }}
 
+
 <div id="scene-{{ section.id }}" class="viva-momento-scene">
   <div class="lado-esquerdo">
     <div class="lampada-container">
-      <div class="lampada" id="lamp-{{ section.id }}"></div>
       <img 
         class="poste"
         src="{{ section.settings.post_icon | image_url: width: section.settings.post_icon_width }}"
         alt="Poste"
         width="{{ section.settings.post_icon_width }}"
       >
+      <div class="lampada" id="lamp-{{ section.id }}"></div>
     </div>
 
     <div class="imagem-secundaria">
@@ -21,7 +22,7 @@
       >
       <h3>{{ section.settings.left_title }}</h3>
       <p>{{ section.settings.left_text }}</p>
-      <a href="{{ section.settings.left_link }}" class="btn-link">leia mais</a>
+      <a href="{{ section.settings.left_link }}" class="btn-link">Saiba mais</a>
     </div>
   </div>
 
