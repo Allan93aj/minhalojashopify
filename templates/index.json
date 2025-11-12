@@ -230,10 +230,10 @@
         "overlay_opacity": 0,
         "center_static_image": "shopify://shop_images/Vector_c9fa5036-3abb-4119-b049-b8b4dfb5ac15.png",
         "rotating_image": "shopify://shop_images/Gira_2708b34f-ba12-48f3-8fc2-92d03eeaa7ef.png",
-        "rotation_speed": "15s",
+        "rotation_speed": "20s",
         "rotation_direction": "normal",
         "circle_size": 250,
-        "icon_size": 80,
+        "icon_size": 100,
         "footer_text": "<p>Do café ao eterno: a árvore das experiência</p>"
       }
     },
