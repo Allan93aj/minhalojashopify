@@ -79,10 +79,13 @@
   left: 50%;
   transform: translateX(-50%);
   color: white;
-  font-size: 1.2rem;
+  font-size: 64px;
   text-align: center;
   z-index: 4;
-  padding: 8px 16px;
+}
+
+.custom-banner__footer-text p{
+    margin: 0;
 }
 
 /* PLACEHOLDER */
