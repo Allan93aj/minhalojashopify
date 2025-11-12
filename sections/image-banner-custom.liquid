@@ -17,20 +17,20 @@
     </div>
 
     <div class="custom-banner__center-wrapper">
-      {%- if section.settings.center_static_image != blank -%}
-        <div class="custom-banner__center-static">
-          <img 
-            src="{{ section.settings.center_static_image | image_url: width: 400 }}" 
-            alt="{{ section.settings.center_static_image.alt | escape }}"
-          >
-        </div>
-      {%- endif -%}
-
       {%- if section.settings.rotating_image != blank -%}
         <div class="custom-banner__rotating">
           <img 
             src="{{ section.settings.rotating_image | image_url: width: 600 }}" 
             alt="{{ section.settings.rotating_image.alt | escape }}"
+          >
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.center_static_image != blank -%}
+        <div class="custom-banner__center-static">
+          <img 
+            src="{{ section.settings.center_static_image | image_url: width: 200 }}" 
+            alt="{{ section.settings.center_static_image.alt | escape }}"
           >
         </div>
       {%- endif -%}
