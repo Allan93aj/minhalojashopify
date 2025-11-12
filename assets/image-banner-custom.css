@@ -32,28 +32,26 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 250px;
-  height: 250px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 /* ÍCONE FIXO */
-.custom-banner__center-static img {
+.custom-banner__center-static {
   position: absolute;
-  width: 100px;
-  height: 100px;
-  object-fit: contain;
   z-index: 3;
+}
+
+.custom-banner__center-static img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 /* CÍRCULO GIRATÓRIO */
 .custom-banner__rotating {
   position: absolute;
-  width: 250px;
-  height: 250px;
-  animation: spin 10s linear infinite;
   z-index: 2;
 }
 

@@ -16,9 +16,20 @@
       {%- endif -%}
     </div>
 
-    <div class="custom-banner__center-wrapper">
+    <div 
+      class="custom-banner__center-wrapper" 
+      style="width: {{ section.settings.circle_size }}px; height: {{ section.settings.circle_size }}px;"
+    >
       {%- if section.settings.rotating_image != blank -%}
-        <div class="custom-banner__rotating">
+        <div 
+          class="custom-banner__rotating"
+          style="
+            animation: spin {{ section.settings.rotation_speed }} linear infinite;
+            animation-direction: {% if section.settings.rotation_direction == 'reverse' %}reverse{% else %}normal{% endif %};
+            width: {{ section.settings.circle_size }}px;
+            height: {{ section.settings.circle_size }}px;
+          "
+        >
           <img 
             src="{{ section.settings.rotating_image | image_url: width: 600 }}" 
             alt="{{ section.settings.rotating_image.alt | escape }}"
@@ -27,9 +38,12 @@
       {%- endif -%}
 
       {%- if section.settings.center_static_image != blank -%}
-        <div class="custom-banner__center-static">
+        <div 
+          class="custom-banner__center-static"
+          style="width: {{ section.settings.icon_size }}px; height: {{ section.settings.icon_size }}px;"
+        >
           <img 
-            src="{{ section.settings.center_static_image | image_url: width: 200 }}" 
+            src="{{ section.settings.center_static_image | image_url: width: 400 }}" 
             alt="{{ section.settings.center_static_image.alt | escape }}"
           >
         </div>
@@ -79,6 +93,42 @@
       "type": "image_picker",
       "id": "rotating_image",
       "label": "Imagem circular giratória (fica em volta do ícone)"
+    },
+    {
+      "type": "text",
+      "id": "rotation_speed",
+      "label": "Velocidade da rotação (ex: 5s, 10s, 20s)",
+      "default": "10s"
+    },
+    {
+      "type": "select",
+      "id": "rotation_direction",
+      "label": "Direção da rotação",
+      "options": [
+        { "value": "normal", "label": "Horário" },
+        { "value": "reverse", "label": "Anti-horário" }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "range",
+      "id": "circle_size",
+      "min": 100,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "label": "Tamanho do círculo giratório",
+      "default": 250
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Tamanho do ícone central",
+      "default": 120
     },
     {
       "type": "richtext",
