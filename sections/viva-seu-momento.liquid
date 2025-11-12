@@ -1,112 +1,161 @@
-{{ 'viva-seu-momento.css' | asset_url | stylesheet_tag }}
+{{ 'custom-viva-seu-momento.css' | asset_url | stylesheet_tag }}
 
-<div id="VivaSeuMomento-{{ section.id }}" class="container-viva-seu-momento">
+<div class="container-viva-seu-momento layout-{{ section.settings.image_side }}">
   <div class="lado-esquerdo">
-    {%- if section.settings.left_image_1 != blank -%}
-      <img 
-        src="{{ section.settings.left_image_1 | image_url: width: 600 }}" 
-        alt="{{ section.settings.left_image_1.alt | escape }}">
-    {%- endif -%}
+    {% if section.settings.image_1 != blank %}
+      <div class="image-wrapper">
+        <img 
+          src="{{ section.settings.image_1 | image_url: width: section.settings.image_width }}" 
+          alt="{{ section.settings.image_1.alt | escape }}"
+          style="width: {{ section.settings.image_width }}px;"
+        >
+        {% if section.settings.title_image_1 != blank %}
+          <h3 class="image-title">{{ section.settings.title_image_1 }}</h3>
+        {% endif %}
+      </div>
+    {% endif %}
 
-    {%- if section.settings.left_image_2 != blank -%}
-      <img 
-        src="{{ section.settings.left_image_2 | image_url: width: 600 }}" 
-        alt="{{ section.settings.left_image_2.alt | escape }}">
-    {%- endif -%}
+    {% if section.settings.image_2 != blank %}
+      <div class="image-wrapper">
+        <img 
+          src="{{ section.settings.image_2 | image_url: width: section.settings.image_width }}" 
+          alt="{{ section.settings.image_2.alt | escape }}"
+          style="width: {{ section.settings.image_width }}px;"
+        >
+      </div>
+    {% endif %}
   </div>
 
   <div class="lado-direito">
     <div class="container-lado-direito">
-
-      <!-- BLOCO 1 -->
-      <div class="bloco-texto-imagem">
-        <div class="bloco-texto">
-          <h2>{{ section.settings.right_title_1 }}</h2>
-          <p>{{ section.settings.right_text_1 }}</p>
+      <div class="info-bloco">
+        <div class="texto">
+          <h2>{{ section.settings.block_1_title }}</h2>
+          <p>{{ section.settings.block_1_text }}</p>
         </div>
-        <div class="bloco-imagem">
-          {%- if section.settings.right_image_1 != blank -%}
+        {% if section.settings.block_1_image != blank %}
+          <div class="imagem">
             <img 
-              src="{{ section.settings.right_image_1 | image_url: width: 400 }}" 
-              alt="{{ section.settings.right_image_1.alt | escape }}">
-          {%- endif -%}
-        </div>
+              src="{{ section.settings.block_1_image | image_url: width: section.settings.image_width }}" 
+              alt="{{ section.settings.block_1_image.alt | escape }}"
+              style="width: {{ section.settings.image_width }}px;"
+            >
+          </div>
+        {% endif %}
       </div>
 
-      <!-- BLOCO 2 -->
-      <div class="bloco-texto-imagem">
-        <div class="bloco-texto">
-          <h2>{{ section.settings.right_title_2 }}</h2>
-          <p>{{ section.settings.right_text_2 }}</p>
+      <div class="info-bloco">
+        <div class="texto">
+          <h2>{{ section.settings.block_2_title }}</h2>
+          <p>{{ section.settings.block_2_text }}</p>
+          {% if section.settings.button_text != blank and section.settings.button_link != blank %}
+            <a href="{{ section.settings.button_link }}" class="btn-leia-mais">
+              {{ section.settings.button_text }}
+            </a>
+          {% endif %}
         </div>
-        <div class="bloco-imagem">
-          {%- if section.settings.right_image_2 != blank -%}
+        {% if section.settings.block_2_image != blank %}
+          <div class="imagem">
             <img 
-              src="{{ section.settings.right_image_2 | image_url: width: 400 }}" 
-              alt="{{ section.settings.right_image_2.alt | escape }}">
-          {%- endif -%}
-        </div>
+              src="{{ section.settings.block_2_image | image_url: width: section.settings.image_width }}" 
+              alt="{{ section.settings.block_2_image.alt | escape }}"
+              style="width: {{ section.settings.image_width }}px;"
+            >
+          </div>
+        {% endif %}
       </div>
-
     </div>
   </div>
 </div>
 
 {% schema %}
 {
-  "name": "Viva Seu Momento",
-  "tag": "section",
-  "class": "section section--viva-seu-momento",
+  "name": "Viva Seu Momento Custom",
   "settings": [
     {
-      "type": "image_picker",
-      "id": "left_image_1",
-      "label": "Imagem da esquerda 1"
+      "type": "select",
+      "id": "image_side",
+      "label": "Lado das imagens",
+      "options": [
+        { "value": "left", "label": "Esquerdo" },
+        { "value": "right", "label": "Direito" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "label": "Largura das imagens (px)",
+      "min": 100,
+      "max": 800,
+      "step": 10,
+      "default": 300
     },
     {
       "type": "image_picker",
-      "id": "left_image_2",
-      "label": "Imagem da esquerda 2"
+      "id": "image_1",
+      "label": "Imagem 1 (principal)"
     },
     {
       "type": "text",
-      "id": "right_title_1",
-      "label": "Título bloco 1",
-      "default": "Título 1"
-    },
-    {
-      "type": "textarea",
-      "id": "right_text_1",
-      "label": "Texto bloco 1",
-      "default": "Descrição do primeiro bloco"
+      "id": "title_image_1",
+      "label": "Título da Imagem 1"
     },
     {
       "type": "image_picker",
-      "id": "right_image_1",
-      "label": "Imagem bloco 1"
+      "id": "image_2",
+      "label": "Imagem 2"
     },
     {
       "type": "text",
-      "id": "right_title_2",
-      "label": "Título bloco 2",
-      "default": "Título 2"
+      "id": "block_1_title",
+      "label": "Título do Bloco 1",
+      "default": "Título exemplo"
     },
     {
       "type": "textarea",
-      "id": "right_text_2",
-      "label": "Texto bloco 2",
-      "default": "Descrição do segundo bloco"
+      "id": "block_1_text",
+      "label": "Texto do Bloco 1",
+      "default": "Descrição exemplo para o primeiro bloco."
     },
     {
       "type": "image_picker",
-      "id": "right_image_2",
-      "label": "Imagem bloco 2"
+      "id": "block_1_image",
+      "label": "Imagem do Bloco 1"
+    },
+    {
+      "type": "text",
+      "id": "block_2_title",
+      "label": "Título do Bloco 2",
+      "default": "Título exemplo"
+    },
+    {
+      "type": "textarea",
+      "id": "block_2_text",
+      "label": "Texto do Bloco 2",
+      "default": "Descrição exemplo para o segundo bloco."
+    },
+    {
+      "type": "image_picker",
+      "id": "block_2_image",
+      "label": "Imagem do Bloco 2"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Texto do botão 'Leia Mais'",
+      "default": "Leia Mais"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link do botão"
     }
   ],
   "presets": [
     {
-      "name": "Viva Seu Momento",
-      "category": "Seções Personalizadas"
+      "name": "Viva Seu Momento Custom",
+      "category": "Sessões Personalizadas"
     }
   ]
 }

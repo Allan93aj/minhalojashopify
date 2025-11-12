@@ -4,86 +4,92 @@
   justify-content: center;
   gap: 40px;
   padding: 60px 20px;
-  flex-wrap: wrap;
 }
 
-.lado-esquerdo {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
+.container-viva-seu-momento.layout-right {
+  flex-direction: row-reverse;
 }
 
-.lado-esquerdo img {
-  width: 100%;
-  max-width: 400px;
-  object-fit: cover;
-  border-radius: 10px;
-}
-
+.lado-esquerdo,
 .lado-direito {
   flex: 1;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.image-wrapper {
+  position: relative;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.image-wrapper img {
+  display: block;
+  border-radius: 10px;
+}
+
+.image-title {
+  margin-top: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
 }
 
 .container-lado-direito {
   display: flex;
   flex-direction: column;
   gap: 40px;
-  width: 100%;
-  max-width: 500px;
 }
 
-.bloco-texto-imagem {
+.info-bloco {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
+  gap: 30px;
 }
 
-.bloco-texto {
-  flex: 1;
+.info-bloco .texto {
+  max-width: 400px;
 }
 
-.bloco-texto h2 {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
+.info-bloco h2 {
+  font-size: 2rem;
   color: #222;
+  margin-bottom: 10px;
 }
 
-.bloco-texto p {
-  font-size: 1rem;
+.info-bloco p {
   color: #555;
   line-height: 1.5;
+  margin-bottom: 20px;
 }
 
-.bloco-imagem {
-  flex: 1;
-  display: flex;
-  justify-content: center;
+.btn-leia-mais {
+  display: inline-block;
+  background: #222;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background 0.3s;
 }
 
-.bloco-imagem img {
-  width: 100%;
-  max-width: 200px;
-  object-fit: contain;
+.btn-leia-mais:hover {
+  background: #444;
 }
 
 @media (max-width: 768px) {
   .container-viva-seu-momento {
     flex-direction: column;
-    gap: 40px;
   }
 
-  .container-lado-direito {
-    align-items: center;
-  }
-
-  .bloco-texto-imagem {
+  .info-bloco {
     flex-direction: column;
     text-align: center;
+  }
+
+  .info-bloco .texto {
+    max-width: 100%;
   }
 }
