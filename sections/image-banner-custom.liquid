@@ -2,7 +2,7 @@
 
 <div id="CustomBanner-{{ section.id }}" class="custom-banner">
   {%- if section.settings.main_image != blank -%}
-    <div class="custom-banner__image-wrapper">
+    <div class="custom-banner__background">
       <img 
         src="{{ section.settings.main_image | image_url: width: 3840 }}" 
         alt="{{ section.settings.main_image.alt | escape }}"
@@ -14,23 +14,33 @@
           style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"
         ></div>
       {%- endif -%}
+    </div>
 
-      {%- if section.settings.center_image != blank -%}
-        <div class="custom-banner__center-image-wrapper">
+    <div class="custom-banner__center-wrapper">
+      {%- if section.settings.center_static_image != blank -%}
+        <div class="custom-banner__center-static">
           <img 
-            src="{{ section.settings.center_image | image_url: width: 600 }}" 
-            alt="{{ section.settings.center_image.alt | escape }}"
-            class="custom-banner__center-image"
+            src="{{ section.settings.center_static_image | image_url: width: 400 }}" 
+            alt="{{ section.settings.center_static_image.alt | escape }}"
           >
         </div>
       {%- endif -%}
 
-      {%- if section.settings.footer_text != blank -%}
-        <div class="custom-banner__footer-text">
-          {{ section.settings.footer_text }}
+      {%- if section.settings.rotating_image != blank -%}
+        <div class="custom-banner__rotating">
+          <img 
+            src="{{ section.settings.rotating_image | image_url: width: 600 }}" 
+            alt="{{ section.settings.rotating_image.alt | escape }}"
+          >
         </div>
       {%- endif -%}
     </div>
+
+    {%- if section.settings.footer_text != blank -%}
+      <div class="custom-banner__footer-text">
+        {{ section.settings.footer_text }}
+      </div>
+    {%- endif -%}
   {%- else -%}
     <div class="custom-banner__placeholder">
       {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
@@ -41,25 +51,14 @@
 
 {% schema %}
 {
-  "name": "Custom Banner Full",
+  "name": "Banner Custom Rotating",
   "tag": "section",
-  "class": "section section--custom-banner",
+  "class": "section section--custom-banner-rotating",
   "settings": [
     {
       "type": "image_picker",
       "id": "main_image",
       "label": "Imagem principal (fundo)"
-    },
-    {
-      "type": "image_picker",
-      "id": "center_image",
-      "label": "Mini imagem central"
-    },
-    {
-      "type": "richtext",
-      "id": "footer_text",
-      "label": "Texto no rodapé da imagem",
-      "default": "<p>Seu texto aqui...</p>"
     },
     {
       "type": "range",
@@ -70,11 +69,27 @@
       "unit": "%",
       "label": "Opacidade da sobreposição (escurecer imagem)",
       "default": 0
+    },
+    {
+      "type": "image_picker",
+      "id": "center_static_image",
+      "label": "Ícone fixo central"
+    },
+    {
+      "type": "image_picker",
+      "id": "rotating_image",
+      "label": "Imagem circular giratória (fica em volta do ícone)"
+    },
+    {
+      "type": "richtext",
+      "id": "footer_text",
+      "label": "Texto no rodapé",
+      "default": "<p>Seu texto aqui...</p>"
     }
   ],
   "presets": [
     {
-      "name": "Banner Customizado Full",
+      "name": "Banner Rotativo com Ícone Central",
       "category": "Banners"
     }
   ]
