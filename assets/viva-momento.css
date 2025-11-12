@@ -37,8 +37,8 @@
   transition: all 0.25s linear;
 }
 
-.lamp:after {
-  content: "";
+.lamp::after {
+  content: "teste";
   position: absolute;
   left: 50%;
   top: 50%;
