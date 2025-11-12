@@ -222,33 +222,14 @@
         "padding_bottom": 36
       }
     },
-    "image_banner_HUaeWk": {
-      "type": "image-banner",
-      "blocks": {
-        "text_TgBR9Y": {
-          "type": "text",
-          "settings": {
-            "text": "Do café ao eterno: a árvore das experiência",
-            "text_style": "caption-with-letter-spacing"
-          }
-        }
-      },
-      "block_order": [
-        "text_TgBR9Y"
-      ],
-      "name": "t:sections.image-banner.presets.name",
+    "image_banner_custom_hGj44H": {
+      "type": "image-banner-custom",
+      "name": "Banner Customizado Full",
       "settings": {
-        "image": "shopify://shop_images/Section.png",
-        "image_overlay_opacity": 0,
-        "image_height": "adapt",
-        "image_behavior": "none",
-        "desktop_content_position": "bottom-center",
-        "desktop_content_alignment": "center",
-        "show_text_box": true,
-        "color_scheme": "",
-        "stack_images_on_mobile": true,
-        "mobile_content_alignment": "center",
-        "show_text_below": true
+        "main_image": "shopify://shop_images/Section_3369a9c1-13ad-4898-8bc4-dd0b4a2392e1.png",
+        "center_image": "shopify://shop_images/Gira.png",
+        "footer_text": "<p>Do café ao eterno: a árvore das experiência</p>",
+        "overlay_opacity": 0
       }
     },
     "featured_collection_6r9xkU": {
@@ -419,7 +400,7 @@
     "banner_custom123_BrNjNk",
     "collection_list_qPAmYz",
     "collection_list_8baJV6",
-    "image_banner_HUaeWk",
+    "image_banner_custom_hGj44H",
     "featured_collection_6r9xkU",
     "collection_list_h3qNVC",
     "featured_collection_ErjrNU",
