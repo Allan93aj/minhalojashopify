@@ -14,11 +14,11 @@
   align-items: center;
 }
 
-.lampada-container {
+.lamp-container {
   position: relative;
 }
 
-.lampada {
+.lamp {
   --intensity: 0;
   position: absolute;
   top: 60px;
@@ -37,7 +37,7 @@
   transition: all 0.25s linear;
 }
 
-.lampada::after {
+.lamp:after {
   content: "";
   position: absolute;
   left: 50%;
