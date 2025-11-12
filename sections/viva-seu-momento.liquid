@@ -1,57 +1,87 @@
 {{ 'viva-seu-momento.css' | asset_url | stylesheet_tag }}
 {{ 'custom-viva-seu-momento.js' | asset_url | script_tag }}
-<script src="{{ 'viva-seu-momento-lampada.js' | asset_url }}" defer></script>
 
-<div id="scene-{{ section.id }}" class="viva-momento-scene">
-  <div class="lado-esquerdo">
-    <div class="lampada-container">
-      <img 
-        id="lamp-{{ section.id }}" 
-        class="lampada"
-        src="{{ section.settings.post_icon | image_url: width: section.settings.post_icon_width }}"
-        alt="Lâmpada"
-        style="--lamp-intensity: 0;"
-      >
-      <div class="luz-efeito"></div>
+
+<section class="viva-seu-momento" id="viva-seu-momento">
+  <div class="container-viva-seu-momento">
+    <!-- ======== LADO ESQUERDO ======== -->
+    <div class="lado-esquerdo">
+      <!-- Poste/Lâmpada -->
+      <div class="lamp-scene">
+        <div class="lamp">
+          <div class="lamp-head"></div>
+          <div class="lamp-light"></div>
+        </div>
+      </div>
+
+      <!-- Imagem ao lado do poste -->
+      {% if section.settings.left_image != blank %}
+        <div class="left-image-wrapper">
+          <img
+            src="{{ section.settings.left_image | img_url: 'master' }}"
+            alt="Imagem esquerda"
+            class="left-image"
+            style="width: {{ section.settings.left_image_width }}px;"
+          />
+          {% if section.settings.left_image_title != blank %}
+            <h3>{{ section.settings.left_image_title }}</h3>
+          {% endif %}
+        </div>
+      {% endif %}
     </div>
 
-    <div class="imagem-secundaria">
-      <img 
-        src="{{ section.settings.left_image | image_url: width: section.settings.left_image_width }}"
-        alt="{{ section.settings.left_title | escape }}"
-      >
-      <h3>{{ section.settings.left_title }}</h3>
-      <p>{{ section.settings.left_text }}</p>
-      <a href="{{ section.settings.left_link }}" class="btn-link">Saiba mais</a>
+    <!-- ======== LADO DIREITO ======== -->
+    <div class="lado-direito">
+      <div class="container-lado-direito">
+
+        <!-- BLOCO 1 -->
+        <div class="info-bloco">
+          <div>
+            <h2>{{ section.settings.title_1 }}</h2>
+            <p>{{ section.settings.text_1 }}</p>
+            {% if section.settings.link_1 != blank %}
+              <a href="{{ section.settings.link_1 }}" class="btn-leia-mais">
+                {{ section.settings.button_text_1 }}
+              </a>
+            {% endif %}
+          </div>
+          {% if section.settings.image_1 != blank %}
+            <div>
+              <img
+                src="{{ section.settings.image_1 | img_url: 'master' }}"
+                alt="Imagem bloco 1"
+                style="width: {{ section.settings.image_1_width }}px;"
+              />
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- BLOCO 2 -->
+        <div class="info-bloco">
+          {% if section.settings.image_2 != blank %}
+            <div>
+              <img
+                src="{{ section.settings.image_2 | img_url: 'master' }}"
+                alt="Imagem bloco 2"
+                style="width: {{ section.settings.image_2_width }}px;"
+              />
+            </div>
+          {% endif %}
+          <div>
+            <h2>{{ section.settings.title_2 }}</h2>
+            <p>{{ section.settings.text_2 }}</p>
+            {% if section.settings.link_2 != blank %}
+              <a href="{{ section.settings.link_2 }}" class="btn-leia-mais">
+                {{ section.settings.button_text_2 }}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+</section>
 
-  <div class="lado-direito">
-    <div class="info-bloco">
-      <div class="texto">
-        <h2>{{ section.settings.right_title_1 }}</h2>
-        <p>{{ section.settings.right_text_1 }}</p>
-        <a href="{{ section.settings.right_link_1 }}" class="btn-link">Leia mais</a>
-      </div>
-      <img 
-        src="{{ section.settings.right_image_1 | image_url: width: section.settings.right_image_1_width }}" 
-        alt="Imagem 1 Direita"
-      >
-    </div>
-
-    <div class="info-bloco">
-      <img 
-        src="{{ section.settings.right_image_2 | image_url: width: section.settings.right_image_2_width }}" 
-        alt="Imagem 2 Direita"
-      >
-      <div class="texto">
-        <h2>{{ section.settings.right_title_2 }}</h2>
-        <p>{{ section.settings.right_text_2 }}</p>
-        <a href="{{ section.settings.right_link_2 }}" class="btn-link">Leia mais</a>
-      </div>
-    </div>
-  </div>
-</div>
 
 {% schema %}
 {

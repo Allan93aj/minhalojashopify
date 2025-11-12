@@ -65,3 +65,106 @@
 .btn-link:hover {
   background: #ffe066;
 }
+
+.viva-seu-momento {
+  padding: 60px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.container-viva-seu-momento {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 60px;
+}
+
+.lado-esquerdo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* ---- Poste/Lâmpada ---- */
+.lamp-scene {
+  position: relative;
+  width: 80px;
+  height: 160px;
+}
+
+.lamp {
+  position: relative;
+  width: 12px;
+  height: 160px;
+  background: #222;
+  border-radius: 5px;
+  margin: auto;
+}
+
+.lamp-head {
+  position: absolute;
+  top: 0;
+  left: -14px;
+  width: 40px;
+  height: 20px;
+  background: #222;
+  border-radius: 50% 50% 0 0;
+}
+
+.lamp-light {
+  position: absolute;
+  top: 10px;
+  left: -50px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 230, 100, var(--intensity, 0)) 0%,
+    rgba(255, 230, 100, 0) 70%
+  );
+  filter: blur(40px);
+  transition: opacity 0.3s ease;
+}
+
+/* ---- Botão ---- */
+.btn-leia-mais {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #fdd835;
+  color: #000;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+.btn-leia-mais:hover {
+  background: #ffeb3b;
+}
+
+/* ---- Estrutura ---- */
+.lado-direito {
+  max-width: 600px;
+}
+.info-bloco {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  gap: 20px;
+}
+.info-bloco h2 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+.info-bloco p {
+  font-size: 1rem;
+  color: #444;
+}
+.left-image-wrapper h3 {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 10px;
+}
