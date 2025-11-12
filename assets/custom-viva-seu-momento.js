@@ -1,34 +1,34 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const lampLight = document.querySelector(".lamp-light");
-  const section = document.querySelector("#viva-seu-momento");
+  const scenes = document.querySelectorAll(".viva-momento-scene");
 
   function visibleRatio(element) {
     const rect = element.getBoundingClientRect();
-    const windowHeight =
-      window.innerHeight || document.documentElement.clientHeight;
-    const visibleTop = Math.max(0, 0 - rect.top);
-    const visibleBottom = Math.max(0, rect.bottom - windowHeight);
-    const visibleHeight = rect.height - visibleTop - visibleBottom;
-    return Math.max(0, Math.min(1, visibleHeight / rect.height));
+    const height = window.innerHeight;
+    const visible = Math.max(0, Math.min(rect.bottom, height) - Math.max(rect.top, 0));
+    return Math.max(0, Math.min(1, visible / height));
+  }
+
+  function updateIntensity() {
+    scenes.forEach(scene => {
+      const lamp = scene.querySelector(".lampada");
+      const luz = scene.querySelector(".luz-efeito");
+      const ratio = visibleRatio(scene);
+      const power = 1.4;
+      const intensity = Math.pow(ratio, power);
+
+      lamp.style.setProperty("--intensity", intensity.toFixed(3));
+      luz.style.setProperty("--intensity", intensity.toFixed(3));
+    });
+    ticking = false;
   }
 
   let ticking = false;
-
-  function updateIntensity() {
-    ticking = false;
-    const ratio = visibleRatio(section);
-    const power = 1.5; // curva de intensidade
-    const intensity = Math.pow(ratio, power);
-    lampLight.style.setProperty("--intensity", intensity.toFixed(3));
-  }
-
-  function onScroll() {
+  window.addEventListener("scroll", () => {
     if (!ticking) {
       requestAnimationFrame(updateIntensity);
       ticking = true;
     }
-  }
+  });
 
-  window.addEventListener("scroll", onScroll);
   updateIntensity();
 });
