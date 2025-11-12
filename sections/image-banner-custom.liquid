@@ -1,0 +1,82 @@
+{{ 'section-custom-banner.css' | asset_url | stylesheet_tag }}
+
+<div id="CustomBanner-{{ section.id }}" class="custom-banner">
+  {%- if section.settings.main_image != blank -%}
+    <div class="custom-banner__image-wrapper">
+      <img 
+        src="{{ section.settings.main_image | image_url: width: 3840 }}" 
+        alt="{{ section.settings.main_image.alt | escape }}"
+        class="custom-banner__main-image"
+      >
+      {%- if section.settings.overlay_opacity > 0 -%}
+        <div 
+          class="custom-banner__overlay" 
+          style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"
+        ></div>
+      {%- endif -%}
+
+      {%- if section.settings.center_image != blank -%}
+        <div class="custom-banner__center-image-wrapper">
+          <img 
+            src="{{ section.settings.center_image | image_url: width: 600 }}" 
+            alt="{{ section.settings.center_image.alt | escape }}"
+            class="custom-banner__center-image"
+          >
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.footer_text != blank -%}
+        <div class="custom-banner__footer-text">
+          {{ section.settings.footer_text }}
+        </div>
+      {%- endif -%}
+    </div>
+  {%- else -%}
+    <div class="custom-banner__placeholder">
+      {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      <p>Adicione uma imagem principal no editor</p>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Custom Banner Full",
+  "tag": "section",
+  "class": "section section--custom-banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "main_image",
+      "label": "Imagem principal (fundo)"
+    },
+    {
+      "type": "image_picker",
+      "id": "center_image",
+      "label": "Mini imagem central"
+    },
+    {
+      "type": "richtext",
+      "id": "footer_text",
+      "label": "Texto no rodapé da imagem",
+      "default": "<p>Seu texto aqui...</p>"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "label": "Opacidade da sobreposição (escurecer imagem)",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banner Customizado Full",
+      "category": "Banners"
+    }
+  ]
+}
+{% endschema %}
