@@ -93,3 +93,63 @@
 .btn-link:hover {
   color: #ffaa00;
 }
+
+
+/* ====================== */
+/* Poste e lâmpada */
+.street {
+  position: relative;
+  z-index: 1;
+}
+
+.street img {
+  width: 220px;
+  height: auto;
+}
+
+/* Lâmpada */
+.lamp {
+  --intensity: 0;
+  position: absolute;
+  top: 6px;
+  left: calc(50% + 100px - 14px);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(255, 240, 200, calc(var(--intensity) * 1)),
+    rgba(255, 210, 100, calc(var(--intensity) * 0.9)),
+    rgba(200, 140, 50, calc(var(--intensity) * 0.6))
+  );
+  box-shadow:
+    0 0 calc(18px * var(--intensity)) rgba(255, 210, 90, calc(var(--intensity) * 0.9)),
+    0 0 calc(60px * var(--intensity)) rgba(255, 210, 90, calc(var(--intensity) * 0.45));
+  transition: background 100ms linear, box-shadow 200ms linear;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* Brilho "halo" */
+.lamp::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -40%);
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  filter: blur(30px);
+  opacity: calc(var(--intensity) * 0.85);
+  background: radial-gradient(
+    circle,
+    rgba(255, 187, 0, 0.9),
+    rgba(255, 210, 100, 0.12),
+    rgba(0, 0, 0, 0)
+  );
+  transition: opacity 200ms linear;
+  pointer-events: none;
+}
