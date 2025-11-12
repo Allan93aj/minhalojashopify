@@ -1,236 +1,178 @@
 {{ 'viva-seu-momento.css' | asset_url | stylesheet_tag }}
 {{ 'custom-viva-seu-momento.js' | asset_url | script_tag }}
+<script src="{{ 'viva-seu-momento-lampada.js' | asset_url }}" defer></script>
 
-<div class="container-viva-seu-momento layout-{{ section.settings.image_side }}">
-  <!-- LADO ESQUERDO -->
+<div id="scene-{{ section.id }}" class="viva-momento-scene">
   <div class="lado-esquerdo">
-    <div class="imagens-esquerda">
-      {% if section.settings.post_icon != blank %}
-        <div 
-          class="icone-poste" 
-          style="--max-brightness: {{ section.settings.max_light_intensity }}%;"
-        >
-          <img 
-            src="{{ section.settings.post_icon | image_url: width: section.settings.post_icon_width }}" 
-            alt="Poste" 
-            style="width: {{ section.settings.post_icon_width }}px;"
-          >
-        </div>
-      {% endif %}
+    <div class="lampada-container">
+      <img 
+        id="lamp-{{ section.id }}" 
+        class="lampada"
+        src="{{ section.settings.post_icon | image_url: width: section.settings.post_icon_width }}"
+        alt="Lâmpada"
+        style="--lamp-intensity: 0;"
+      >
+      <div class="luz-efeito"></div>
+    </div>
 
-      {% if section.settings.left_image_2 != blank %}
-        <div class="imagem-esquerda">
-          <img 
-            src="{{ section.settings.left_image_2 | image_url: width: section.settings.left_image_2_width }}" 
-            alt="{{ section.settings.left_image_2_title }}"
-            style="width: {{ section.settings.left_image_2_width }}px;"
-          >
-          <div class="info-esquerda">
-            <h3>{{ section.settings.left_image_2_title }}</h3>
-            <p>{{ section.settings.left_image_2_text }}</p>
-            {% if section.settings.left_image_2_button_text != blank and section.settings.left_image_2_button_link != blank %}
-              <a href="{{ section.settings.left_image_2_button_link }}" class="btn-leia-mais">
-                {{ section.settings.left_image_2_button_text }}
-              </a>
-            {% endif %}
-          </div>
-        </div>
-      {% endif %}
+    <div class="imagem-secundaria">
+      <img 
+        src="{{ section.settings.left_image | image_url: width: section.settings.left_image_width }}"
+        alt="{{ section.settings.left_title | escape }}"
+      >
+      <h3>{{ section.settings.left_title }}</h3>
+      <p>{{ section.settings.left_text }}</p>
+      <a href="{{ section.settings.left_link }}" class="btn-link">Saiba mais</a>
     </div>
   </div>
 
-  <!-- LADO DIREITO -->
   <div class="lado-direito">
-    <div class="container-lado-direito">
-      
-      <!-- BLOCO 1 -->
-      <div class="info-bloco bloco1">
-        <div class="texto">
-          <h2>{{ section.settings.block1_title }}</h2>
-          <p>{{ section.settings.block1_text }}</p>
-          {% if section.settings.block1_button_text != blank and section.settings.block1_button_link != blank %}
-            <a href="{{ section.settings.block1_button_link }}" class="btn-leia-mais">
-              {{ section.settings.block1_button_text }}
-            </a>
-          {% endif %}
-        </div>
-        {% if section.settings.block1_image != blank %}
-          <div class="imagem">
-            <img 
-              src="{{ section.settings.block1_image | image_url: width: section.settings.block1_image_width }}" 
-              alt="Imagem bloco 1"
-              style="width: {{ section.settings.block1_image_width }}px;"
-            >
-          </div>
-        {% endif %}
+    <div class="info-bloco">
+      <div class="texto">
+        <h2>{{ section.settings.right_title_1 }}</h2>
+        <p>{{ section.settings.right_text_1 }}</p>
+        <a href="{{ section.settings.right_link_1 }}" class="btn-link">Leia mais</a>
       </div>
+      <img 
+        src="{{ section.settings.right_image_1 | image_url: width: section.settings.right_image_1_width }}" 
+        alt="Imagem 1 Direita"
+      >
+    </div>
 
-      <!-- BLOCO 2 -->
-      <div class="info-bloco bloco2">
-        {% if section.settings.block2_image != blank %}
-          <div class="imagem">
-            <img 
-              src="{{ section.settings.block2_image | image_url: width: section.settings.block2_image_width }}" 
-              alt="Imagem bloco 2"
-              style="width: {{ section.settings.block2_image_width }}px;"
-            >
-          </div>
-        {% endif %}
-        <div class="texto">
-          <h2>{{ section.settings.block2_title }}</h2>
-          <p>{{ section.settings.block2_text }}</p>
-          {% if section.settings.block2_button_text != blank and section.settings.block2_button_link != blank %}
-            <a href="{{ section.settings.block2_button_link }}" class="btn-leia-mais">
-              {{ section.settings.block2_button_text }}
-            </a>
-          {% endif %}
-        </div>
+    <div class="info-bloco">
+      <img 
+        src="{{ section.settings.right_image_2 | image_url: width: section.settings.right_image_2_width }}" 
+        alt="Imagem 2 Direita"
+      >
+      <div class="texto">
+        <h2>{{ section.settings.right_title_2 }}</h2>
+        <p>{{ section.settings.right_text_2 }}</p>
+        <a href="{{ section.settings.right_link_2 }}" class="btn-link">Leia mais</a>
       </div>
-
     </div>
   </div>
 </div>
 
 {% schema %}
 {
-  "name": "Viva Seu Momento",
+  "name": "Viva seu momento",
   "settings": [
-    {
-      "type": "select",
-      "id": "image_side",
-      "label": "Lado das imagens",
-      "options": [
-        { "value": "left", "label": "Esquerdo" },
-        { "value": "right", "label": "Direito" }
-      ],
-      "default": "left"
-    },
-
     {
       "type": "image_picker",
       "id": "post_icon",
-      "label": "Ícone do Poste (com luz)"
-    },
-    {
-      "type": "number",
-      "id": "post_icon_width",
-      "label": "Largura do ícone do poste (px)",
-      "default": 120,
-      "info": "Defina a largura do ícone em pixels (ex: 120)"
+      "label": "Ícone do Poste/Lâmpada"
     },
     {
       "type": "range",
-      "id": "max_light_intensity",
-      "label": "Força máxima da luz do poste (%)",
+      "id": "post_icon_width",
+      "label": "Largura da lâmpada (px)",
       "min": 50,
-      "max": 300,
+      "max": 600,
       "step": 10,
-      "default": 150
-    },
-
-    {
-      "type": "image_picker",
-      "id": "left_image_2",
-      "label": "Imagem ao lado do poste"
-    },
-    {
-      "type": "number",
-      "id": "left_image_2_width",
-      "label": "Largura da imagem ao lado do poste (px)",
-      "default": 300,
-      "info": "Defina a largura da imagem ao lado do poste (px)"
-    },
-    {
-      "type": "text",
-      "id": "left_image_2_title",
-      "label": "Título da imagem ao lado do poste"
-    },
-    {
-      "type": "textarea",
-      "id": "left_image_2_text",
-      "label": "Texto da imagem ao lado do poste"
-    },
-    {
-      "type": "text",
-      "id": "left_image_2_button_text",
-      "label": "Texto do botão da imagem à esquerda"
-    },
-    {
-      "type": "url",
-      "id": "left_image_2_button_link",
-      "label": "Link do botão da imagem à esquerda"
-    },
-
-    {
-      "type": "text",
-      "id": "block1_title",
-      "label": "Título do primeiro bloco (direita)"
-    },
-    {
-      "type": "textarea",
-      "id": "block1_text",
-      "label": "Texto do primeiro bloco (direita)"
-    },
-    {
-      "type": "text",
-      "id": "block1_button_text",
-      "label": "Texto do botão (bloco 1)"
-    },
-    {
-      "type": "url",
-      "id": "block1_button_link",
-      "label": "Link do botão (bloco 1)"
+      "default": 200
     },
     {
       "type": "image_picker",
-      "id": "block1_image",
-      "label": "Imagem (bloco 1)"
+      "id": "left_image",
+      "label": "Imagem ao lado da lâmpada"
     },
     {
-      "type": "number",
-      "id": "block1_image_width",
-      "label": "Largura da imagem (bloco 1) em px",
-      "default": 300,
-      "info": "Defina a largura da imagem do primeiro bloco (px)"
-    },
-
-    {
-      "type": "image_picker",
-      "id": "block2_image",
-      "label": "Imagem (bloco 2)"
-    },
-    {
-      "type": "number",
-      "id": "block2_image_width",
-      "label": "Largura da imagem (bloco 2) em px",
-      "default": 300,
-      "info": "Defina a largura da imagem do segundo bloco (px)"
+      "type": "range",
+      "id": "left_image_width",
+      "label": "Largura imagem esquerda (px)",
+      "min": 50,
+      "max": 800,
+      "step": 10,
+      "default": 300
     },
     {
       "type": "text",
-      "id": "block2_title",
-      "label": "Título do segundo bloco (direita)"
+      "id": "left_title",
+      "label": "Título imagem esquerda"
     },
     {
       "type": "textarea",
-      "id": "block2_text",
-      "label": "Texto do segundo bloco (direita)"
-    },
-    {
-      "type": "text",
-      "id": "block2_button_text",
-      "label": "Texto do botão (bloco 2)"
+      "id": "left_text",
+      "label": "Texto imagem esquerda"
     },
     {
       "type": "url",
-      "id": "block2_button_link",
-      "label": "Link do botão (bloco 2)"
+      "id": "left_link",
+      "label": "Link botão imagem esquerda"
+    },
+
+    {
+      "type": "header",
+      "content": "Bloco direito 1"
+    },
+    {
+      "type": "text",
+      "id": "right_title_1",
+      "label": "Título bloco 1"
+    },
+    {
+      "type": "textarea",
+      "id": "right_text_1",
+      "label": "Texto bloco 1"
+    },
+    {
+      "type": "url",
+      "id": "right_link_1",
+      "label": "Link bloco 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "right_image_1",
+      "label": "Imagem bloco 1"
+    },
+    {
+      "type": "range",
+      "id": "right_image_1_width",
+      "label": "Largura imagem bloco 1 (px)",
+      "min": 50,
+      "max": 800,
+      "step": 10,
+      "default": 300
+    },
+
+    {
+      "type": "header",
+      "content": "Bloco direito 2"
+    },
+    {
+      "type": "text",
+      "id": "right_title_2",
+      "label": "Título bloco 2"
+    },
+    {
+      "type": "textarea",
+      "id": "right_text_2",
+      "label": "Texto bloco 2"
+    },
+    {
+      "type": "url",
+      "id": "right_link_2",
+      "label": "Link bloco 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "right_image_2",
+      "label": "Imagem bloco 2"
+    },
+    {
+      "type": "range",
+      "id": "right_image_2_width",
+      "label": "Largura imagem bloco 2 (px)",
+      "min": 50,
+      "max": 800,
+      "step": 10,
+      "default": 300
     }
   ],
   "presets": [
     {
-      "name": "Viva Seu Momento",
-      "category": "Sessões Personalizadas"
+      "name": "Viva seu momento",
+      "category": "Seções Custom"
     }
   ]
 }
