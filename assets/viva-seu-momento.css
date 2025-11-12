@@ -1,149 +1,67 @@
-/* Container e layout */
-.container-viva-seu-momento {
+.viva-momento-scene {
   display: flex;
-  gap: 60px;
-  padding: 60px 20px;
-  align-items: flex-start;
-  justify-content: center;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Permite inverter os lados pelo schema */
-.container-viva-seu-momento.layout-right {
-  flex-direction: row-reverse;
-}
-
-/* LADO ESQUERDO */
-.lado-esquerdo {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-}
-
-.imagens-esquerda {
-  display: flex;
-  gap: 24px;
-  align-items: center;
-}
-
-/* Poste (ícone) */
-.icone-poste {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* --max-brightness é definido inline via Liquid (valor percentual). */
-}
-.icone-poste img {
-  display: block;
-  transition: filter 0.2s ease, box-shadow 0.2s ease;
-  filter: brightness(1);
-  will-change: filter, box-shadow;
-}
-
-/* Imagem 2 (com título, texto, botão) */
-.imagem-esquerda-2 {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: flex-start;
-  max-width: 420px;
-}
-.imagem-esquerda-2 img {
-  display:block;
-  border-radius: 8px;
-  object-fit: cover;
-}
-.left-image-title {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #222;
-}
-.left-image-text {
-  margin: 0;
-  color: #555;
-  line-height: 1.4;
-}
-.btn-left-image {
-  display:inline-block;
-  margin-top: 6px;
-  background:#222;
-  color:#fff;
-  padding:8px 14px;
-  border-radius:6px;
-  text-decoration:none;
-}
-
-/* LADO DIREITO */
-.lado-direito {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-}
-.container-lado-direito {
-  width: 100%;
-  max-width: 700px;
-  display: flex;
-  flex-direction: column;
-  gap: 36px;
-}
-
-/* INFO BLOCO (aplicado aos dois blocos) */
-.info-bloco {
-  display: flex;
-  gap: 24px;
   align-items: center;
   justify-content: space-between;
-}
-.info-bloco .texto {
-  flex: 1;
-  min-width: 180px;
-}
-.info-bloco h2 {
-  margin: 0 0 8px 0;
-  font-size: 1.6rem;
-  color: #222;
-}
-.info-bloco p {
-  margin: 0 0 12px 0;
-  color: #555;
-  line-height: 1.5;
-}
-.btn-info {
-  display:inline-block;
-  background:#222;
-  color:#fff;
-  padding:8px 14px;
-  border-radius:6px;
-  text-decoration:none;
+  padding: 60px 5vw;
+  gap: 40px;
+  position: relative;
 }
 
-/* Imagens dentro dos blocos */
-.bloco-img-1 img,
-.bloco-img-2 img {
-  display:block;
-  border-radius:8px;
-  object-fit: cover;
+.lado-esquerdo,
+.lado-direito {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 }
 
-/* Responsividade */
-@media (max-width: 900px) {
-  .container-viva-seu-momento {
-    flex-direction: column;
-    gap: 40px;
-    padding: 40px 16px;
-  }
+.lampada-container {
+  position: relative;
+  display: inline-block;
+}
 
-  .imagens-esquerda {
-    gap: 16px;
-  }
+.lampada {
+  width: var(--lamp-width, 200px);
+  transition: filter 0.3s ease;
+  filter: brightness(calc(0.6 + var(--intensity, 0)));
+}
 
-  .info-bloco {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.luz-efeito {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255, 230, 120, var(--intensity, 0)) 0%, transparent 70%);
+  transform: translate(-50%, -10%);
+  pointer-events: none;
+}
 
-  .info-bloco .texto { order: 1; }
-  .bloco-img-1, .bloco-img-2 { order: 2; }
+.imagem-secundaria img {
+  width: auto;
+  max-width: 100%;
+}
+
+.info-bloco {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.texto {
+  max-width: 400px;
+}
+
+.btn-link {
+  display: inline-block;
+  background: #ffcc00;
+  color: #000;
+  padding: 10px 20px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.btn-link:hover {
+  background: #ffe066;
 }

@@ -1,48 +1,34 @@
-(function () {
-  // Debounce simples para performance no scroll
-  function debounce(fn, wait) {
-    let t;
-    return function () {
-      clearTimeout(t);
-      t = setTimeout(() => fn.apply(this, arguments), wait);
-    };
+document.addEventListener("DOMContentLoaded", () => {
+  const scenes = document.querySelectorAll(".viva-momento-scene");
+
+  function visibleRatio(element) {
+    const rect = element.getBoundingClientRect();
+    const height = window.innerHeight;
+    const visible = Math.max(0, Math.min(rect.bottom, height) - Math.max(rect.top, 0));
+    return Math.max(0, Math.min(1, visible / height));
   }
 
-  function updatePostLight() {
-    const postes = document.querySelectorAll(".icone-poste");
-    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+  function updateIntensity() {
+    scenes.forEach(scene => {
+      const lamp = scene.querySelector(".lampada");
+      const luz = scene.querySelector(".luz-efeito");
+      const ratio = visibleRatio(scene);
+      const power = 1.4;
+      const intensity = Math.pow(ratio, power);
 
-    postes.forEach((poste) => {
-      const img = poste.querySelector("img");
-      if (!img) return;
-
-      const rect = poste.getBoundingClientRect();
-      // porcentagem de visibilidade do topo: quando top <= windowHeight e bottom >= 0
-      const visibleTop = Math.max(0, Math.min(windowHeight, windowHeight - rect.top));
-      const visibleRatio = Math.max(0, Math.min(1, visibleTop / windowHeight));
-
-      // Ler intensidade máxima definida em schema (valor percentual)
-      // O Liquid define --max-brightness em atributo inline (ex: 150)
-      const maxBrightnessPercent = parseFloat(getComputedStyle(poste).getPropertyValue("--max-brightness")) || 150;
-      // converte para multiplicador: ex 150% => 1.5
-      const maxMultiplier = maxBrightnessPercent / 100;
-
-      // Brightness base 1 -> até maxMultiplier
-      const brightness = 1 + (visibleRatio * (maxMultiplier - 1));
-
-      // drop-shadow com tom amarelo, intensidade vinculada à visibilidade
-      const glowPx = Math.round(visibleRatio * 30); // até 30px de blur
-      const glowOpacity = (visibleRatio * 0.9).toFixed(2); // opacidade do glow (até 0.9)
-
-      img.style.filter = `brightness(${brightness})`;
-      img.style.boxShadow = `0 0 ${glowPx}px rgba(255, 200, 50, ${glowOpacity})`;
-      // para performance: hint de propriedade
-      img.style.willChange = "filter, box-shadow";
+      lamp.style.setProperty("--intensity", intensity.toFixed(3));
+      luz.style.setProperty("--intensity", intensity.toFixed(3));
     });
+    ticking = false;
   }
 
-  // Executa no carregamento (para estado inicial) e no scroll/resize
-  document.addEventListener("DOMContentLoaded", updatePostLight);
-  window.addEventListener("resize", debounce(updatePostLight, 120));
-  window.addEventListener("scroll", debounce(updatePostLight, 12));
-})();
+  let ticking = false;
+  window.addEventListener("scroll", () => {
+    if (!ticking) {
+      requestAnimationFrame(updateIntensity);
+      ticking = true;
+    }
+  });
+
+  updateIntensity();
+});
