@@ -1,10 +1,11 @@
-/* .viva-momento-scene {
+.viva-momento-scene {
   display: grid;
   grid-template-columns: 50% 50%;
   align-items: flex-start;
   max-width: 95%;
   margin: 0 auto;
   position: relative;
+  overflow: hidden;
 }
 
 .lado-esquerdo {
@@ -15,22 +16,25 @@
 
 .lampada-container {
   position: relative;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
 }
 
 .lampada {
   --intensity: 0;
   position: absolute;
-  top: 40px;
-  left: calc(50% + 70px);
+  top: 60px;
+  left: calc(50% + 100px);
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, rgba(255,240,150,calc(var(--intensity)*1)), rgba(255,210,80,calc(var(--intensity)*0.9)), rgba(200,140,50,calc(var(--intensity)*0.6)));
-  box-shadow: 0 0 calc(18px * var(--intensity)) rgba(255,220,100,calc(var(--intensity)*0.9)), 0 0 calc(60px * var(--intensity)) rgba(255,210,90,calc(var(--intensity)*0.45));
-  transition: all 0.2s linear;
+  background: radial-gradient(circle at 35% 30%,
+    rgba(255,240,150,calc(var(--intensity)*1)),
+    rgba(255,210,80,calc(var(--intensity)*0.9)),
+    rgba(200,140,50,calc(var(--intensity)*0.6))
+  );
+  box-shadow:
+    0 0 calc(18px * var(--intensity)) rgba(255,220,100,calc(var(--intensity)*0.9)),
+    0 0 calc(60px * var(--intensity)) rgba(255,210,90,calc(var(--intensity)*0.45));
+  transition: all 0.25s linear;
 }
 
 .lampada::after {
@@ -43,10 +47,29 @@
   height: 180px;
   border-radius: 50%;
   filter: blur(30px);
-  opacity: calc(var(--intensity) * 0.85);
-  background: radial-gradient(circle, rgba(255, 187, 0, 0.9), rgba(255,210,100,0.12), rgba(0,0,0,0));
-  transition: opacity 200ms linear;
+  opacity: calc(var(--intensity) * 0.9);
+  background: radial-gradient(circle,
+    rgba(255,187,0,0.9),
+    rgba(255,210,100,0.12),
+    rgba(0,0,0,0)
+  );
   pointer-events: none;
+  transition: opacity 200ms linear;
+}
+
+.lampada.pulsar::after {
+  animation: lamp-pulse 3s ease-in-out infinite;
+}
+
+@keyframes lamp-pulse {
+  0%, 100% {
+    opacity: calc(var(--intensity) * 0.9);
+    transform: translate(-50%, -40%) scale(1);
+  }
+  50% {
+    opacity: calc(var(--intensity) * 1.1);
+    transform: translate(-50%, -40%) scale(1.05);
+  }
 }
 
 .poste {
@@ -57,10 +80,6 @@
 .imagem-secundaria {
   text-align: center;
   padding-left: 40px;
-}
-
-.imagem-secundaria h3 {
-  margin-top: 10px;
 }
 
 .lado-direito {
@@ -77,13 +96,7 @@
   gap: 30px;
 }
 
-.info-bloco .texto {
-  max-width: 300px;
-}
-
 .btn-link {
-  display: inline-block;
-  margin-top: 10px;
   color: #ffbb00;
   text-decoration: none;
   font-weight: bold;
@@ -92,4 +105,4 @@
 
 .btn-link:hover {
   color: #ffaa00;
-} */
+}
