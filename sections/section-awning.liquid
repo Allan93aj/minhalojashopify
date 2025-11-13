@@ -1,0 +1,478 @@
+{% comment %}
+  Seção: Hero Banner com Toldo Decorativo
+  Adicione este arquivo em sections/hero-awning.liquid
+{% endcomment %}
+
+<style>
+  .hero-awning-section {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .awning-container {
+    position: relative;
+    width: 100%;
+    height: {{ section.settings.awning_height }}px;
+    background: {{ section.settings.awning_color }};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  
+  .awning-scallops {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    display: flex;
+  }
+  
+  .scallop {
+    flex: 1;
+    height: 100%;
+    background: {{ section.settings.awning_color }};
+    border-radius: 0 0 100% 100%;
+    margin: 0 -1px;
+  }
+  
+  .awning-text {
+    position: relative;
+    z-index: 2;
+    color: {{ section.settings.awning_text_color }};
+    font-size: {{ section.settings.awning_font_size }}px;
+    font-weight: {{ section.settings.awning_font_weight }};
+    text-align: center;
+    padding: 0 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .hero-content {
+    position: relative;
+    width: 100%;
+    min-height: {{ section.settings.hero_height }}px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 60px 40px;
+  }
+  
+  .hero-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: {{ section.settings.overlay_color }};
+    opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+    z-index: 1;
+  }
+  
+  .hero-text-box {
+    position: relative;
+    z-index: 2;
+    background: {{ section.settings.text_box_bg }};
+    padding: {{ section.settings.text_box_padding }}px;
+    max-width: {{ section.settings.text_box_width }}px;
+    border-radius: {{ section.settings.text_box_radius }}px;
+  }
+  
+  .hero-subtitle {
+    font-size: {{ section.settings.subtitle_size }}px;
+    color: {{ section.settings.subtitle_color }};
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 400;
+  }
+  
+  .hero-title {
+    font-size: {{ section.settings.title_size }}px;
+    color: {{ section.settings.title_color }};
+    font-weight: {{ section.settings.title_weight }};
+    line-height: 1.2;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  
+  .hero-description {
+    font-size: {{ section.settings.description_size }}px;
+    color: {{ section.settings.description_color }};
+    line-height: 1.6;
+    margin-bottom: 30px;
+  }
+  
+  .hero-cta {
+    display: inline-block;
+    background: {{ section.settings.button_bg }};
+    color: {{ section.settings.button_text_color }};
+    padding: 15px 40px;
+    border-radius: {{ section.settings.button_radius }}px;
+    text-decoration: none;
+    font-size: {{ section.settings.button_size }}px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+  }
+  
+  .hero-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    opacity: 0.9;
+  }
+  
+  @media (max-width: 768px) {
+    .awning-container {
+      height: {{ section.settings.awning_height | minus: 30 }}px;
+    }
+    
+    .awning-scallops {
+      height: 40px;
+    }
+    
+    .awning-text {
+      font-size: {{ section.settings.awning_font_size | minus: 4 }}px;
+    }
+    
+    .hero-content {
+      min-height: {{ section.settings.hero_height | minus: 100 }}px;
+      padding: 40px 20px;
+    }
+    
+    .hero-text-box {
+      max-width: 100%;
+      padding: {{ section.settings.text_box_padding | minus: 10 }}px;
+    }
+    
+    .hero-title {
+      font-size: {{ section.settings.title_size | minus: 10 }}px;
+    }
+    
+    .hero-subtitle {
+      font-size: {{ section.settings.subtitle_size | minus: 2 }}px;
+    }
+    
+    .hero-description {
+      font-size: {{ section.settings.description_size | minus: 2 }}px;
+    }
+  }
+</style>
+
+<section class="hero-awning-section">
+  <!-- Toldo Decorativo -->
+  <div class="awning-container">
+    {% if section.settings.awning_text != blank %}
+      <div class="awning-text">{{ section.settings.awning_text }}</div>
+    {% endif %}
+    
+    <div class="awning-scallops">
+      {% for i in (1..20) %}
+        <div class="scallop"></div>
+      {% endfor %}
+    </div>
+  </div>
+  
+  <!-- Hero Content -->
+  <div class="hero-content" 
+       style="background-image: url('{{ section.settings.background_image | img_url: '2000x' }}');">
+    
+    <div class="hero-text-box">
+      {% if section.settings.subtitle != blank %}
+        <div class="hero-subtitle">{{ section.settings.subtitle }}</div>
+      {% endif %}
+      
+      {% if section.settings.title != blank %}
+        <h1 class="hero-title">{{ section.settings.title }}</h1>
+      {% endif %}
+      
+      {% if section.settings.description != blank %}
+        <div class="hero-description">{{ section.settings.description }}</div>
+      {% endif %}
+      
+      {% if section.settings.button_text != blank %}
+        <a href="{{ section.settings.button_link }}" class="hero-cta">
+          {{ section.settings.button_text }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero com Toldo",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Toldo Decorativo"
+    },
+    {
+      "type": "text",
+      "id": "awning_text",
+      "label": "Texto no Toldo",
+      "info": "Deixe em branco para ocultar"
+    },
+    {
+      "type": "color",
+      "id": "awning_color",
+      "label": "Cor do Toldo",
+      "default": "#0a3d4a"
+    },
+    {
+      "type": "color",
+      "id": "awning_text_color",
+      "label": "Cor do Texto do Toldo",
+      "default": "#ff3333"
+    },
+    {
+      "type": "range",
+      "id": "awning_height",
+      "label": "Altura do Toldo",
+      "min": 80,
+      "max": 200,
+      "step": 10,
+      "default": 140,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "awning_font_size",
+      "label": "Tamanho da Fonte do Toldo",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "awning_font_weight",
+      "label": "Peso da Fonte do Toldo",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Médio" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "header",
+      "content": "Imagem de Fundo"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Imagem de Fundo"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Cor do Overlay",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Opacidade do Overlay",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "default": 40,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "hero_height",
+      "label": "Altura Mínima do Hero",
+      "min": 400,
+      "max": 800,
+      "step": 50,
+      "default": 600,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Caixa de Texto"
+    },
+    {
+      "type": "color",
+      "id": "text_box_bg",
+      "label": "Cor de Fundo da Caixa",
+      "default": "rgba(10, 61, 74, 0.9)"
+    },
+    {
+      "type": "range",
+      "id": "text_box_width",
+      "label": "Largura Máxima da Caixa",
+      "min": 300,
+      "max": 700,
+      "step": 50,
+      "default": 500,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "text_box_padding",
+      "label": "Padding da Caixa",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "text_box_radius",
+      "label": "Arredondamento da Caixa",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "default": 10,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Textos"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtítulo",
+      "default": "MACARONS LADOVAS"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size",
+      "label": "Tamanho do Subtítulo",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "default": 14,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Cor do Subtítulo",
+      "default": "#ffffff"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Título Principal",
+      "default": "Uma torre de sabores para adoçar o momento."
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Tamanho do Título",
+      "min": 24,
+      "max": 60,
+      "step": 2,
+      "default": 36,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "title_weight",
+      "label": "Peso do Título",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Cor do Título",
+      "default": "#ffffff"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Descrição",
+      "default": "Passe o mouse nos macarons e descubra os sabores"
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "label": "Tamanho da Descrição",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Cor da Descrição",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Botão"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Texto do Botão",
+      "default": "VER MAIS"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link do Botão"
+    },
+    {
+      "type": "color",
+      "id": "button_bg",
+      "label": "Cor de Fundo do Botão",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Cor do Texto do Botão",
+      "default": "#0a3d4a"
+    },
+    {
+      "type": "range",
+      "id": "button_size",
+      "label": "Tamanho da Fonte do Botão",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "default": 14,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "button_radius",
+      "label": "Arredondamento do Botão",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "default": 25,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero com Toldo"
+    }
+  ]
+}
+{% endschema %}
