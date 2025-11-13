@@ -1,0 +1,73 @@
+{{ 'instagram-section.css' | asset_url | stylesheet_tag }}
+{{ 'instagram-section.js' | asset_url | script_tag }}
+
+<section class="instagram-section">
+  <div class="instagram-header">
+    <h2>Siga LaDovas no Instagram</h2>
+    <a href="{{ section.settings.instagram_url }}" target="_blank" aria-label="Instagram">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="#fff">
+        <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2a3 3 0 013 3v10a3 3 0 01-3 3H7a3 3 0 01-3-3V7a3 3 0 013-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.5-.5a1 1 0 100 2 1 1 0 000-2z"/>
+      </svg>
+    </a>
+  </div>
+
+  <div class="instagram-gallery">
+    <!-- Imagens fixas configuráveis -->
+    <div class="gallery-item fixed">
+      <img src="{{ section.settings.image_1 | img_url: '720x' }}" alt="Imagem 1">
+      {% if section.settings.text_1 != blank %}
+        <div class="overlay-text">
+          <h3>{{ section.settings.text_1 }}</h3>
+          <p>{{ section.settings.subtext_1 }}</p>
+        </div>
+      {% endif %}
+    </div>
+    <div class="gallery-item fixed">
+      <img src="{{ section.settings.image_2 | img_url: '720x' }}" alt="Imagem 2">
+    </div>
+
+    <!-- Imagens vindas do Instagram -->
+    <div id="instagram-feed" class="instagram-feed"></div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Seção Instagram LaDovas",
+  "settings": [
+    {
+      "type": "text",
+      "id": "instagram_url",
+      "label": "URL do Instagram",
+      "default": "https://instagram.com/ladovas"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_1",
+      "label": "Imagem fixa 1"
+    },
+    {
+      "type": "text",
+      "id": "text_1",
+      "label": "Título da imagem 1",
+      "default": "BEM VINDOS"
+    },
+    {
+      "type": "text",
+      "id": "subtext_1",
+      "label": "Subtítulo da imagem 1",
+      "default": "AO LADOVAS CAFÉ"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Imagem fixa 2"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Seção Instagram LaDovas"
+    }
+  ]
+}
+{% endschema %}
