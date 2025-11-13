@@ -20,6 +20,8 @@
             "background_image": "shopify://shop_images/card01.png",
             "overlay_image": "shopify://shop_images/card01_575f9fed-00f5-455d-ab3e-cfeafcb2de2e.png",
             "inner_image": "shopify://shop_images/card01_98f37c40-232f-47bd-bb35-bdbe34357756.png",
+            "content_title": "Relax",
+            "content_description": "O silêncio acolhedor que te faz esquecer do tempo",
             "button_text": "Ver mais",
             "button_link": ""
           }
@@ -32,6 +34,8 @@
             "background_image": "shopify://shop_images/card02.png",
             "overlay_image": "shopify://shop_images/card02_a1d3e97c-9056-49f2-8ed7-6a2521b36484.png",
             "inner_image": "shopify://shop_images/card02_0734c0b1-e35b-4441-a656-e81a4be502f3.png",
+            "content_title": "Relax",
+            "content_description": "O silêncio acolhedor que te faz esquecer do tempo",
             "button_text": "Ver mais",
             "button_link": ""
           }
@@ -44,6 +48,8 @@
             "background_image": "shopify://shop_images/card03.png",
             "overlay_image": "shopify://shop_images/card03_95c0270d-dea7-4433-8d55-7c3831daa417.png",
             "inner_image": "shopify://shop_images/card03_b967130d-9d0a-42e0-a6de-5898b3d615a0.png",
+            "content_title": "Relax",
+            "content_description": "O silêncio acolhedor que te faz esquecer do tempo",
             "button_text": "Ver mais",
             "button_link": ""
           }
@@ -56,6 +62,8 @@
             "background_image": "shopify://shop_images/card04.png",
             "overlay_image": "shopify://shop_images/card04_ecf90f49-ecaa-4246-b054-1c32e40880c1.png",
             "inner_image": "shopify://shop_images/card04_557918e2-bf17-4f53-a6d2-046757035134.png",
+            "content_title": "Relax",
+            "content_description": "O silêncio acolhedor que te faz esquecer do tempo",
             "button_text": "Ver mais",
             "button_link": ""
           }
@@ -68,6 +76,8 @@
             "background_image": "shopify://shop_images/card05.png",
             "overlay_image": "shopify://shop_images/card05_e1d79061-d930-4262-ab7f-326ab01d3961.png",
             "inner_image": "shopify://shop_images/card05_a2fef8db-c4cc-43de-8449-ba3e31183a5e.png",
+            "content_title": "Relax",
+            "content_description": "O silêncio acolhedor que te faz esquecer do tempo",
             "button_text": "Ver mais",
             "button_link": ""
           }
@@ -80,6 +90,8 @@
             "background_image": "shopify://shop_images/card06.png",
             "overlay_image": "shopify://shop_images/card06_2d908c22-d3a8-4a73-906b-c49379f7f125.png",
             "inner_image": "shopify://shop_images/card06_8095de3e-d45f-4883-9491-8f5afe2ff2d5.png",
+            "content_title": "Relax",
+            "content_description": "O silêncio acolhedor que te faz esquecer do tempo",
             "button_text": "Ver mais",
             "button_link": ""
           }
@@ -92,6 +104,8 @@
             "background_image": "shopify://shop_images/card07_0b070bb8-2026-431e-b614-4acb744a9619.png",
             "overlay_image": "shopify://shop_images/card07_2058bee9-9ba0-41c5-9905-aa338bdbb651.png",
             "inner_image": "shopify://shop_images/a9otu0.gif",
+            "content_title": "Relax",
+            "content_description": "O silêncio acolhedor que te faz esquecer do tempo",
             "button_text": "Ver mais",
             "button_link": ""
           }
@@ -107,6 +121,104 @@
         "card_NiJxqH"
       ],
       "name": "Banner Dinâmico 123",
+      "settings": {
+        "banner_title": "Muito mais do que café. Um lugar de momentos"
+      }
+    },
+    "banner_interativo_34gJKM": {
+      "type": "banner-interativo",
+      "blocks": {
+        "card_VQyQYf": {
+          "type": "card",
+          "settings": {
+            "card_number": "01",
+            "card_title": "Café",
+            "background_image": "shopify://shop_images/card01_98f37c40-232f-47bd-bb35-bdbe34357756.png",
+            "overlay_image": "shopify://shop_images/card01_98f37c40-232f-47bd-bb35-bdbe34357756.png",
+            "inner_image": "shopify://shop_images/Rectangle_568.png",
+            "content_title": "Relax",
+            "content_description": "O silêncio acolhedor que te faz esquecer do tempo",
+            "button_text": "encontre seu refúgio",
+            "button_link": ""
+          }
+        },
+        "card_6GTJcw": {
+          "type": "card",
+          "settings": {
+            "card_number": "01",
+            "card_title": "Café",
+            "content_title": "Relax",
+            "content_description": "O silêncio acolhedor que te faz esquecer do tempo",
+            "button_text": "encontre seu refúgio",
+            "button_link": ""
+          }
+        },
+        "card_Xtqae3": {
+          "type": "card",
+          "settings": {
+            "card_number": "01",
+            "card_title": "Café",
+            "content_title": "Relax",
+            "content_description": "O silêncio acolhedor que te faz esquecer do tempo",
+            "button_text": "encontre seu refúgio",
+            "button_link": ""
+          }
+        },
+        "card_kj8YPY": {
+          "type": "card",
+          "settings": {
+            "card_number": "01",
+            "card_title": "Café",
+            "content_title": "Relax",
+            "content_description": "O silêncio acolhedor que te faz esquecer do tempo",
+            "button_text": "encontre seu refúgio",
+            "button_link": ""
+          }
+        },
+        "card_yx4rYg": {
+          "type": "card",
+          "settings": {
+            "card_number": "01",
+            "card_title": "Café",
+            "content_title": "Relax",
+            "content_description": "O silêncio acolhedor que te faz esquecer do tempo",
+            "button_text": "encontre seu refúgio",
+            "button_link": ""
+          }
+        },
+        "card_Pn7iCm": {
+          "type": "card",
+          "settings": {
+            "card_number": "01",
+            "card_title": "Café",
+            "content_title": "Relax",
+            "content_description": "O silêncio acolhedor que te faz esquecer do tempo",
+            "button_text": "encontre seu refúgio",
+            "button_link": ""
+          }
+        },
+        "card_hdpEd9": {
+          "type": "card",
+          "settings": {
+            "card_number": "01",
+            "card_title": "Café",
+            "content_title": "Relax",
+            "content_description": "O silêncio acolhedor que te faz esquecer do tempo",
+            "button_text": "encontre seu refúgio",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "card_VQyQYf",
+        "card_6GTJcw",
+        "card_Xtqae3",
+        "card_kj8YPY",
+        "card_yx4rYg",
+        "card_Pn7iCm",
+        "card_hdpEd9"
+      ],
+      "name": "Banner Interativo",
       "settings": {
         "banner_title": "Muito mais do que café. Um lugar de momentos"
       }
@@ -591,6 +703,7 @@
   },
   "order": [
     "banner_custom123_BrNjNk",
+    "banner_interativo_34gJKM",
     "deals_banner_wGVmQB",
     "image_banner_aJnpa4",
     "section_awning_Vw6NRA",
