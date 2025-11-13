@@ -1,178 +1,617 @@
-{{ 'viva-momento.css' | asset_url | stylesheet_tag }}
-{{ 'viva-momento.js' | asset_url | script_tag }}
+{% comment %}
+  Seção: A Essência Ladovas - Layout com Poste e Cards
+  Adicione este arquivo em sections/ladovas-essence.liquid
+{% endcomment %}
 
+<style>
+  .essence-section {
+    display: grid;
+    grid-template-columns: 200px 1fr 1fr;
+    gap: 20px;
+    padding: 60px 40px;
+    background: {{ section.settings.bg_color }};
+    min-height: 90vh;
+  }
+  
+  /* Poste Decorativo */
+  .lamp-post {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+  }
+  
+  .lamp-icon {
+    width: 120px;
+    height: auto;
+    margin-bottom: 20px;
+  }
+  
+  .lamp-icon img,
+  .lamp-icon svg {
+    width: 100%;
+    height: auto;
+  }
+  
+  .main-title {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: {{ section.settings.main_title_size }}px;
+    font-weight: {{ section.settings.main_title_weight }};
+    color: {{ section.settings.main_title_color }};
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-top: 40px;
+  }
+  
+  /* Hero Card Grande */
+  .hero-card {
+    position: relative;
+    border-radius: 30px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+    padding: 50px;
+    min-height: 600px;
+  }
+  
+  .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 60%);
+  }
+  
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    max-width: 80%;
+  }
+  
+  .hero-title {
+    font-size: {{ section.settings.hero_title_size }}px;
+    font-weight: {{ section.settings.hero_title_weight }};
+    margin-bottom: 30px;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+  
+  .hero-description {
+    font-size: {{ section.settings.hero_desc_size }}px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    max-width: 500px;
+  }
+  
+  .hero-link {
+    display: inline-block;
+    color: white;
+    text-decoration: none;
+    font-size: {{ section.settings.link_size }}px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
+  }
+  
+  .hero-link:hover {
+    border-bottom-color: white;
+    transform: translateX(5px);
+  }
+  
+  /* Coluna Direita com 2 Cards */
+  .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .info-card {
+    background: {{ section.settings.card_bg }};
+    border-radius: 30px;
+    padding: 40px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .info-card.with-image {
+    position: relative;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    padding: 0;
+  }
+  
+  .card-content-wrapper {
+    position: relative;
+    z-index: 2;
+    padding: 40px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .info-card.with-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.3);
+    z-index: 1;
+  }
+  
+  .info-card.with-image .card-content-wrapper {
+    color: white;
+  }
+  
+  .card-title {
+    font-size: {{ section.settings.card_title_size }}px;
+    font-weight: {{ section.settings.card_title_weight }};
+    color: {{ section.settings.card_title_color }};
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+  
+  .info-card.with-image .card-title {
+    color: white;
+  }
+  
+  .card-description {
+    font-size: {{ section.settings.card_desc_size }}px;
+    color: {{ section.settings.card_desc_color }};
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  
+  .info-card.with-image .card-description {
+    color: rgba(255,255,255,0.95);
+  }
+  
+  .card-image {
+    width: 100%;
+    max-width: 350px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .card-link {
+    display: inline-block;
+    color: {{ section.settings.card_title_color }};
+    text-decoration: none;
+    font-size: {{ section.settings.link_size }}px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    align-self: flex-start;
+  }
+  
+  .info-card.with-image .card-link {
+    color: white;
+  }
+  
+  .card-link:hover {
+    transform: translateX(5px);
+  }
+  
+  .decorative-icons {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .decorative-icon {
+    width: 60px;
+    height: 60px;
+    border: 2px solid {{ section.settings.card_title_color }};
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .decorative-icon svg {
+    width: 30px;
+    height: 30px;
+    stroke: {{ section.settings.card_title_color }};
+  }
+  
+  @media (max-width: 1200px) {
+    .essence-section {
+      grid-template-columns: 150px 1fr;
+      gap: 15px;
+    }
+    
+    .right-column {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    
+    .hero-card {
+      grid-column: 2 / 3;
+      grid-row: 1;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .essence-section {
+      grid-template-columns: 1fr;
+      padding: 40px 20px;
+    }
+    
+    .lamp-post {
+      display: none;
+    }
+    
+    .hero-card {
+      min-height: 500px;
+      padding: 30px;
+    }
+    
+    .hero-content {
+      max-width: 100%;
+    }
+    
+    .hero-title {
+      font-size: {{ section.settings.hero_title_size | minus: 10 }}px;
+    }
+    
+    .right-column {
+      grid-template-columns: 1fr;
+    }
+    
+    .info-card {
+      padding: 30px;
+    }
+    
+    .card-title {
+      font-size: {{ section.settings.card_title_size | minus: 4 }}px;
+    }
+  }
+</style>
 
-<div id="scene-{{ section.id }}" class="viva-momento-scene">
-  <div class="lado-esquerdo">
-    <div class="lampada-container">
-      <img 
-        class="poste"
-        src="{{ section.settings.post_icon | image_url: width: section.settings.post_icon_width }}"
-        alt="Poste"
-        width="{{ section.settings.post_icon_width }}"
-      >
-      <div class="lamp" id="lamp-{{ section.id }}"></div>
-    </div>
-
-    <div class="imagem-secundaria">
-      <img 
-        src="{{ section.settings.left_image | image_url: width: section.settings.left_image_width }}"
-        alt="{{ section.settings.left_title | escape }}"
-        width="{{ section.settings.left_image_width }}"
-      >
-      <h3>{{ section.settings.left_title }}</h3>
-      <p>{{ section.settings.left_text }}</p>
-      <a href="{{ section.settings.left_link }}" class="btn-link">Saiba mais</a>
-    </div>
-  </div>
-
-  <div class="lado-direito">
-    <div class="info-bloco">
-      <div class="texto">
-        <h2>{{ section.settings.right_title_1 }}</h2>
-        <p>{{ section.settings.right_text_1 }}</p>
-        <a href="{{ section.settings.right_link_1 }}" class="btn-link">Leia mais</a>
+<section class="essence-section">
+  
+  <!-- Poste Decorativo -->
+  <div class="lamp-post">
+    {% if section.settings.lamp_icon %}
+      <div class="lamp-icon">
+        <img src="{{ section.settings.lamp_icon | img_url: '200x' }}" alt="Ladovas">
       </div>
-      <img 
-        src="{{ section.settings.right_image_1 | image_url: width: section.settings.right_image_1_width }}" 
-        alt="Imagem 1 Direita"
-        width="{{ section.settings.right_image_1_width }}"
-      >
-    </div>
-
-    <div class="info-bloco">
-      <img 
-        src="{{ section.settings.right_image_2 | image_url: width: section.settings.right_image_2_width }}" 
-        alt="Imagem 2 Direita"
-        width="{{ section.settings.right_image_2_width }}"
-      >
-      <div class="texto">
-        <h2>{{ section.settings.right_title_2 }}</h2>
-        <p>{{ section.settings.right_text_2 }}</p>
-        <a href="{{ section.settings.right_link_2 }}" class="btn-link">Leia mais</a>
+    {% else %}
+      <div class="lamp-icon">
+        <svg viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg">
+          <rect x="45" y="60" width="10" height="140" fill="#1a3a3a"/>
+          <ellipse cx="50" cy="40" rx="20" ry="15" fill="#1a3a3a" opacity="0.3"/>
+          <path d="M35 45 Q50 55 65 45 L65 60 L35 60 Z" fill="#1a3a3a"/>
+          <rect x="40" y="55" width="20" height="8" fill="#ffd700" opacity="0.6"/>
+        </svg>
+      </div>
+    {% endif %}
+    
+    {% if section.settings.main_title != blank %}
+      <h2 class="main-title">{{ section.settings.main_title }}</h2>
+    {% endif %}
+  </div>
+  
+  <!-- Hero Card Grande -->
+  {% if section.blocks.size > 0 %}
+    {% assign hero_block = section.blocks[0] %}
+    <div class="hero-card" 
+         style="background-image: url('{{ hero_block.settings.background_image | img_url: '1200x' }}');">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        {% if hero_block.settings.title != blank %}
+          <h3 class="hero-title">{{ hero_block.settings.title }}</h3>
+        {% endif %}
+        
+        {% if hero_block.settings.description != blank %}
+          <p class="hero-description">{{ hero_block.settings.description }}</p>
+        {% endif %}
+        
+        {% if hero_block.settings.link_text != blank and hero_block.settings.link_url != blank %}
+          <a href="{{ hero_block.settings.link_url }}" class="hero-link">
+            {{ hero_block.settings.link_text }} →
+          </a>
+        {% endif %}
       </div>
     </div>
+  {% endif %}
+  
+  <!-- Coluna Direita com 2 Cards -->
+  <div class="right-column">
+    {% for block in section.blocks offset:1 limit:2 %}
+      <div class="info-card {% if block.settings.background_image != blank %}with-image{% endif %}"
+           {% if block.settings.background_image != blank %}
+           style="background-image: url('{{ block.settings.background_image | img_url: '800x' }}');"
+           {% endif %}>
+        <div class="card-content-wrapper">
+          <div>
+            {% if block.settings.title != blank %}
+              <h3 class="card-title">{{ block.settings.title }}</h3>
+            {% endif %}
+            
+            {% if block.settings.card_image != blank %}
+              <img src="{{ block.settings.card_image | img_url: '400x' }}" 
+                   alt="{{ block.settings.title }}" 
+                   class="card-image">
+            {% endif %}
+            
+            {% if block.settings.description != blank %}
+              <p class="card-description">{{ block.settings.description }}</p>
+            {% endif %}
+          </div>
+          
+          <div>
+            {% if block.settings.link_text != blank and block.settings.link_url != blank %}
+              <a href="{{ block.settings.link_url }}" class="card-link">
+                {{ block.settings.link_text }} →
+              </a>
+            {% endif %}
+            
+            {% if block.settings.show_icons %}
+              <div class="decorative-icons">
+                <div class="decorative-icon">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 17L12 22L22 17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 12L12 17L22 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div class="decorative-icon">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke-width="2"/>
+                    <path d="M12 6V12L16 14" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
   </div>
-</div>
+  
+</section>
 
 {% schema %}
 {
-  "name": "Viva seu momento",
+  "name": "A Essência Ladovas",
   "settings": [
     {
-      "type": "image_picker",
-      "id": "post_icon",
-      "label": "Imagem do Poste"
+      "type": "header",
+      "content": "Configurações Gerais"
     },
     {
-      "type": "range",
-      "id": "post_icon_width",
-      "label": "Largura do poste (px)",
-      "min": 50,
-      "max": 600,
-      "step": 10,
-      "default": 200
-    },
-    {
-      "type": "image_picker",
-      "id": "left_image",
-      "label": "Imagem esquerda"
-    },
-    {
-      "type": "range",
-      "id": "left_image_width",
-      "label": "Largura imagem esquerda (px)",
-      "min": 50,
-      "max": 800,
-      "step": 10,
-      "default": 300
-    },
-    {
-      "type": "text",
-      "id": "left_title",
-      "label": "Título esquerda"
-    },
-    {
-      "type": "textarea",
-      "id": "left_text",
-      "label": "Texto esquerda"
-    },
-    {
-      "type": "url",
-      "id": "left_link",
-      "label": "Link esquerda"
+      "type": "color",
+      "id": "bg_color",
+      "label": "Cor de Fundo",
+      "default": "#f8f6f3"
     },
     {
       "type": "header",
-      "content": "Bloco direito 1"
-    },
-    {
-      "type": "text",
-      "id": "right_title_1",
-      "label": "Título bloco 1"
-    },
-    {
-      "type": "textarea",
-      "id": "right_text_1",
-      "label": "Texto bloco 1"
-    },
-    {
-      "type": "url",
-      "id": "right_link_1",
-      "label": "Link bloco 1"
+      "content": "Poste Decorativo"
     },
     {
       "type": "image_picker",
-      "id": "right_image_1",
-      "label": "Imagem bloco 1"
+      "id": "lamp_icon",
+      "label": "Ícone do Poste/Logo"
+    },
+    {
+      "type": "text",
+      "id": "main_title",
+      "label": "Título Principal (Vertical)",
+      "default": "VIVA O SEU MOMENTO!"
     },
     {
       "type": "range",
-      "id": "right_image_1_width",
-      "label": "Largura imagem bloco 1 (px)",
-      "min": 50,
-      "max": 800,
-      "step": 10,
-      "default": 300
+      "id": "main_title_size",
+      "label": "Tamanho do Título",
+      "min": 20,
+      "max": 50,
+      "step": 2,
+      "default": 32,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "main_title_weight",
+      "label": "Peso do Título",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "color",
+      "id": "main_title_color",
+      "label": "Cor do Título",
+      "default": "#ffffff"
     },
     {
       "type": "header",
-      "content": "Bloco direito 2"
-    },
-    {
-      "type": "text",
-      "id": "right_title_2",
-      "label": "Título bloco 2"
-    },
-    {
-      "type": "textarea",
-      "id": "right_text_2",
-      "label": "Texto bloco 2"
-    },
-    {
-      "type": "url",
-      "id": "right_link_2",
-      "label": "Link bloco 2"
-    },
-    {
-      "type": "image_picker",
-      "id": "right_image_2",
-      "label": "Imagem bloco 2"
+      "content": "Estilos dos Textos"
     },
     {
       "type": "range",
-      "id": "right_image_2_width",
-      "label": "Largura imagem bloco 2 (px)",
-      "min": 50,
-      "max": 800,
-      "step": 10,
-      "default": 300
+      "id": "hero_title_size",
+      "label": "Tamanho Título Hero",
+      "min": 24,
+      "max": 60,
+      "step": 2,
+      "default": 48,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "hero_title_weight",
+      "label": "Peso Título Hero",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "range",
+      "id": "hero_desc_size",
+      "label": "Tamanho Descrição Hero",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "card_bg",
+      "label": "Cor de Fundo dos Cards",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "label": "Tamanho Título Card",
+      "min": 20,
+      "max": 40,
+      "step": 2,
+      "default": 28,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "card_title_weight",
+      "label": "Peso Título Card",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Cor Título Card",
+      "default": "#1a3a3a"
+    },
+    {
+      "type": "range",
+      "id": "card_desc_size",
+      "label": "Tamanho Descrição Card",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "default": 15,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "card_desc_color",
+      "label": "Cor Descrição Card",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "link_size",
+      "label": "Tamanho Links",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "default": 14,
+      "unit": "px"
     }
   ],
+  "blocks": [
+    {
+      "type": "content_card",
+      "name": "Card de Conteúdo",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "A essência Ladovas"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Descrição",
+          "default": "No Ladovas, cada detalhe foi pensado para inspirar momentos."
+        },
+        {
+          "type": "image_picker",
+          "id": "background_image",
+          "label": "Imagem de Fundo"
+        },
+        {
+          "type": "image_picker",
+          "id": "card_image",
+          "label": "Imagem do Card (opcional)",
+          "info": "Para cards sem imagem de fundo"
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Texto do Link",
+          "default": "Leia mais"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "URL do Link"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_icons",
+          "label": "Mostrar Ícones Decorativos",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "max_blocks": 3,
   "presets": [
     {
-      "name": "Viva seu momento",
-      "category": "Seções Custom"
+      "name": "A Essência Ladovas",
+      "blocks": [
+        {
+          "type": "content_card",
+          "settings": {
+            "title": "VIVA O SEU MOMENTO!"
+          }
+        },
+        {
+          "type": "content_card",
+          "settings": {
+            "title": "A ESSÊNCIA LADOVAS"
+          }
+        },
+        {
+          "type": "content_card",
+          "settings": {
+            "title": "AMBIENTES QUE INSPIRAM",
+            "show_icons": true
+          }
+        }
+      ]
     }
   ]
 }
