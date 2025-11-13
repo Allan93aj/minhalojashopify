@@ -145,8 +145,8 @@
         "card_6GTJcw": {
           "type": "card",
           "settings": {
-            "card_number": "01",
-            "card_title": "Café",
+            "card_number": "02",
+            "card_title": "Conexão",
             "content_title": "Relax",
             "content_description": "O silêncio acolhedor que te faz esquecer do tempo",
             "button_text": "encontre seu refúgio",
@@ -156,7 +156,7 @@
         "card_Xtqae3": {
           "type": "card",
           "settings": {
-            "card_number": "01",
+            "card_number": "03",
             "card_title": "Café",
             "content_title": "Relax",
             "content_description": "O silêncio acolhedor que te faz esquecer do tempo",
@@ -167,7 +167,7 @@
         "card_kj8YPY": {
           "type": "card",
           "settings": {
-            "card_number": "01",
+            "card_number": "04",
             "card_title": "Café",
             "content_title": "Relax",
             "content_description": "O silêncio acolhedor que te faz esquecer do tempo",
@@ -178,7 +178,7 @@
         "card_yx4rYg": {
           "type": "card",
           "settings": {
-            "card_number": "01",
+            "card_number": "05",
             "card_title": "Café",
             "content_title": "Relax",
             "content_description": "O silêncio acolhedor que te faz esquecer do tempo",
@@ -189,7 +189,7 @@
         "card_Pn7iCm": {
           "type": "card",
           "settings": {
-            "card_number": "01",
+            "card_number": "06",
             "card_title": "Café",
             "content_title": "Relax",
             "content_description": "O silêncio acolhedor que te faz esquecer do tempo",
@@ -200,7 +200,7 @@
         "card_hdpEd9": {
           "type": "card",
           "settings": {
-            "card_number": "01",
+            "card_number": "07",
             "card_title": "Café",
             "content_title": "Relax",
             "content_description": "O silêncio acolhedor que te faz esquecer do tempo",
