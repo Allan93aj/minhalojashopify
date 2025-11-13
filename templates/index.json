@@ -147,6 +147,9 @@
           "settings": {
             "card_number": "02",
             "card_title": "Conexão",
+            "background_image": "shopify://shop_images/card02.png",
+            "overlay_image": "shopify://shop_images/card02.png",
+            "inner_image": "shopify://shop_images/card02.png",
             "content_title": "Relax",
             "content_description": "O silêncio acolhedor que te faz esquecer do tempo",
             "button_text": "encontre seu refúgio",
