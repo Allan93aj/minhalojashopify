@@ -17,39 +17,23 @@
       <div
         class="cards-expanding"
         data-index="{{ forloop.index }}"
-        style="background-image: url('{{ block.settings.background_image | image_url }}');"
+        style="--bg:url('{{ block.settings.background_image | image_url }}')"
       >
         <div class="wrapper-cards-expanding">
           {% if block.settings.overlay_image != blank %}
             <img src="{{ block.settings.overlay_image | image_url }}" alt="{{ block.settings.card_title }}">
           {% endif %}
-          
           <div class="wrapper-number-and-name">
             <p class="card-number">{{ block.settings.card_number }}</p>
             <span class="card-title">{{ block.settings.card_title }}</span>
           </div>
-          
           <div class="content-cards-expanding">
             <div class="inner-content-cards-expanding">
-              {% if block.settings.inner_image != blank %}
-                <div class="img-cards-expanding">
+              <div class="img-cards-expanding">
+                {% if block.settings.inner_image != blank %}
                   <img src="{{ block.settings.inner_image | image_url }}" alt="{{ block.settings.card_title }}">
-                </div>
-              {% endif %}
-              
-              {% if block.settings.content_title != blank %}
-                <h3 class="content-title">{{ block.settings.content_title }}</h3>
-              {% endif %}
-              
-              {% if block.settings.content_description != blank %}
-                <p class="content-description">{{ block.settings.content_description }}</p>
-              {% endif %}
-              
-              {% if block.settings.button_text != blank and block.settings.button_link != blank %}
-                <a href="{{ block.settings.button_link }}" class="content-button">
-                  {{ block.settings.button_text }}
-                </a>
-              {% endif %}
+                {% endif %}
+              </div>
             </div>
           </div>
         </div>
@@ -57,6 +41,8 @@
     {% endfor %}
   </div>
 </section>
+
+
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -79,6 +65,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   });
 });
+
 </script>
 
 {% schema %}
@@ -128,21 +115,9 @@ document.addEventListener("DOMContentLoaded", function() {
         },
         {
           "type": "text",
-          "id": "content_title",
-          "label": "Título do conteúdo expandido",
-          "default": "Relax"
-        },
-        {
-          "type": "textarea",
-          "id": "content_description",
-          "label": "Descrição do conteúdo expandido",
-          "default": "O silêncio acolhedor que te faz esquecer do tempo"
-        },
-        {
-          "type": "text",
           "id": "button_text",
           "label": "Texto do botão",
-          "default": "encontre seu refúgio"
+          "default": "Ver mais"
         },
         {
           "type": "url",
