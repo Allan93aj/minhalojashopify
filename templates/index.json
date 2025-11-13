@@ -124,18 +124,21 @@
         "deal_item_9LNpiz": {
           "type": "deal_item",
           "settings": {
+            "icon_image": "shopify://shop_images/OBJECTS-1.png",
             "text": "Descubra nossos macarons artesanais"
           }
         },
         "deal_item_aTnwRW": {
           "type": "deal_item",
           "settings": {
+            "icon_image": "shopify://shop_images/OBJECTS_39cd08b0-97be-4644-b6b1-8294c1b572b3.png",
             "text": "Feitos com amor e dedicação"
           }
         },
         "deal_item_ifUXpE": {
           "type": "deal_item",
           "settings": {
+            "icon_image": "shopify://shop_images/OBJECTS-1_4e45503e-3e72-4012-921e-9a4d96aaf382.png",
             "text": "Presentes únicos e deliciosos"
           }
         }
