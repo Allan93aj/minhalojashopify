@@ -157,8 +157,8 @@
         "font_size": 18,
         "icon_size": 40,
         "font_weight": "600",
-        "speed": 30,
-        "item_gap": 60,
+        "speed": 40,
+        "item_gap": 20,
         "pause_on_hover": true
       }
     },
