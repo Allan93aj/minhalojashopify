@@ -111,6 +111,54 @@
         "banner_title": "Muito mais do que café. Um lugar de momentos"
       }
     },
+    "deals_banner_wGVmQB": {
+      "type": "deals-banner",
+      "blocks": {
+        "deal_item_jRKc8y": {
+          "type": "deal_item",
+          "settings": {
+            "icon_image": "shopify://shop_images/OBJECTS.png",
+            "text": "Os melhores macarons da sua vida 1"
+          }
+        },
+        "deal_item_9LNpiz": {
+          "type": "deal_item",
+          "settings": {
+            "text": "Descubra nossos macarons artesanais"
+          }
+        },
+        "deal_item_aTnwRW": {
+          "type": "deal_item",
+          "settings": {
+            "text": "Feitos com amor e dedicação"
+          }
+        },
+        "deal_item_ifUXpE": {
+          "type": "deal_item",
+          "settings": {
+            "text": "Presentes únicos e deliciosos"
+          }
+        }
+      },
+      "block_order": [
+        "deal_item_jRKc8y",
+        "deal_item_9LNpiz",
+        "deal_item_aTnwRW",
+        "deal_item_ifUXpE"
+      ],
+      "name": "Banner Deals",
+      "settings": {
+        "background_color": "#0a3d4a",
+        "text_color": "#ffffff",
+        "padding": 20,
+        "font_size": 18,
+        "icon_size": 40,
+        "font_weight": "600",
+        "speed": 30,
+        "item_gap": 60,
+        "pause_on_hover": true
+      }
+    },
     "collection_list_qPAmYz": {
       "type": "collection-list",
       "blocks": {
@@ -442,6 +490,7 @@
   },
   "order": [
     "banner_custom123_BrNjNk",
+    "deals_banner_wGVmQB",
     "collection_list_qPAmYz",
     "macaron_tower_CWe64p",
     "collection_list_8baJV6",
