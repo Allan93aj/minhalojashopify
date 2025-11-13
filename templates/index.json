@@ -131,6 +131,7 @@
         "featured_collection_qr6tF6",
         "featured_collection_9bqkBY"
       ],
+      "disabled": true,
       "custom_css": [
         ".card:not(.ratio) > .card__content {position: absolute; background: #fff; bottom: 30px; left: 50px; width: 250px; border-radius: 8px; text-align: center;}"
       ],
@@ -145,6 +146,21 @@
         "swipe_on_mobile": true,
         "padding_top": 12,
         "padding_bottom": 36
+      }
+    },
+    "macaron_tower_CWe64p": {
+      "type": "macaron-tower",
+      "name": "Torre de Macarons",
+      "settings": {
+        "product_vendor": "LaDovas",
+        "product_title": "Torre de Macarrons",
+        "product_price": "R$ 450,00",
+        "main_title": "Torre de Macarons Ladovas",
+        "description_1": "Mais do que uma sobremesa, a torre de macarons é uma celebração dos momentos que merecem ser lembrados.",
+        "description_2": "Feita com sabores selecionados e cores vibrantes, ela transforma qualquer pausa em uma experiência. Seja um encontro, um aniversário ou um simples café de fim de tarde.",
+        "description_3": "Cada camada é um convite ao prazer e à delicadeza.",
+        "button_text": "Encomende a sua torre →",
+        "button_link": ""
       }
     },
     "collection_list_8baJV6": {
@@ -427,6 +443,7 @@
   "order": [
     "banner_custom123_BrNjNk",
     "collection_list_qPAmYz",
+    "macaron_tower_CWe64p",
     "collection_list_8baJV6",
     "image_banner_custom_hGj44H",
     "viva_seu_momento_YJ7fcx",
