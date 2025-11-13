@@ -162,6 +162,59 @@
         "pause_on_hover": true
       }
     },
+    "image_banner_aJnpa4": {
+      "type": "image-banner",
+      "name": "t:sections.image-banner.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Group_88.png",
+        "image_overlay_opacity": 0,
+        "image_height": "adapt",
+        "image_behavior": "none",
+        "desktop_content_position": "middle-center",
+        "desktop_content_alignment": "center",
+        "show_text_box": true,
+        "color_scheme": "",
+        "stack_images_on_mobile": true,
+        "mobile_content_alignment": "center",
+        "show_text_below": true
+      }
+    },
+    "section_awning_Vw6NRA": {
+      "type": "section-awning",
+      "name": "Hero com Toldo",
+      "settings": {
+        "awning_text": "",
+        "awning_color": "#0a3d4a",
+        "awning_text_color": "#ff3333",
+        "awning_height": 140,
+        "awning_font_size": 16,
+        "awning_font_weight": "600",
+        "background_image": "shopify://shop_images/Rectangle_590.png",
+        "overlay_color": "#000000",
+        "overlay_opacity": 0,
+        "hero_height": 800,
+        "text_box_bg": "rgba(10, 61, 74, 0.9)",
+        "text_box_width": 700,
+        "text_box_padding": 30,
+        "text_box_radius": 0,
+        "subtitle": "MACARONS LADOVAS",
+        "subtitle_size": 14,
+        "subtitle_color": "#ffffff",
+        "title": "Uma torre de sabores para adoçar o momento.",
+        "title_size": 36,
+        "title_weight": "700",
+        "title_color": "#ffffff",
+        "description": "Passe o mouse nos macarons e descubra os sabores",
+        "description_size": 16,
+        "description_color": "#ffffff",
+        "button_text": "VER MAIS",
+        "button_link": "",
+        "button_bg": "#ffffff",
+        "button_text_color": "#0a3d4a",
+        "button_size": 14,
+        "button_radius": 25
+      }
+    },
     "collection_list_qPAmYz": {
       "type": "collection-list",
       "blocks": {
@@ -494,6 +547,8 @@
   "order": [
     "banner_custom123_BrNjNk",
     "deals_banner_wGVmQB",
+    "image_banner_aJnpa4",
+    "section_awning_Vw6NRA",
     "collection_list_qPAmYz",
     "macaron_tower_CWe64p",
     "collection_list_8baJV6",
