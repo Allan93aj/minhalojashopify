@@ -1,0 +1,340 @@
+{% comment %}
+  Seção: Banner de Deals com Scroll Infinito
+  Adicione este arquivo em sections/deals-banner.liquid
+{% endcomment %}
+
+<style>
+  .deals-banner {
+    background-color: {{ section.settings.background_color }};
+    padding: {{ section.settings.padding }}px 0;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .deals-track-container {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+  }
+  
+  .deals-track {
+    display: flex;
+    align-items: center;
+    gap: {{ section.settings.item_gap }}px;
+    animation: scroll-{{ section.id }} {{ section.settings.speed }}s linear infinite;
+    white-space: nowrap;
+  }
+  
+  .deals-track.paused {
+    animation-play-state: paused;
+  }
+  
+  .deals-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: {{ section.settings.text_color }};
+    font-size: {{ section.settings.font_size }}px;
+    font-weight: {{ section.settings.font_weight }};
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .deals-icon {
+    width: {{ section.settings.icon_size }}px;
+    height: {{ section.settings.icon_size }}px;
+    flex-shrink: 0;
+  }
+  
+  .deals-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: {{ section.settings.icon_color }};
+    stroke: {{ section.settings.icon_color }};
+  }
+  
+  @keyframes scroll-{{ section.id }} {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .deals-item {
+      font-size: {{ section.settings.font_size | minus: 2 }}px;
+    }
+    
+    .deals-icon {
+      width: {{ section.settings.icon_size | minus: 10 }}px;
+      height: {{ section.settings.icon_size | minus: 10 }}px;
+    }
+  }
+</style>
+
+<section class="deals-banner" 
+         {% if section.settings.pause_on_hover %}
+         onmouseenter="this.querySelector('.deals-track').classList.add('paused')"
+         onmouseleave="this.querySelector('.deals-track').classList.remove('paused')"
+         {% endif %}>
+  <div class="deals-track-container">
+    <div class="deals-track">
+      {% for block in section.blocks %}
+        <div class="deals-item">
+          {% if block.settings.icon_type == 'macaron' %}
+            <div class="deals-icon">
+              <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="50" cy="35" rx="35" ry="15" opacity="0.8"/>
+                <rect x="15" y="35" width="70" height="25" rx="3"/>
+                <ellipse cx="50" cy="60" rx="35" ry="15" opacity="0.9"/>
+              </svg>
+            </div>
+          {% elsif block.settings.icon_type == 'star' %}
+            <div class="deals-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+              </svg>
+            </div>
+          {% elsif block.settings.icon_type == 'heart' %}
+            <div class="deals-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            </div>
+          {% elsif block.settings.icon_type == 'gift' %}
+            <div class="deals-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 12v10H4V12M2 7h20v5H2V7z"/>
+                <path d="M12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+              </svg>
+            </div>
+          {% elsif block.settings.icon_type == 'sparkles' %}
+            <div class="deals-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 1L9 9L1 12L9 15L12 23L15 15L23 12L15 9L12 1Z"/>
+                <path d="M19 4L18 6L16 7L18 8L19 10L20 8L22 7L20 6L19 4Z"/>
+              </svg>
+            </div>
+          {% endif %}
+          
+          <span>{{ block.settings.text }}</span>
+        </div>
+      {% endfor %}
+      
+      <!-- Duplicar itens para scroll infinito -->
+      {% for block in section.blocks %}
+        <div class="deals-item">
+          {% if block.settings.icon_type == 'macaron' %}
+            <div class="deals-icon">
+              <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="50" cy="35" rx="35" ry="15" opacity="0.8"/>
+                <rect x="15" y="35" width="70" height="25" rx="3"/>
+                <ellipse cx="50" cy="60" rx="35" ry="15" opacity="0.9"/>
+              </svg>
+            </div>
+          {% elsif block.settings.icon_type == 'star' %}
+            <div class="deals-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+              </svg>
+            </div>
+          {% elsif block.settings.icon_type == 'heart' %}
+            <div class="deals-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            </div>
+          {% elsif block.settings.icon_type == 'gift' %}
+            <div class="deals-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 12v10H4V12M2 7h20v5H2V7z"/>
+                <path d="M12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+              </svg>
+            </div>
+          {% elsif block.settings.icon_type == 'sparkles' %}
+            <div class="deals-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 1L9 9L1 12L9 15L12 23L15 15L23 12L15 9L12 1Z"/>
+                <path d="M19 4L18 6L16 7L18 8L19 10L20 8L22 7L20 6L19 4Z"/>
+              </svg>
+            </div>
+          {% endif %}
+          
+          <span>{{ block.settings.text }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Banner Deals",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Cores e Estilo"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Cor de Fundo",
+      "default": "#0a3d4a"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Cor do Texto",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Cor dos Ícones",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Tamanhos"
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "label": "Padding Vertical",
+      "min": 10,
+      "max": 50,
+      "step": 2,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Tamanho da Fonte",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "default": 18,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Tamanho dos Ícones",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Peso da Fonte",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Médio" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "header",
+      "content": "Animação"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Velocidade do Scroll",
+      "info": "Valores menores = mais rápido",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "default": 30,
+      "unit": "s"
+    },
+    {
+      "type": "range",
+      "id": "item_gap",
+      "label": "Espaçamento entre Itens",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "default": 60,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pausar ao passar o mouse",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "deal_item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texto",
+          "default": "Os melhores macarons da sua vida"
+        },
+        {
+          "type": "select",
+          "id": "icon_type",
+          "label": "Tipo de Ícone",
+          "options": [
+            { "value": "macaron", "label": "Macaron" },
+            { "value": "star", "label": "Estrela" },
+            { "value": "heart", "label": "Coração" },
+            { "value": "gift", "label": "Presente" },
+            { "value": "sparkles", "label": "Brilhos" }
+          ],
+          "default": "macaron"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banner Deals",
+      "blocks": [
+        {
+          "type": "deal_item",
+          "settings": {
+            "text": "Os melhores macarons da sua vida",
+            "icon_type": "macaron"
+          }
+        },
+        {
+          "type": "deal_item",
+          "settings": {
+            "text": "Descubra nossos macarons artesanais",
+            "icon_type": "star"
+          }
+        },
+        {
+          "type": "deal_item",
+          "settings": {
+            "text": "Feitos com amor e dedicação",
+            "icon_type": "heart"
+          }
+        },
+        {
+          "type": "deal_item",
+          "settings": {
+            "text": "Presentes únicos e deliciosos",
+            "icon_type": "gift"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
