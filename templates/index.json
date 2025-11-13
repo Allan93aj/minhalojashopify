@@ -183,17 +183,11 @@
       "type": "section-awning",
       "name": "Hero com Toldo",
       "settings": {
-        "awning_text": "",
-        "awning_color": "#0a3d4a",
-        "awning_text_color": "#ff3333",
-        "awning_height": 140,
-        "awning_font_size": 16,
-        "awning_font_weight": "600",
         "background_image": "shopify://shop_images/Rectangle_590.png",
         "overlay_color": "#000000",
         "overlay_opacity": 0,
         "hero_height": 800,
-        "text_box_bg": "rgba(10, 61, 74, 0.9)",
+        "text_box_bg": "#0a3d4ae6",
         "text_box_width": 700,
         "text_box_padding": 30,
         "text_box_radius": 0,
@@ -322,6 +316,7 @@
         "featured_collection_FL4BUG",
         "featured_collection_gLqapF"
       ],
+      "disabled": true,
       "custom_css": [
         ".collection-list-title {width: 100%; text-align: center;}",
         ".collection-list {gap: 35px;}",
@@ -340,6 +335,56 @@
         "swipe_on_mobile": true,
         "padding_top": 36,
         "padding_bottom": 36
+      }
+    },
+    "split_product_carousel_7RjYpp": {
+      "type": "split-product-carousel",
+      "blocks": {
+        "product_DNhFXj": {
+          "type": "product",
+          "settings": {
+            "product_image": "shopify://shop_images/Captura-de-tela-2025-05-13-110341-_1_-2_1.png",
+            "product_title": "Café Ladovas",
+            "product_description": ""
+          }
+        },
+        "product_dtrKpy": {
+          "type": "product",
+          "settings": {
+            "product_image": "shopify://shop_images/Captura-de-tela-2025-05-13-110341-_1_-2_1_7ace87e1-4860-408f-8673-86ca05e8cb49.png",
+            "product_title": "Café Ladovas",
+            "product_description": ""
+          }
+        }
+      },
+      "block_order": [
+        "product_DNhFXj",
+        "product_dtrKpy"
+      ],
+      "name": "Split Product Carousel",
+      "settings": {
+        "bg_color": "#f5f3f0",
+        "section_height": 700,
+        "background_image": "shopify://shop_images/Rectangle559.png",
+        "image_overlay": "#000000",
+        "image_overlay_opacity": 0,
+        "show_decorative_line": true,
+        "decorative_line_color": "#f91313",
+        "content_bg": "#f5f3f0",
+        "content_padding": 60,
+        "content_max_width": 600,
+        "section_title": "Sabores que contam histórias",
+        "title_size": 42,
+        "title_weight": "700",
+        "title_color": "#1a3a3a",
+        "section_description": "Do ritual da manhã ao brinde do fim de tarde — leve um pedaço do Ladovas com você.",
+        "description_size": 16,
+        "description_color": "#333333",
+        "product_info_size": 14,
+        "product_info_color": "#666666",
+        "arrow_size": 50,
+        "arrow_color": "#1a3a3a",
+        "arrow_hover_color": "#ffffff"
       }
     },
     "image_banner_custom_hGj44H": {
@@ -552,6 +597,7 @@
     "collection_list_qPAmYz",
     "macaron_tower_CWe64p",
     "collection_list_8baJV6",
+    "split_product_carousel_7RjYpp",
     "image_banner_custom_hGj44H",
     "viva_seu_momento_YJ7fcx",
     "featured_collection_6r9xkU",
