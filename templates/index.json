@@ -404,25 +404,101 @@
     },
     "viva_seu_momento_YJ7fcx": {
       "type": "viva-seu-momento",
+      "blocks": {
+        "content_card_CK7ARH": {
+          "type": "content_card",
+          "settings": {
+            "title": "A essência Ladovas",
+            "description": "No Ladovas, cada detalhe foi pensado para inspirar momentos.",
+            "link_text": "Leia mais",
+            "link_url": "",
+            "show_icons": false
+          }
+        }
+      },
+      "block_order": [
+        "content_card_CK7ARH"
+      ],
+      "disabled": true,
       "name": "Viva Seu Momento",
       "settings": {
-        "post_icon": "shopify://shop_images/poste_c6998ef5-ad0f-4fc0-92b2-76fd828183a0.png",
-        "post_icon_width": 140,
-        "left_image": "shopify://shop_images/Rectangle568_12e3df00-99d3-44ce-a61b-7c52587a94aa.png",
-        "left_image_width": 600,
-        "left_title": "Viva o Seu Momento!",
-        "left_text": "Agora é a sua vez de viver um momento Ladovas.  Escolha o seu  relaxar, celebrar, inspirar-se ou apenas estar.",
-        "left_link": "shopify://pages/monte-seu-kit",
-        "right_title_1": "a essência ladovas",
-        "right_text_1": "No Ladovas, cada detalhe foi pensado para inspirar momentos.\u000b A luz suave, o aroma, o som ambiente, o tempo que desacelera.\u000b Aqui, o que importa não é o que você pede — é o que você vive.",
-        "right_link_1": "shopify://pages/monte-seu-kit",
-        "right_image_1": "shopify://shop_images/Rectangle_569_df8bbc82-758b-43bd-9fff-1483ae242b54.png",
-        "right_image_1_width": 300,
-        "right_title_2": "ambientes que inspiram",
-        "right_text_2": "Cada canto do Ladovas conta uma história.\u000bseja na varanda ensolarada, no sofá da janela ou na mesa coletiva,  você encontra um lugar para viver o seu momento.",
-        "right_link_2": "shopify://pages/monte-seu-kit",
-        "right_image_2": "shopify://shop_images/Rectangle_570_5bc92ee7-d9d3-4e6f-b5e1-15b20196db92.png",
-        "right_image_2_width": 300
+        "bg_color": "#f8f6f3",
+        "main_title": "VIVA O SEU MOMENTO!",
+        "main_title_size": 32,
+        "main_title_weight": "700",
+        "main_title_color": "#ffffff",
+        "hero_title_size": 48,
+        "hero_title_weight": "700",
+        "hero_desc_size": 16,
+        "card_bg": "#ffffff",
+        "card_title_size": 28,
+        "card_title_weight": "700",
+        "card_title_color": "#1a3a3a",
+        "card_desc_size": 15,
+        "card_desc_color": "#333333",
+        "link_size": 14
+      }
+    },
+    "viva_seu_momento_4GP7WU": {
+      "type": "viva-seu-momento",
+      "blocks": {
+        "content_card_yWgtdA": {
+          "type": "content_card",
+          "settings": {
+            "title": "VIVA O SEU MOMENTO!",
+            "description": "No Ladovas, cada detalhe foi pensado para inspirar momentos.",
+            "background_image": "shopify://shop_images/Rectangle568_12e3df00-99d3-44ce-a61b-7c52587a94aa.png",
+            "link_text": "Leia mais",
+            "link_url": "",
+            "show_icons": false
+          }
+        },
+        "content_card_NXMCPB": {
+          "type": "content_card",
+          "settings": {
+            "title": "A ESSÊNCIA LADOVAS",
+            "description": "No Ladovas, cada detalhe foi pensado para inspirar momentos.",
+            "card_image": "shopify://shop_images/Rectangle_569_df8bbc82-758b-43bd-9fff-1483ae242b54.png",
+            "link_text": "Leia mais",
+            "link_url": "",
+            "show_icons": false
+          }
+        },
+        "content_card_xcYmck": {
+          "type": "content_card",
+          "settings": {
+            "title": "AMBIENTES QUE INSPIRAM",
+            "description": "No Ladovas, cada detalhe foi pensado para inspirar momentos.",
+            "card_image": "shopify://shop_images/Rectangle_570_5bc92ee7-d9d3-4e6f-b5e1-15b20196db92.png",
+            "link_text": "Leia mais",
+            "link_url": "",
+            "show_icons": true
+          }
+        }
+      },
+      "block_order": [
+        "content_card_yWgtdA",
+        "content_card_NXMCPB",
+        "content_card_xcYmck"
+      ],
+      "name": "A Essência Ladovas",
+      "settings": {
+        "bg_color": "#f8f6f3",
+        "lamp_icon": "shopify://shop_images/poste_1f94927e-5bdb-4e12-90f1-892715c44e29.png",
+        "main_title": "VIVA O SEU MOMENTO!",
+        "main_title_size": 32,
+        "main_title_weight": "700",
+        "main_title_color": "#ffffff",
+        "hero_title_size": 48,
+        "hero_title_weight": "700",
+        "hero_desc_size": 16,
+        "card_bg": "#ffffff",
+        "card_title_size": 28,
+        "card_title_weight": "700",
+        "card_title_color": "#1a3a3a",
+        "card_desc_size": 15,
+        "card_desc_color": "#333333",
+        "link_size": 14
       }
     },
     "featured_collection_6r9xkU": {
@@ -600,6 +676,7 @@
     "split_product_carousel_7RjYpp",
     "image_banner_custom_hGj44H",
     "viva_seu_momento_YJ7fcx",
+    "viva_seu_momento_4GP7WU",
     "featured_collection_6r9xkU",
     "collection_list_h3qNVC",
     "featured_collection_ErjrNU",
