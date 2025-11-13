@@ -15,9 +15,6 @@
     width: 100%;
     height: {{ section.settings.awning_height }}px;
     background: {{ section.settings.awning_color }};
-    display: flex;
-    align-items: center;
-    justify-content: center;
     overflow: hidden;
   }
   
@@ -36,18 +33,6 @@
     background: {{ section.settings.awning_color }};
     border-radius: 0 0 100% 100%;
     margin: 0 -1px;
-  }
-  
-  .awning-text {
-    position: relative;
-    z-index: 2;
-    color: {{ section.settings.awning_text_color }};
-    font-size: {{ section.settings.awning_font_size }}px;
-    font-weight: {{ section.settings.awning_font_weight }};
-    text-align: center;
-    padding: 0 20px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
   }
   
   .hero-content {
@@ -138,10 +123,6 @@
       height: 40px;
     }
     
-    .awning-text {
-      font-size: {{ section.settings.awning_font_size | minus: 4 }}px;
-    }
-    
     .hero-content {
       min-height: {{ section.settings.hero_height | minus: 100 }}px;
       padding: 40px 20px;
@@ -169,10 +150,6 @@
 <section class="hero-awning-section">
   <!-- Toldo Decorativo -->
   <div class="awning-container">
-    {% if section.settings.awning_text != blank %}
-      <div class="awning-text">{{ section.settings.awning_text }}</div>
-    {% endif %}
-    
     <div class="awning-scallops">
       {% for i in (1..20) %}
         <div class="scallop"></div>
@@ -215,22 +192,10 @@
       "content": "Toldo Decorativo"
     },
     {
-      "type": "text",
-      "id": "awning_text",
-      "label": "Texto no Toldo",
-      "info": "Deixe em branco para ocultar"
-    },
-    {
       "type": "color",
       "id": "awning_color",
       "label": "Cor do Toldo",
       "default": "#0a3d4a"
-    },
-    {
-      "type": "color",
-      "id": "awning_text_color",
-      "label": "Cor do Texto do Toldo",
-      "default": "#ff3333"
     },
     {
       "type": "range",
@@ -241,28 +206,6 @@
       "step": 10,
       "default": 140,
       "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "awning_font_size",
-      "label": "Tamanho da Fonte do Toldo",
-      "min": 12,
-      "max": 32,
-      "step": 1,
-      "default": 16,
-      "unit": "px"
-    },
-    {
-      "type": "select",
-      "id": "awning_font_weight",
-      "label": "Peso da Fonte do Toldo",
-      "options": [
-        { "value": "400", "label": "Normal" },
-        { "value": "500", "label": "Médio" },
-        { "value": "600", "label": "Semi-Bold" },
-        { "value": "700", "label": "Bold" }
-      ],
-      "default": "600"
     },
     {
       "type": "header",
