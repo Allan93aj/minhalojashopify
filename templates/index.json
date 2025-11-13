@@ -587,6 +587,17 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "instagram_section_6TjBBT": {
+      "type": "instagram-section",
+      "name": "Seção Instagram LaDovas",
+      "settings": {
+        "instagram_url": "https://www.instagram.com/rzfallanandrade/",
+        "image_1": "shopify://shop_images/Rectangle568_12e3df00-99d3-44ce-a61b-7c52587a94aa.png",
+        "text_1": "",
+        "subtext_1": "",
+        "image_2": "shopify://shop_images/Rectangle568_12e3df00-99d3-44ce-a61b-7c52587a94aa.png"
+      }
     }
   },
   "order": [
@@ -604,6 +615,7 @@
     "collection_list_h3qNVC",
     "featured_collection_ErjrNU",
     "collection_list_pRU7dP",
-    "collection_list_Mx9xFa"
+    "collection_list_Mx9xFa",
+    "instagram_section_6TjBBT"
   ]
 }
