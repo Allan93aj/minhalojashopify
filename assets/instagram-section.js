@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const container = document.querySelector('#instagram-feed');
 
   // Substitua com seu token do Instagram Basic Display API
-  const accessToken = 'SEU_TOKEN_DO_INSTAGRAM';
+  const accessToken = '0f1399d3c3c250206e3973ac816cb2be';
   const limit = 3; // quantidade de posts
 
   if (!container || !accessToken) return;
