@@ -250,9 +250,7 @@
       "type": "macaron-tower",
       "name": "Torre de Macarons",
       "settings": {
-        "product_vendor": "LaDovas",
-        "product_title": "Torre de Macarrons",
-        "product_price": "R$ 450,00",
+        "product_collection": "eletronicos",
         "main_title": "Torre de Macarons Ladovas",
         "description_1": "Mais do que uma sobremesa, a torre de macarons é uma celebração dos momentos que merecem ser lembrados.",
         "description_2": "Feita com sabores selecionados e cores vibrantes, ela transforma qualquer pausa em uma experiência. Seja um encontro, um aniversário ou um simples café de fim de tarde.",
